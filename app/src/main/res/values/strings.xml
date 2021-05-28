@@ -3,4 +3,13 @@
     <string name="startBtnText">START</string>
     <string name="stopBtnText">STOP</string>
     <string name="configBtnText">CONFIG</string>
+    <string name="max_number_of_samples">Max number of samples:</string>
+    <string name="sample_time_ms">500</string>
+    <string name="ip_address">192.168.0.103</string>
+    <string name="max_num_of_samples">100</string>
+    <string name="api_version">1.0</string>
+    <string name="main_author">Miłosz Plutowski</string>
+    <string name="second_author">Szymon Kwasiborski</string>
+    <string name="third_author">Jakub Gątarski</string>
+    <string name="fourth_author">Filip Kałużny</string>
 </resources>

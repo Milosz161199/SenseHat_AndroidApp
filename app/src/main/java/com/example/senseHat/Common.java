@@ -31,6 +31,9 @@ final class Common {
     // IoT server data
     public static String FILE_NAME = "measurements.php?id=";
 
+    public static String PHP_COMMAND_TAKING_DATA_TO_TABLE = "";
+    public static String PHP_COMMAND_TAKING_DATA_TO_GRAPH = "";
+
     public static List<MeasurementModel> measurementModelsList;
 
 
