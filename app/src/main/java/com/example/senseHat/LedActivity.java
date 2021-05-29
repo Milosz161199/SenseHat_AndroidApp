@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class LedsActivity extends AppCompatActivity {
+public class LedActivity extends AppCompatActivity {
 
     /* BEGIN widgets */
 

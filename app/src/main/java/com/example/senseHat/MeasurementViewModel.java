@@ -22,4 +22,6 @@ public class MeasurementViewModel {
     public String getUnit() {
         return model.mUnit;
     }
+
+    public String getSensor() { return model.mSensor; }
 }

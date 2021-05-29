@@ -23,6 +23,12 @@ final class Common {
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
     public final static int DEFAULT_SAMPLE_TIME = 500;
 
+    public final static String CONFIG_MAX_NUMBER_OF_SAMPLES = "maxNumOfSamples";
+    public final static int DEFAULT_MAX_NUMBER_OF_SAMPLES = 100;
+
+    public final static String CONFIG_API_VERSION = "apiVersion";
+    public final static double DEFAULT_API_VERSION = 1.0;
+
     // error codes
     public final static int ERROR_TIME_STAMP = -1;
     public final static int ERROR_NAN_DATA = -2;
@@ -33,6 +39,8 @@ final class Common {
 
     public static String PHP_COMMAND_TAKING_DATA_TO_TABLE = "";
     public static String PHP_COMMAND_TAKING_DATA_TO_GRAPH = "";
+    public static String PHP_COMMAND_TAKING_DATA_TO_CONFIG = "";
+
 
     public static List<MeasurementModel> measurementModelsList;
 

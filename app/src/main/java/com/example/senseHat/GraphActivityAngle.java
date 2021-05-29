@@ -257,7 +257,7 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     private void openLedView(){
-        Intent openLedsViewIntent = new Intent(this, LedsActivity.class);
+        Intent openLedsViewIntent = new Intent(this, LedActivity.class);
         startActivity(openLedsViewIntent);
         finish();
     }

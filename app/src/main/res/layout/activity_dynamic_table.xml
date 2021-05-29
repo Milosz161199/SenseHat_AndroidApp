@@ -47,6 +47,13 @@
                 app:srcCompat="@drawable/ic_action_chart" />
 
             <ImageButton
+                android:id="@+id/btnGoToJoyStick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_joystick" />
+
+            <ImageButton
                 android:id="@+id/btnGoToLed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

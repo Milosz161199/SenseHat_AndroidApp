@@ -143,7 +143,7 @@ public class ConfigActivity extends AppCompatActivity {
         intent.putExtra(Common.CONFIG_IP_ADDRESS, ipEditText.getText().toString());
         intent.putExtra(Common.CONFIG_SAMPLE_TIME, sampleTimeEditText.getText().toString());
         setResult(RESULT_OK, intent);
-        Intent openLedsViewIntent = new Intent(this, LedsActivity.class);
+        Intent openLedsViewIntent = new Intent(this, LedActivity.class);
         startActivity(openLedsViewIntent);
         finish();
     }
