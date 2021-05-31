@@ -58,11 +58,6 @@ public class GraphActivityAngle extends AppCompatActivity {
     private Switch swPitch;
     private Switch swYaw;
 
-    private ImageButton btnGoToConfig;
-    private ImageButton btnGoToGraphEnv;
-    private ImageButton btnGoToGraphAngle;
-    private ImageButton btnGoToLed;
-    private ImageButton btnGoToTable;
 
     //private LineGraphSeries[] dataSeries;
 
@@ -120,8 +115,6 @@ public class GraphActivityAngle extends AppCompatActivity {
         textViewError.setText("");
         /* END initialize TextViews */
 
-        // Init buttons
-        initMenuButtons();
 
         /* BEGIN initialize GraphView */
         InitGraphView();
@@ -199,74 +192,6 @@ public class GraphActivityAngle extends AppCompatActivity {
 
     }
 
-
-    public void initMenuButtons(){
-        /* START INIT WIDGETS VIEW */
-        btnGoToConfig = (ImageButton) findViewById(R.id.btnGoToConfig);
-        btnGoToGraphEnv = (ImageButton) findViewById(R.id.btnGoToGraphEnv);
-        btnGoToGraphAngle = (ImageButton) findViewById(R.id.btnGoToGraphAngle);
-        btnGoToLed = (ImageButton) findViewById(R.id.btnGoToLed);
-        btnGoToTable = (ImageButton) findViewById(R.id.btnGoToTable);
-        /* END INIT WIDGETS VIEW */
-
-        btnGoToConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openConfig();
-            }
-        });
-
-        btnGoToGraphEnv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphEnvView();
-            }
-        });
-
-        btnGoToGraphAngle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphAngleView();
-            }
-        });
-
-        btnGoToLed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLedView();
-            }
-        });
-
-        btnGoToTable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTableView();
-            }
-        });
-
-    }
-
-    private void openGraphEnvView(){
-        Intent openGraphEnvViewIntent = new Intent(this, GraphActivityEnv.class);
-        startActivity(openGraphEnvViewIntent);
-        finish();
-    }
-
-    private void openGraphAngleView(){
-
-    }
-
-    private void openLedView(){
-        Intent openLedsViewIntent = new Intent(this, LedActivity.class);
-        startActivity(openLedsViewIntent);
-        finish();
-    }
-
-    private void openTableView(){
-        Intent openTableViewIntent = new Intent(this, DynamicTableActivity.class);
-        startActivity(openTableViewIntent);
-        finish();
-    }
 
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki

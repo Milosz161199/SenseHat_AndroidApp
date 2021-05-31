@@ -40,11 +40,6 @@ public class LedActivity extends AppCompatActivity {
 
     /* BEGIN widgets */
 
-    private ImageButton btnGoToConfig;
-    private ImageButton btnGoToGraphEnv;
-    private ImageButton btnGoToGraphAngle;
-    private ImageButton btnGoToLed;
-    private ImageButton btnGoToTable;
 
     private Button sendBtn;
 
@@ -78,8 +73,7 @@ public class LedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leds);
 
-        //Init buttons
-        initMenuButtons();
+
         sendBtn = (Button) findViewById(R.id.sendBtn);
 
         /* BEGIN Color data initialization */
@@ -157,87 +151,6 @@ public class LedActivity extends AppCompatActivity {
         /* END 'Volley' request queue initialization */
     }
 
-
-    public void initMenuButtons(){
-        /* START INIT WIDGETS VIEW */
-        btnGoToConfig = (ImageButton) findViewById(R.id.btnGoToConfig);
-        btnGoToGraphEnv = (ImageButton) findViewById(R.id.btnGoToGraphEnv);
-        btnGoToGraphAngle = (ImageButton) findViewById(R.id.btnGoToGraphAngle);
-        btnGoToLed = (ImageButton) findViewById(R.id.btnGoToLed);
-        btnGoToTable = (ImageButton) findViewById(R.id.btnGoToTable);
-        /* END INIT WIDGETS VIEW */
-
-        btnGoToConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openConfig();
-            }
-        });
-
-        btnGoToGraphEnv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphEnvView();
-            }
-        });
-
-        btnGoToGraphAngle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphAngleView();
-            }
-        });
-
-        btnGoToLed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLedView();
-            }
-        });
-
-        btnGoToTable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTableView();
-            }
-        });
-
-    }
-
-    /**
-     * @brief Called when the user taps the 'Config' button.
-     * */
-    private void openConfig() {
-        Intent openConfigIntent = new Intent(this, ConfigActivity.class);
-        Bundle configBundle = new Bundle();
-        configBundle.putString(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_IP_ADDRESS);
-        configBundle.putInt(Common.CONFIG_SAMPLE_TIME, Common.DEFAULT_SAMPLE_TIME);
-        openConfigIntent.putExtras(configBundle);
-        startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
-        finish();
-    }
-
-    private void openGraphEnvView(){
-        Intent openGraphViewIntent = new Intent(this, GraphActivityEnv.class);
-        startActivity(openGraphViewIntent);
-        finish();
-    }
-
-    private void openGraphAngleView(){
-        Intent openGraphViewIntent = new Intent(this, GraphActivityAngle.class);
-        startActivity(openGraphViewIntent);
-        finish();
-    }
-
-    private void openLedView(){
-
-    }
-
-    private void openTableView(){
-        Intent openTableViewIntent = new Intent(this, DynamicTableActivity.class);
-        startActivity(openTableViewIntent);
-        finish();
-    }
 
     /**
      * @brief Color conversion method: ARGB components to single ARGB integer value

@@ -73,12 +73,6 @@ public class DynamicTableActivity extends AppCompatActivity {
     private RecyclerView.Adapter tableAdapter;
     private RecyclerView.LayoutManager tableManager;
 
-    private ImageButton btnGoToConfig;
-    private ImageButton btnGoToGraphEnv;
-    private ImageButton btnGoToGraphAngle;
-    private ImageButton btnGoToLed;
-    private ImageButton btnGoToTable;
-
     private Button btnStartTable;
     private Button btnStopTable;
 
@@ -116,13 +110,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_table);
 
-        // Init buttons
-        initMenuButtons();
-
-
 
         btnStartTable = (Button) findViewById(R.id.btnStartTable);
-        btnStopTable = (Button) findViewById(R.id.btnStopTable);
+        //btnStopTable = (Button) findViewById(R.id.btnStopTable);
 
         checkBoxEnvMes = (CheckBox) findViewById(R.id.checkBoxEnvMes);
         checkBoxAngleOrientation = (CheckBox) findViewById(R.id.checkBoxAngleOrientation);
@@ -165,87 +155,6 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     }
 
-    public void initMenuButtons(){
-        /* START INIT WIDGETS VIEW */
-        btnGoToConfig = (ImageButton) findViewById(R.id.btnGoToConfig);
-        btnGoToGraphEnv = (ImageButton) findViewById(R.id.btnGoToGraphEnv);
-        btnGoToGraphAngle = (ImageButton) findViewById(R.id.btnGoToGraphAngle);
-        btnGoToLed = (ImageButton) findViewById(R.id.btnGoToLed);
-        btnGoToTable = (ImageButton) findViewById(R.id.btnGoToTable);
-        /* END INIT WIDGETS VIEW */
-
-        btnGoToConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openConfig();
-            }
-        });
-
-        btnGoToGraphEnv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphEnvView();
-            }
-        });
-
-        btnGoToGraphAngle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphAngleView();
-            }
-        });
-
-        btnGoToLed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openLedView();
-            }
-        });
-
-        btnGoToTable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTableView();
-            }
-        });
-
-    }
-
-    /**
-     * @brief Called when the user taps the 'Config' button.
-     * */
-    private void openConfig() {
-        Intent openConfigIntent = new Intent(this, ConfigActivity.class);
-        Bundle configBundle = new Bundle();
-        configBundle.putString(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_IP_ADDRESS);
-        configBundle.putInt(Common.CONFIG_SAMPLE_TIME, Common.DEFAULT_SAMPLE_TIME);
-        openConfigIntent.putExtras(configBundle);
-        startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
-        finish();
-    }
-
-    private void openGraphEnvView(){
-        Intent openGraphViewIntent = new Intent(this, GraphActivityEnv.class);
-        startActivity(openGraphViewIntent);
-        finish();
-    }
-
-    private void openGraphAngleView(){
-        Intent openGraphViewIntent = new Intent(this, GraphActivityAngle.class);
-        startActivity(openGraphViewIntent);
-        finish();
-    }
-
-    private void openLedView(){
-        Intent openLedsViewIntent = new Intent(this, LedActivity.class);
-        startActivity(openLedsViewIntent);
-        finish();
-    }
-
-    private void openTableView(){
-
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
@@ -275,10 +184,10 @@ public class DynamicTableActivity extends AppCompatActivity {
                 startRequestTimer();
                 break;
             }
-            case R.id.btnStopTable: {
-                stopRequestTimerTask();
-                break;
-            }
+            //case R.id.btnStopTable: {
+            //    stopRequestTimerTask();
+            //    break;
+            //}
             default: {
                 // do nothing
             }
