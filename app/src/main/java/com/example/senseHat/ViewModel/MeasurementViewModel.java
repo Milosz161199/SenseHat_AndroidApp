@@ -1,6 +1,8 @@
-package com.example.senseHat;
+package com.example.senseHat.ViewModel;
 
 // MODELS
+
+import com.example.senseHat.Model.MeasurementModel;
 
 public class MeasurementViewModel {
 

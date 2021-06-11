@@ -8,7 +8,7 @@
  ******************************************************************************
  */
 
-package com.example.senseHat;
+package com.example.senseHat.View;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.senseHat.R;
 
 import java.util.HashMap;
 import java.util.Map;

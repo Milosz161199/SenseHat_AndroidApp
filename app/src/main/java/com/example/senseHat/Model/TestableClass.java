@@ -8,12 +8,15 @@
  ******************************************************************************
  */
 
-package com.example.senseHat;
+package com.example.senseHat.Model;
+
+import com.example.senseHat.Model.MeasurementModel;
+import com.example.senseHat.View.DynamicTableActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-class TestableClass {
+public class TestableClass {
 
     /**
      * @brief Reading raw chart data from JSON response.

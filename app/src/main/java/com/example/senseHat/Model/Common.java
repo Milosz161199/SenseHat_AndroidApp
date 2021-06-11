@@ -8,11 +8,13 @@
  ******************************************************************************
  */
 
-package com.example.senseHat;
+package com.example.senseHat.Model;
+
+import com.example.senseHat.Model.MeasurementModel;
 
 import java.util.List;
 
-final class Common {
+public class Common {
     // activities request codes
     public final static int REQUEST_CODE_CONFIG = 1;
 

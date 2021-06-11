@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LedActivity"
+    tools:context=".View.LedActivity"
     android:background="@mipmap/raspberry_background">
 
     <LinearLayout
@@ -30,7 +30,6 @@
                 android:textStyle="bold"/>
 
         </LinearLayout>
-
 
         <EditText
             android:id="@+id/urlText"

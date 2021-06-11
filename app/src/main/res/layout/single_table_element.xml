@@ -23,7 +23,6 @@
         android:textColor="#0000FF"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/singleElementNameTextView"
         android:layout_width="wrap_content"
@@ -32,7 +31,6 @@
         android:layout_weight="2"
         android:text="Temperature"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/textView28"

@@ -11,14 +11,14 @@
 
    <application
        android:allowBackup="true"
-       android:icon="@mipmap/ic_launcher"
+       android:icon="@mipmap/ic_launcher_raspberry"
        android:label="@string/app_name"
-       android:roundIcon="@mipmap/ic_launcher_round"
+       android:roundIcon="@mipmap/ic_launcher_raspberry_round"
        android:supportsRtl="true"
        android:theme="@style/AppTheme"
        android:usesCleartextTraffic="true">
        <!-- Main activity -->
-       <activity android:name="com.example.senseHat.HomePageActivity">
+       <activity android:name="com.example.senseHat.View.HomePageActivity">
            <intent-filter>
                <action android:name="android.intent.action.MAIN" />
 
@@ -26,12 +26,12 @@
            </intent-filter>
        </activity>
        <!-- Configuration activity -->
-       <activity android:name="com.example.senseHat.ConfigActivity" />
-       <activity android:name="com.example.senseHat.GraphActivityEnv" />
-       <activity android:name="com.example.senseHat.GraphActivityAngle" />
-       <activity android:name="com.example.senseHat.GraphActivityJoyStick" />
-       <activity android:name="com.example.senseHat.LedActivity" />
-       <activity android:name="com.example.senseHat.DynamicTableActivity" />
+       <activity android:name="com.example.senseHat.View.ConfigActivity" />
+       <activity android:name="com.example.senseHat.View.GraphActivityEnv" />
+       <activity android:name="com.example.senseHat.View.GraphActivityAngle" />
+       <activity android:name="com.example.senseHat.View.GraphActivityJoyStick" />
+       <activity android:name="com.example.senseHat.View.LedActivity" />
+       <activity android:name="com.example.senseHat.View.DynamicTableActivity" />
 
    </application>
 

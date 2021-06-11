@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.constraintlayout.widget.ConstraintLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,8 +6,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@mipmap/raspberry_background"
-tools:context="com.example.senseHat.GraphActivityEnv">
-
+tools:context="com.example.senseHat.View.GraphActivityEnv">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -20,8 +17,6 @@ tools:context="com.example.senseHat.GraphActivityEnv">
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,7 +175,5 @@ tools:context="com.example.senseHat.GraphActivityEnv">
                     android:text="Pressure"
                     tools:ignore="UseSwitchCompatOrMaterialXml"/>
             </LinearLayout>
-
-    </LinearLayout>
-
+        </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

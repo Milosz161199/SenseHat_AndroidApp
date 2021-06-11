@@ -8,15 +8,16 @@
  ******************************************************************************
  */
 
-package com.example.senseHat;
+package com.example.senseHat.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
+import com.example.senseHat.Model.Common;
+import com.example.senseHat.R;
 
 public class ConfigActivity extends AppCompatActivity {
 

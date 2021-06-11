@@ -9,42 +9,44 @@
  ******************************************************************************
  */
 
-        package com.example.senseHat;
+        package com.example.senseHat.View;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import android.app.AlertDialog;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-        import android.graphics.Color;
-        import android.os.Bundle;
-        import android.os.Handler;
-        import android.os.SystemClock;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.CompoundButton;
-        import android.widget.ImageButton;
-        import android.widget.Switch;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import com.android.volley.Request;
-        import com.android.volley.RequestQueue;
-        import com.android.volley.Response;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.StringRequest;
-        import com.android.volley.toolbox.Volley;
-        import com.jjoe64.graphview.GraphView;
-        import com.jjoe64.graphview.LegendRenderer;
-        import com.jjoe64.graphview.series.DataPoint;
-        import com.jjoe64.graphview.series.LineGraphSeries;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.senseHat.Model.Common;
+import com.example.senseHat.R;
+import com.example.senseHat.Model.TestableClass;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
-        import java.util.Timer;
-        import java.util.TimerTask;
+import java.util.Timer;
+import java.util.TimerTask;
 
-        import static java.lang.Double.isNaN;
+import static java.lang.Double.isNaN;
 
-public class GraphActivityEnv extends AppCompatActivity {
+public class GraphActivityAngle extends AppCompatActivity {
 
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
@@ -53,12 +55,10 @@ public class GraphActivityEnv extends AppCompatActivity {
 
 
     /* BEGIN widgets */
-    private Switch swTemperature;
-    private Switch swHumidity;
-    private Switch swPressure;
 
-
-    private ImageButton btnGoToConfig;
+    private Switch swRoll;
+    private Switch swPitch;
+    private Switch swYaw;
 
 
     //private LineGraphSeries[] dataSeries;
@@ -67,15 +67,14 @@ public class GraphActivityEnv extends AppCompatActivity {
     private TextView textViewSampleTime;
     private TextView textViewError;
     private GraphView dataGraph;
-    private LineGraphSeries<DataPoint> dataSeriesTemperature;
-    private LineGraphSeries<DataPoint> dataSeriesHumidity;
-    private LineGraphSeries<DataPoint> dataSeriesPressure;
-
+    private LineGraphSeries<DataPoint> dataSeriesRoll;
+    private LineGraphSeries<DataPoint> dataSeriesPitch;
+    private LineGraphSeries<DataPoint> dataSeriesYaw;
     private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 10.0d;
-    private final double dataGraphMinX =  0.0d;
-    private final double dataGraphMaxY =  100.0d;
-    private final double dataGraphMinY =  0.0d;
+    private final double dataGraphMinX = 0.0d;
+    private final double dataGraphMaxY = 360.0d;
+    private final double dataGraphMinY = 0.0d;
     private AlertDialog.Builder configAlterDialog;
     /* END widgets */
 
@@ -93,21 +92,19 @@ public class GraphActivityEnv extends AppCompatActivity {
     /* Testable module */
     private TestableClass responseHandling = new TestableClass();
 
-    public GraphActivityEnv() {
-
+    public GraphActivityAngle() {
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_env);
+        setContentView(R.layout.activity_graph_angle);
 
         /* BEGIN initialize widgets */
         /* BEGIN initialize Switches */
-        swTemperature = findViewById(R.id.swTemperature);
-        swHumidity = findViewById(R.id.swHumidity);
-        swPressure = findViewById(R.id.swPressure);
-
+        swRoll = findViewById(R.id.swRoll);
+        swPitch = findViewById(R.id.swPitch);
+        swYaw = findViewById(R.id.swYaw);
 
         /* BEGIN initialize TextViews */
         textViewIP = findViewById(R.id.textViewIP);
@@ -126,7 +123,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         /* END initialize GraphView */
 
         /* BEGIN config alter dialog */
-        configAlterDialog = new AlertDialog.Builder(GraphActivityEnv.this);
+        configAlterDialog = new AlertDialog.Builder(GraphActivityAngle.this);
         configAlterDialog.setTitle("This will STOP data acquisition. Proceed?");
         configAlterDialog.setIcon(android.R.drawable.ic_dialog_alert);
         configAlterDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -144,53 +141,53 @@ public class GraphActivityEnv extends AppCompatActivity {
         /* END initialize widgets */
 
         // Initialize Volley request queue
-        queue = Volley.newRequestQueue(GraphActivityEnv.this);
+        queue = Volley.newRequestQueue(GraphActivityAngle.this);
 
 
-        swTemperature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swRoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    Toast.makeText(getApplicationContext(), "+Temperature...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[0] = true;
+                    Toast.makeText(getApplicationContext(), "+Roll...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[3] = true;
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "-Temperature...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[0] = false;
+                    Toast.makeText(getApplicationContext(), "-Roll...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[3] = false;
                 }
             }
         });
 
-        swHumidity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swPitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    Toast.makeText(getApplicationContext(), "+Humidity...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[1] = true;
+                    Toast.makeText(getApplicationContext(), "+Pitch...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[4] = true;
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "-Humidity...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[1] = false;
+                    Toast.makeText(getApplicationContext(), "-Pitch...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[4] = false;
                 }
             }
         });
 
-        swPressure.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swYaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
-                    Toast.makeText(getApplicationContext(), "+Pressure...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[2] = true;
+                    Toast.makeText(getApplicationContext(), "+Yaw...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[5] = true;
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "-Pressure...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[2] = false;
+                    Toast.makeText(getApplicationContext(), "-Yaw...", Toast.LENGTH_SHORT).show();
+                    tabOfMeasurements[5] = false;
                 }
             }
         });
@@ -201,19 +198,20 @@ public class GraphActivityEnv extends AppCompatActivity {
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
         dataGraph = (GraphView)findViewById(R.id.dataGraph);
-        dataSeriesTemperature = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeriesHumidity = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeriesPressure = new LineGraphSeries<>(new DataPoint[]{});
 
+        dataSeriesRoll = new LineGraphSeries<>(new DataPoint[]{});
+        dataSeriesPitch = new LineGraphSeries<>(new DataPoint[]{});
+        dataSeriesYaw = new LineGraphSeries<>(new DataPoint[]{});
 
-        dataGraph.addSeries(dataSeriesTemperature);
-        dataGraph.addSeries(dataSeriesHumidity);
-        dataGraph.addSeries(dataSeriesPressure);
-
+        dataGraph.addSeries(dataSeriesRoll);
+        dataGraph.addSeries(dataSeriesPitch);
+        dataGraph.addSeries(dataSeriesYaw);
 
         dataGraph.getViewport().setXAxisBoundsManual(true);
         dataGraph.getViewport().setMinX(dataGraphMinX);
         dataGraph.getViewport().setMaxX(dataGraphMaxX);
+        dataGraph.getViewport().setMinY(dataGraphMinY);
+        dataGraph.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraph.getViewport().setScalable(true);
         dataGraph.getViewport().setScrollable(true);
@@ -558,23 +556,23 @@ public class GraphActivityEnv extends AppCompatActivity {
                 // update plot series
                 double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
-                if(tabOfMeasurements[0])
-                {
-                    dataSeriesTemperature.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[0]), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesTemperature.setTitle("Temperature [C]");
-                    dataSeriesTemperature.setColor(Color.BLUE);
+                if(tabOfMeasurements[3]){
+                    dataSeriesRoll.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[3]), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesRoll.setTitle("Roll [deg]");
+                    dataSeriesRoll.setColor(Color.YELLOW);
                 }
-                if(tabOfMeasurements[1])
-                {
-                    dataSeriesHumidity.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[1]), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesHumidity.setTitle("Humidity [%]");
-                    dataSeriesHumidity.setColor(Color.GREEN);
+
+                if(tabOfMeasurements[4]){
+                    dataSeriesPitch.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[4]), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesPitch.setTitle("Pitch [deg]");
+                    dataSeriesPitch.setColor(Color.GRAY);
                 }
-                if(tabOfMeasurements[2])
-                {
-                    dataSeriesPressure.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[2]), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesPressure.setTitle("Pressure [hPa]");
-                    dataSeriesPressure.setColor(Color.RED);
+
+                if(tabOfMeasurements[5]){
+                    dataSeriesYaw.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[5]), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesYaw.setTitle("Yaw [deg]");
+                    dataSeriesYaw.setColor(Color.MAGENTA);
+
                 }
 
 
@@ -586,7 +584,7 @@ public class GraphActivityEnv extends AppCompatActivity {
                 dataGraph.getLegendRenderer().setTextSize(30);
 
                 dataGraph.getGridLabelRenderer().setTextSize(20);
-                dataGraph.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Value [-]");
+                dataGraph.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Value [deg]");
                 dataGraph.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
                 dataGraph.getGridLabelRenderer().setNumHorizontalLabels(9);
                 dataGraph.getGridLabelRenderer().setNumVerticalLabels(7);

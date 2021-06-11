@@ -1,5 +1,7 @@
 package com.example.senseHat;
 
+import com.example.senseHat.Model.TestableClass;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

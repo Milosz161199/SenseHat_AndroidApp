@@ -1,13 +1,14 @@
-package com.example.senseHat;
+package com.example.senseHat.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.senseHat.Model.Common;
+import com.example.senseHat.R;
 
 public class HomePageActivity extends AppCompatActivity {
 

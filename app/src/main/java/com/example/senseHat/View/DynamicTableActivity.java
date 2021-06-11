@@ -1,4 +1,4 @@
-package com.example.senseHat;
+package com.example.senseHat.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -22,6 +21,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.senseHat.Model.Common;
+import com.example.senseHat.Model.MeasurementModel;
+import com.example.senseHat.R;
+import com.example.senseHat.Model.TestableClass;
+import com.example.senseHat.ViewModel.MeasurementViewModel;
+import com.example.senseHat.ViewModel.TableAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,6 @@
-package com.example.senseHat;
+package com.example.senseHat.Model;
+
+import com.example.senseHat.ViewModel.MeasurementViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

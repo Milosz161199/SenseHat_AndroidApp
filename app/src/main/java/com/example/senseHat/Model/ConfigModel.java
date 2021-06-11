@@ -1,4 +1,4 @@
-package com.example.senseHat;
+package com.example.senseHat.Model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
