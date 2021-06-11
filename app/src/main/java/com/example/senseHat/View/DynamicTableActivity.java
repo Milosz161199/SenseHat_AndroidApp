@@ -157,7 +157,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         dynamicTableRecyclerViewAdapter = new TableAdapter(this, mList);
         dynamicTableRecyclerView.setAdapter(dynamicTableRecyclerViewAdapter);
     }
-
+/*
     public void initTable(){
         name1 = (TextView) findViewById(R.id.name1);
         name2 = (TextView) findViewById(R.id.name2);
@@ -190,7 +190,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         unit9 = (TextView) findViewById(R.id.unit9);
 
     }
-
+*/
     private void initTableList()
     {
         mList = new ArrayList<MeasurementModel>() {};
@@ -410,8 +410,8 @@ public class DynamicTableActivity extends AppCompatActivity {
             requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
             // get raw data from JSON response to Table View
-            initTable();
-            clearTable();
+            //initTable();
+            //clearTable();
 
             responseHandling.getRawDataFromResponseToTable(response);
 
@@ -423,7 +423,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
-
+/*
     public static void clearTable()
     {
         name1.clearComposingText();
@@ -456,5 +456,5 @@ public class DynamicTableActivity extends AppCompatActivity {
         unit8.clearComposingText();
         unit9.clearComposingText();
     }
-
+*/
 }

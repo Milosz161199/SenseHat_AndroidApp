@@ -3,6 +3,7 @@ package com.example.senseHat.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +13,12 @@ import com.example.senseHat.R;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private ImageButton imageButtonGoToTable;
-    private ImageButton imageButtonGoToConfig;
-    private ImageButton imageButtonGoToGraphAngle;
-    private ImageButton imageButtonGoToGraphEnv;
-    private ImageButton imageButtonGoToGraphJoyStick;
-    private ImageButton imageButtonGoToLed;
+    private Button imageButtonGoToTable;
+    private Button imageButtonGoToConfig;
+    private Button imageButtonGoToGraphAngle;
+    private Button imageButtonGoToGraphEnv;
+    private Button imageButtonGoToGraphJoyStick;
+    private Button imageButtonGoToLed;
 
 
 
@@ -46,12 +47,12 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void initMenuBar(){
-        imageButtonGoToTable = (ImageButton) findViewById(R.id.btnGoToTable);
-        imageButtonGoToConfig = (ImageButton) findViewById(R.id.btnGoToConfig);
-        imageButtonGoToGraphAngle = (ImageButton) findViewById(R.id.btnGoToGraphAngle);
-        imageButtonGoToGraphEnv = (ImageButton) findViewById(R.id.btnGoToGraphEnv);
-        imageButtonGoToGraphJoyStick = (ImageButton) findViewById(R.id.btnGoToGraphJoyStick);
-        imageButtonGoToLed = (ImageButton) findViewById(R.id.btnGoToLed);
+        imageButtonGoToTable = (Button) findViewById(R.id.btnGoToTable);
+        imageButtonGoToConfig = (Button) findViewById(R.id.btnGoToConfig);
+        imageButtonGoToGraphAngle = (Button) findViewById(R.id.btnGoToGraphAngle);
+        imageButtonGoToGraphEnv = (Button) findViewById(R.id.btnGoToGraphEnv);
+        imageButtonGoToGraphJoyStick = (Button) findViewById(R.id.btnGoToGraphJoyStick);
+        imageButtonGoToLed = (Button) findViewById(R.id.btnGoToLed);
     }
 
     private void menuBarButtons() {

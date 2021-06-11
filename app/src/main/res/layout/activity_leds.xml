@@ -27,6 +27,7 @@
                 android:gravity="center_horizontal"
                 android:text="Led matrix"
                 android:textSize="24dp"
+                android:textColor="#000000"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -1597,6 +1598,7 @@
                     android:layout_weight="0"
                     android:gravity="right|center_vertical"
                     android:text="R"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <SeekBar
@@ -1626,6 +1628,7 @@
                     android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
                     android:text="G"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <SeekBar
@@ -1655,6 +1658,7 @@
                     android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
                     android:text="B"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <SeekBar

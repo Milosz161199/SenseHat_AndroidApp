@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Angle measurements"
+                android:textColor="#000000"
                 android:textSize="24dp"
                 android:textStyle="bold">
 
