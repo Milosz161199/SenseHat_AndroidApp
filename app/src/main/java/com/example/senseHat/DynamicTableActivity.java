@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -22,10 +23,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DynamicTableActivity extends AppCompatActivity {
+
+    private ArrayList<MeasurementModel> mList;
+
+    private List<MeasurementViewModel> measurements;
+
 
     public static String[] TableName;
     public static String[] TableValue;
@@ -60,8 +68,6 @@ public class DynamicTableActivity extends AppCompatActivity {
     public static TextView unit7;
     public static TextView unit8;
     public static TextView unit9;
-
-
 
 
     /* BEGIN config data */
@@ -104,13 +110,27 @@ public class DynamicTableActivity extends AppCompatActivity {
     /* Testable module */
     private TestableClass responseHandling = new TestableClass();
 
+    private RecyclerView dynamicTableRecyclerView;
+    private RecyclerView.Adapter dynamicTableRecyclerViewAdapter;
+    private RecyclerView.LayoutManager dynamicTableRecyclerViewManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_table);
 
+        initTableList();
 
+        /**************** INIT WIDGETS *****************/
+        initView();
+
+
+
+        // Initialize Volley request queue
+        queue = Volley.newRequestQueue(DynamicTableActivity.this);
+    }
+
+    public void initView(){
         btnStartTable = (Button) findViewById(R.id.btnStartTable);
         //btnStopTable = (Button) findViewById(R.id.btnStopTable);
 
@@ -118,8 +138,19 @@ public class DynamicTableActivity extends AppCompatActivity {
         checkBoxAngleOrientation = (CheckBox) findViewById(R.id.checkBoxAngleOrientation);
         checkBoxJoyStick = (CheckBox) findViewById(R.id.checkBoxJoyStick);
 
-        // Initialize Volley request queue
-        queue = Volley.newRequestQueue(DynamicTableActivity.this);
+        dynamicTableRecyclerView = (RecyclerView) findViewById(R.id.dynamicTableRecyclerView);
+
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        dynamicTableRecyclerViewManager = new LinearLayoutManager(this);
+        dynamicTableRecyclerView.setLayoutManager(dynamicTableRecyclerViewManager);
+
+        dynamicTableRecyclerView.setHasFixedSize(true);
+
+        dynamicTableRecyclerViewAdapter = new TableAdapter(this, mList);
+        dynamicTableRecyclerView.setAdapter(dynamicTableRecyclerViewAdapter);
     }
 
     public void initTable(){
@@ -155,6 +186,29 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     }
 
+    private void initTableList()
+    {
+        mList = new ArrayList<MeasurementModel>() {};
+        MeasurementModel m = new MeasurementModel("Temperature", 1.2 , "°C", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Pressure", 1000.2 , "hPa", "QFQFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Roll", 100.2 , "rad", "QFQFQFQQ");
+        mList.add(m);
+        m = new MeasurementModel("Yall", 100.2 , "deg", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Humidity", 10.2 , "%", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Pitch", 100.2 , "deg", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Counter_middle", 10 , "[-]", "JOY");
+        mList.add(m);
+        m = new MeasurementModel("Counter_y", 10 , "[-]", "JOY");
+        mList.add(m);
+        m = new MeasurementModel("Counter_x", 10 , "[-]", "JOY");
+        mList.add(m);
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
