@@ -70,6 +70,9 @@ public class GraphActivityEnv extends AppCompatActivity {
     private TextView textViewSampleTime;
     private TextView textViewError;
     private GraphView dataGraph;
+    private GraphView dataGraphTemp;
+    private GraphView dataGraphHum;
+    private GraphView dataGraphPres;
     private LineGraphSeries<DataPoint> dataSeriesTemperature;
     private LineGraphSeries<DataPoint> dataSeriesHumidity;
     private LineGraphSeries<DataPoint> dataSeriesPressure;
@@ -203,23 +206,89 @@ public class GraphActivityEnv extends AppCompatActivity {
 
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
-        dataGraph = (GraphView)findViewById(R.id.dataGraph);
+        dataGraphTemp = (GraphView) findViewById(R.id.dataGraphTemp);
+        dataGraphHum = (GraphView) findViewById(R.id.dataGraphHum);
+        dataGraphPres = (GraphView) findViewById(R.id.dataGraphPres);
+
         dataSeriesTemperature = new LineGraphSeries<>(new DataPoint[]{});
         dataSeriesHumidity = new LineGraphSeries<>(new DataPoint[]{});
         dataSeriesPressure = new LineGraphSeries<>(new DataPoint[]{});
 
 
-        dataGraph.addSeries(dataSeriesTemperature);
-        dataGraph.addSeries(dataSeriesHumidity);
-        dataGraph.addSeries(dataSeriesPressure);
+        dataGraphTemp.addSeries(dataSeriesTemperature);
+        dataGraphHum.addSeries(dataSeriesHumidity);
+        dataGraphPres.addSeries(dataSeriesPressure);
 
 
-        dataGraph.getViewport().setXAxisBoundsManual(true);
-        dataGraph.getViewport().setMinX(dataGraphMinX);
-        dataGraph.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphTemp.getViewport().setXAxisBoundsManual(true);
+        dataGraphTemp.getViewport().setYAxisBoundsManual(true);
+        dataGraphTemp.getViewport().setMinX(0);
+        dataGraphTemp.getViewport().setMaxX(10);
+        dataGraphTemp.getViewport().setMinY(20);
+        dataGraphTemp.getViewport().setMaxY(40);
 
-        dataGraph.getViewport().setScalable(true);
-        dataGraph.getViewport().setScrollable(true);
+        dataGraphTemp.getViewport().setScalable(true);
+        dataGraphTemp.getViewport().setScrollable(true);
+
+        dataGraphHum.getViewport().setXAxisBoundsManual(true);
+        dataGraphHum.getViewport().setYAxisBoundsManual(true);
+        dataGraphHum.getViewport().setMinX(0);
+        dataGraphHum.getViewport().setMaxX(10);
+        dataGraphHum.getViewport().setMinY(0);
+        dataGraphHum.getViewport().setMaxY(100);
+
+        dataGraphHum.getViewport().setScalable(true);
+        dataGraphHum.getViewport().setScrollable(true);
+
+        dataGraphPres.getViewport().setXAxisBoundsManual(true);
+        dataGraphPres.getViewport().setYAxisBoundsManual(true);
+        dataGraphPres.getViewport().setMinX(0);
+        dataGraphPres.getViewport().setMaxX(10);
+        dataGraphPres.getViewport().setMinY(990);
+        dataGraphPres.getViewport().setMaxY(1100);
+
+        dataGraphPres.getViewport().setScalable(true);
+        dataGraphPres.getViewport().setScrollable(true);
+
+        // refresh chart
+        dataGraphTemp.onDataChanged(true, true);
+
+        dataGraphTemp.getLegendRenderer().setVisible(true);
+        dataGraphTemp.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphTemp.getLegendRenderer().setTextSize(30);
+
+        dataGraphTemp.getGridLabelRenderer().setTextSize(20);
+        dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [°C]");
+        dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphTemp.getGridLabelRenderer().setPadding(35);
+
+        dataGraphHum.onDataChanged(true, true);
+
+        dataGraphHum.getLegendRenderer().setVisible(true);
+        dataGraphHum.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphHum.getLegendRenderer().setTextSize(30);
+
+        dataGraphHum.getGridLabelRenderer().setTextSize(20);
+        dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [-]");
+        dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphHum.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphHum.getGridLabelRenderer().setPadding(35);
+
+        dataGraphPres.onDataChanged(true, true);
+
+        dataGraphPres.getLegendRenderer().setVisible(true);
+        dataGraphPres.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphPres.getLegendRenderer().setTextSize(30);
+
+        dataGraphPres.getGridLabelRenderer().setTextSize(20);
+        dataGraphPres.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pressure [hPa]");
+        dataGraphPres.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphPres.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphPres.getGridLabelRenderer().setPadding(35);
     }
 
     /**

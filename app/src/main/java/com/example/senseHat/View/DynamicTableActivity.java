@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -40,41 +41,6 @@ public class DynamicTableActivity extends AppCompatActivity {
     private List<MeasurementViewModel> measurements;
 
 
-    public static String[] TableName;
-    public static String[] TableValue;
-    public static String[] TableUnit;
-
-    public static TextView name1;
-    public static TextView name2;
-    public static TextView name3;
-    public static TextView name4;
-    public static TextView name5;
-    public static TextView name6;
-    public static TextView name7;
-    public static TextView name8;
-    public static TextView name9;
-
-    public static TextView value1;
-    public static TextView value2;
-    public static TextView value3;
-    public static TextView value4;
-    public static TextView value5;
-    public static TextView value6;
-    public static TextView value7;
-    public static TextView value8;
-    public static TextView value9;
-
-    public static TextView unit1;
-    public static TextView unit2;
-    public static TextView unit3;
-    public static TextView unit4;
-    public static TextView unit5;
-    public static TextView unit6;
-    public static TextView unit7;
-    public static TextView unit8;
-    public static TextView unit9;
-
-
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
     private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
@@ -90,7 +56,9 @@ public class DynamicTableActivity extends AppCompatActivity {
     private CheckBox checkBoxEnvMes;
     private CheckBox checkBoxAngleOrientation;
     private CheckBox checkBoxJoyStick;
+    private CheckBox checkBoxCompass;
 
+    private Switch swChangeUnit;
 
     private String onlyEnvMes = "measurements.php?id=[0,1,2]";
     private String onlyAngles = "measurements.php?id=[3,4,5]";
@@ -124,6 +92,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_table);
 
+        /**************** INIT RECYCLER VIEW - DYNAMIC TABLE *****************/
         initTableList();
 
         /**************** INIT WIDGETS *****************/
@@ -142,6 +111,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         checkBoxEnvMes = (CheckBox) findViewById(R.id.checkBoxEnvMes);
         checkBoxAngleOrientation = (CheckBox) findViewById(R.id.checkBoxAngleOrientation);
         checkBoxJoyStick = (CheckBox) findViewById(R.id.checkBoxJoyStick);
+        checkBoxCompass = (CheckBox) findViewById(R.id.checkBoxCompass);
+
+        swChangeUnit = (Switch) findViewById(R.id.swChangeUnit);
 
         dynamicTableRecyclerView = (RecyclerView) findViewById(R.id.dynamicTableRecyclerView);
 
@@ -157,44 +129,13 @@ public class DynamicTableActivity extends AppCompatActivity {
         dynamicTableRecyclerViewAdapter = new TableAdapter(this, mList);
         dynamicTableRecyclerView.setAdapter(dynamicTableRecyclerViewAdapter);
     }
-/*
-    public void initTable(){
-        name1 = (TextView) findViewById(R.id.name1);
-        name2 = (TextView) findViewById(R.id.name2);
-        name3 = (TextView) findViewById(R.id.name3);
-        name4 = (TextView) findViewById(R.id.name4);
-        name5 = (TextView) findViewById(R.id.name5);
-        name6 = (TextView) findViewById(R.id.name6);
-        name7 = (TextView) findViewById(R.id.name7);
-        name8 = (TextView) findViewById(R.id.name8);
-        name9 = (TextView) findViewById(R.id.name9);
 
-        value1 = (TextView) findViewById(R.id.value1);
-        value2 = (TextView) findViewById(R.id.value2);
-        value3 = (TextView) findViewById(R.id.value3);
-        value4 = (TextView) findViewById(R.id.value4);
-        value5 = (TextView) findViewById(R.id.value5);
-        value6 = (TextView) findViewById(R.id.value6);
-        value7 = (TextView) findViewById(R.id.value7);
-        value8 = (TextView) findViewById(R.id.value8);
-        value9 = (TextView) findViewById(R.id.value9);
-
-        unit1 = (TextView) findViewById(R.id.unit1);
-        unit2 = (TextView) findViewById(R.id.unit2);
-        unit3 = (TextView) findViewById(R.id.unit3);
-        unit4 = (TextView) findViewById(R.id.unit4);
-        unit5 = (TextView) findViewById(R.id.unit5);
-        unit6 = (TextView) findViewById(R.id.unit6);
-        unit7 = (TextView) findViewById(R.id.unit7);
-        unit8 = (TextView) findViewById(R.id.unit8);
-        unit9 = (TextView) findViewById(R.id.unit9);
-
-    }
-*/
     private void initTableList()
     {
         mList = new ArrayList<MeasurementModel>() {};
         MeasurementModel m = new MeasurementModel("Temperature", 1.2 , "°C", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Temperature", 1000.2 , "F", "SENSOR 1");
         mList.add(m);
         m = new MeasurementModel("Pressure", 1000.2 , "hPa", "QFQFQFQFQ");
         mList.add(m);
@@ -202,7 +143,13 @@ public class DynamicTableActivity extends AppCompatActivity {
         mList.add(m);
         m = new MeasurementModel("Yall", 100.2 , "deg", "QFQFQFQ");
         mList.add(m);
+        m = new MeasurementModel("Roll", 1.2 , "rad", "QFQFQFQQ");
+        mList.add(m);
+        m = new MeasurementModel("Yall", 1.2 , "rad", "QFQFQFQ");
+        mList.add(m);
         m = new MeasurementModel("Humidity", 10.2 , "%", "QFQFQFQ");
+        mList.add(m);
+        m = new MeasurementModel("Humidity", 10.2 , "[-]]", "QFQFQFQ");
         mList.add(m);
         m = new MeasurementModel("Pitch", 100.2 , "deg", "QFQFQFQ");
         mList.add(m);
@@ -212,7 +159,14 @@ public class DynamicTableActivity extends AppCompatActivity {
         mList.add(m);
         m = new MeasurementModel("Counter_x", 10 , "[-]", "JOY");
         mList.add(m);
-
+        m = new MeasurementModel("North", 10 , "[-]", "COMPASS");
+        mList.add(m);
+        m = new MeasurementModel("X", 10 , "[-]", "COMPASS_RAW");
+        mList.add(m);
+        m = new MeasurementModel("Y", 10 , "[-]", "COMPASS_RAW");
+        mList.add(m);
+        m = new MeasurementModel("Z", 10 , "[-]", "COMPASS_RAW");
+        mList.add(m);
     }
 
     @Override
@@ -423,38 +377,4 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
-/*
-    public static void clearTable()
-    {
-        name1.clearComposingText();
-        name1.clearComposingText();
-        name2.clearComposingText();
-        name3.clearComposingText();
-        name4.clearComposingText();
-        name5.clearComposingText();
-        name6.clearComposingText();
-        name7.clearComposingText();
-        name8.clearComposingText();
-        name9.clearComposingText();
-        value1.clearComposingText();
-        value1.clearComposingText();
-        value2.clearComposingText();
-        value3.clearComposingText();
-        value4.clearComposingText();
-        value5.clearComposingText();
-        value6.clearComposingText();
-        value7.clearComposingText();
-        value8.clearComposingText();
-        value9.clearComposingText();
-        unit1.clearComposingText();
-        unit2.clearComposingText();
-        unit3.clearComposingText();
-        unit4.clearComposingText();
-        unit5.clearComposingText();
-        unit6.clearComposingText();
-        unit7.clearComposingText();
-        unit8.clearComposingText();
-        unit9.clearComposingText();
-    }
-*/
 }

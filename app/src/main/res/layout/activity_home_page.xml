@@ -38,7 +38,7 @@
                 android:gravity="center"
                 android:text="HOME"
                 android:textColor="#E91E63"
-                android:textSize="20dp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
 

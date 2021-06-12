@@ -67,6 +67,9 @@ public class GraphActivityAngle extends AppCompatActivity {
     private TextView textViewSampleTime;
     private TextView textViewError;
     private GraphView dataGraph;
+    private GraphView dataGraphRoll;
+    private GraphView dataGraphYaw;
+    private GraphView dataGraphPitch;
     private LineGraphSeries<DataPoint> dataSeriesRoll;
     private LineGraphSeries<DataPoint> dataSeriesPitch;
     private LineGraphSeries<DataPoint> dataSeriesYaw;
@@ -102,9 +105,9 @@ public class GraphActivityAngle extends AppCompatActivity {
 
         /* BEGIN initialize widgets */
         /* BEGIN initialize Switches */
-        swRoll = findViewById(R.id.swRoll);
-        swPitch = findViewById(R.id.swPitch);
-        swYaw = findViewById(R.id.swYaw);
+        swRoll = (Switch) findViewById(R.id.swRoll);
+        swPitch = (Switch) findViewById(R.id.swPitch);
+        swYaw = (Switch) findViewById(R.id.swYaw);
 
         /* BEGIN initialize TextViews */
         textViewIP = findViewById(R.id.textViewIP);
@@ -197,24 +200,90 @@ public class GraphActivityAngle extends AppCompatActivity {
 
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
-        dataGraph = (GraphView)findViewById(R.id.dataGraph);
+        dataGraphRoll = (GraphView) findViewById(R.id.dataGraphRoll);
+        dataGraphPitch = (GraphView) findViewById(R.id.dataGraphPitch);
+        dataGraphYaw = (GraphView) findViewById(R.id.dataGraphYaw);
 
         dataSeriesRoll = new LineGraphSeries<>(new DataPoint[]{});
         dataSeriesPitch = new LineGraphSeries<>(new DataPoint[]{});
         dataSeriesYaw = new LineGraphSeries<>(new DataPoint[]{});
 
-        dataGraph.addSeries(dataSeriesRoll);
-        dataGraph.addSeries(dataSeriesPitch);
-        dataGraph.addSeries(dataSeriesYaw);
+        dataGraphRoll.addSeries(dataSeriesRoll);
+        dataGraphPitch.addSeries(dataSeriesPitch);
+        dataGraphYaw.addSeries(dataSeriesYaw);
 
-        dataGraph.getViewport().setXAxisBoundsManual(true);
-        dataGraph.getViewport().setMinX(dataGraphMinX);
-        dataGraph.getViewport().setMaxX(dataGraphMaxX);
-        dataGraph.getViewport().setMinY(dataGraphMinY);
-        dataGraph.getViewport().setMaxY(dataGraphMaxY);
+        dataGraphRoll.getViewport().setXAxisBoundsManual(true);
+        dataGraphRoll.getViewport().setYAxisBoundsManual(true);
+        dataGraphRoll.getViewport().setMinX(dataGraphMinX);
+        dataGraphRoll.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphRoll.getViewport().setMinY(dataGraphMinY);
+        dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
 
-        dataGraph.getViewport().setScalable(true);
-        dataGraph.getViewport().setScrollable(true);
+        dataGraphRoll.getViewport().setScalable(true);
+        dataGraphRoll.getViewport().setScrollable(true);
+
+        dataGraphPitch.getViewport().setXAxisBoundsManual(true);
+        dataGraphPitch.getViewport().setYAxisBoundsManual(true);
+        dataGraphPitch.getViewport().setMinX(dataGraphMinX);
+        dataGraphPitch.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphPitch.getViewport().setMinY(dataGraphMinY);
+        dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
+
+        dataGraphPitch.getViewport().setScalable(true);
+        dataGraphPitch.getViewport().setScrollable(true);
+
+        dataGraphYaw.getViewport().setXAxisBoundsManual(true);
+        dataGraphYaw.getViewport().setYAxisBoundsManual(true);
+        dataGraphYaw.getViewport().setMinX(dataGraphMinX);
+        dataGraphYaw.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphYaw.getViewport().setMinY(dataGraphMinY);
+        dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
+
+        dataGraphYaw.getViewport().setScalable(true);
+        dataGraphYaw.getViewport().setScrollable(true);
+
+
+        // refresh chart
+        dataGraphRoll.onDataChanged(true, true);
+
+        dataGraphRoll.getLegendRenderer().setVisible(true);
+        dataGraphRoll.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphRoll.getLegendRenderer().setTextSize(30);
+
+        dataGraphRoll.getGridLabelRenderer().setTextSize(20);
+        dataGraphRoll.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Roll [deg]");
+        dataGraphRoll.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphRoll.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphRoll.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphRoll.getGridLabelRenderer().setPadding(35);
+
+        dataGraphPitch.onDataChanged(true, true);
+
+        dataGraphPitch.getLegendRenderer().setVisible(true);
+        dataGraphPitch.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphPitch.getLegendRenderer().setTextSize(30);
+
+        dataGraphPitch.getGridLabelRenderer().setTextSize(20);
+        dataGraphPitch.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pitch [deg]");
+        dataGraphPitch.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphPitch.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphPitch.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphPitch.getGridLabelRenderer().setPadding(35);
+
+        dataGraphYaw.onDataChanged(true, true);
+
+        dataGraphYaw.getLegendRenderer().setVisible(true);
+        dataGraphYaw.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphYaw.getLegendRenderer().setTextSize(30);
+
+        dataGraphYaw.getGridLabelRenderer().setTextSize(20);
+        dataGraphYaw.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Yaw [deg]");
+        dataGraphYaw.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphYaw.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphYaw.getGridLabelRenderer().setPadding(35);
+
+
     }
 
     /**

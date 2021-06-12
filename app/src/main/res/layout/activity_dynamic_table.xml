@@ -33,7 +33,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dynamicTableRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_weight="2"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
@@ -43,7 +43,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/swChangeUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change unit od measurement" />
 
             <CheckBox
                 android:id="@+id/checkBoxEnvMes"
@@ -55,8 +63,7 @@
                 android:id="@+id/checkBoxAngleOrientation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Angle Orientation" />
-
+                android:text="Angle Orientation (RPY)" />
 
             <CheckBox
                 android:id="@+id/checkBoxJoyStick"
@@ -65,10 +72,17 @@
                 android:text="Joy-stick" />
 
             <CheckBox
+                android:id="@+id/checkBoxCompass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compass" />
+
+            <CheckBox
                 android:id="@+id/checkBoxAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="All measurements" />
+
         </LinearLayout>
 
 

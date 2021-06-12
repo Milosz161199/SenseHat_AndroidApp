@@ -129,22 +129,22 @@ tools:context="com.example.senseHat.View.GraphActivityEnv">
             android:orientation="vertical">
 
             <com.jjoe64.graphview.GraphView
-                android:id="@+id/dataGraph"
+                android:id="@+id/dataGraphTemp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="125dp" />
 
             <com.jjoe64.graphview.GraphView
-                android:id="@+id/dataGraph2"
+                android:id="@+id/dataGraphHum"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="125dp" />
 
             <com.jjoe64.graphview.GraphView
-                android:id="@+id/dataGraph3"
+                android:id="@+id/dataGraphPres"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="125dp" />
         </LinearLayout>
 
             <LinearLayout

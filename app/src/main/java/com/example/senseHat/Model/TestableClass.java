@@ -102,6 +102,7 @@ public class TestableClass {
                 /* get measurement model from JSON data */
                 MeasurementModel measurement = new MeasurementModel(jArray.getJSONObject(i));
 
+                /*
                 if(i == 0 )
                 {
                     DynamicTableActivity.name1.setText(measurement.mName);
@@ -156,7 +157,7 @@ public class TestableClass {
                     DynamicTableActivity.value9.setText(String.format(valueFormat, measurement.mValue));
                     DynamicTableActivity.unit9.setText(measurement.mUnit);
                 }
-
+                */
             } catch (JSONException e) {
                 e.printStackTrace();
             }
