@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/raspberry_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@mipmap/raspberry_background">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.example.senseHat.View.ConfigActivity">
 
     <LinearLayout
@@ -45,6 +48,26 @@
                 android:importantForAutofill="no"
                 android:inputType="textUri"
                 android:text="@string/ip_address" />
+
+
+            <TextView
+                android:id="@+id/textViewSocketConfig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="Socket number:"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/socketEditTextConfig"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:text="@string/socket_number" />
+
 
             <TextView
                 android:id="@+id/textViewSampleTimeConfig"
@@ -93,7 +116,7 @@
             android:textSize="24sp"/>
 
         <EditText
-            android:id="@+id/editTextNumber"
+            android:id="@+id/apiVersionEditTextConfig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -103,7 +126,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnSetConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SET CHANGES" />
+
+            <Button
+                android:id="@+id/btnSetDefaultConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SET DEFAULT" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
             android:layout_weight="1"
@@ -141,5 +183,7 @@
                 android:text="@string/fourth_author" />
 
         </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

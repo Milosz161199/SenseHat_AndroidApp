@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.XYValue;
 import com.example.senseHat.R;
 import com.jjoe64.graphview.GraphView;
@@ -20,6 +21,11 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
 import java.util.ArrayList;
 
 public class GraphActivityJoyStick extends AppCompatActivity {
+
+    /* BEGIN config data */
+    private String ipAddress = Common.DEFAULT_IP_ADDRESS;
+    private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
+    /* END config data */
 
     private GraphView dataGraphJoy;
     private Button btnRefreshCounters;

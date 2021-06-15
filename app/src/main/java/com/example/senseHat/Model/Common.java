@@ -22,6 +22,9 @@ public class Common {
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
     public final static String DEFAULT_IP_ADDRESS = "192.168.0.104";
 
+    public final static String CONFIG_SOCKET = "socketAddress";
+    public final static int DEFAULT_SOCKET = 8000;
+
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
     public final static int DEFAULT_SAMPLE_TIME = 500;
 
