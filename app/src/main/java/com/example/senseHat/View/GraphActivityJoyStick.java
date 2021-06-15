@@ -10,8 +10,13 @@
 
 package com.example.senseHat.View;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +24,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
+import com.example.senseHat.Model.JoyStickModel;
+import com.example.senseHat.Model.TestableClass;
 import com.example.senseHat.Model.XYValue;
 import com.example.senseHat.R;
 import com.jjoe64.graphview.GraphView;
@@ -29,13 +42,35 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static java.lang.Double.isNaN;
 
 public class GraphActivityJoyStick extends AppCompatActivity {
 
     /* BEGIN config data */
-    private String ipAddress = Common.DEFAULT_IP_ADDRESS;
-    private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
+    private String ipAddress = HomePageActivity.ipAddress;
+    private int sampleTime = HomePageActivity.sampleTime;
     /* END config data */
+
+    /* BEGIN request timer */
+    private RequestQueue queue;
+    private Timer requestTimer;
+    private long requestTimerTimeStamp = 0;
+    private long requestTimerPreviousTime = -1;
+    private boolean requestTimerFirstRequest = true;
+    private boolean requestTimerFirstRequestAfterStop;
+    private TimerTask requestTimerTask;
+    private final Handler handler = new Handler();
+    /* END request timer */
+
+    /* Testable module */
+    private TestableClass responseHandling = new TestableClass();
+
+    /* Joy-stick Model */
+    private JoyStickModel joyStickModel = new JoyStickModel();
+
 
     private GraphView dataGraphJoy;
     private Button btnRefreshCounters;
@@ -47,8 +82,8 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     private final int dataGraphMaxY = 100;
     private final int dataGraphMinY = -100;
 
-    private ArrayList<XYValue> xyValueArray;
-    public XYValue xy;
+    private ArrayList<JoyStickModel> xyValueArray;
+    //public XYValue xy;
 
     public String text;
 
@@ -56,23 +91,220 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_joystick);
+
+        // Initialize Volley request queue
+        queue = Volley.newRequestQueue(GraphActivityJoyStick.this);
+
         initView();
 
         xyValueArray = new ArrayList<>();
 
-        xy = new XYValue(45,50);
-        xyValueArray.add(xy);
-        text = "("+String.valueOf(xyValueArray.get(0).getX()) +", "+String.valueOf(xyValueArray.get(0).getY())+")";
+        //xy = new XYValue(45,50);
+        //xyValueArray.add(joyStickModel);
+        //text = "("+String.valueOf(xyValueArray.get(0).getCounterX()) +", "+String.valueOf(xyValueArray.get(0).getCounterY())+")";
+
+
+
         InitGraphView();
 
         btnRefreshCounters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                sendGetRequest();
             }
         });
 
+
     }
+
+
+    /**
+     * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
+     */
+    private void startRequestTimer() {
+        if(requestTimer == null) {
+            // set a new Timer
+            requestTimer = new Timer();
+
+            // initialize the TimerTask's job
+            initializeRequestTimerTask();
+            requestTimer.schedule(requestTimerTask, 0, sampleTime);
+
+            // clear error message
+            //textViewError.setText("");
+        }
+    }
+
+    /**
+     * @brief Stops request timer (if currently exist)
+     * and sets 'requestTimerFirstRequestAfterStop' flag.
+     */
+    private void stopRequestTimerTask() {
+        // stop the timer, if it's not already null
+        if (requestTimer != null) {
+            requestTimer.cancel();
+            requestTimer = null;
+            requestTimerFirstRequestAfterStop = true;
+        }
+    }
+
+    /**
+     * @brief Initialize request timer period task with 'Handler' post method as 'sendGetRequest'.
+     */
+    private void initializeRequestTimerTask() {
+        requestTimerTask = new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() { sendGetRequest(); }
+                });
+            }
+        };
+    }
+
+
+    /**
+     * @brief Validation of client-side time stamp based on 'SystemClock'.
+     */
+    private long getValidTimeStampIncrease(long currentTime)
+    {
+        // Right after start remember current time and return 0
+        if(requestTimerFirstRequest)
+        {
+            requestTimerPreviousTime = currentTime;
+            requestTimerFirstRequest = false;
+            return 0;
+        }
+
+        // After each stop return value not greater than sample time
+        // to avoid "holes" in the plot
+        if(requestTimerFirstRequestAfterStop)
+        {
+            if((currentTime - requestTimerPreviousTime) > sampleTime)
+                requestTimerPreviousTime = currentTime - sampleTime;
+
+            requestTimerFirstRequestAfterStop = false;
+        }
+
+        // If time difference is equal zero after start
+        // return sample time
+        if((currentTime - requestTimerPreviousTime) == 0)
+            return sampleTime;
+
+        // Return time difference between current and previous request
+        return (currentTime - requestTimerPreviousTime);
+    }
+
+    /**
+     * @brief Create JSON file URL from IoT server IP.
+     * @param ip IP address (string)
+     * @retval GET request URL
+     */
+    private String getURL(String ip) {
+        return ("http://" + ip + Common.PHP_COMMAND_TAKE_DATA_JOY_STICK );
+    }
+
+    /**
+     * @brief Sending GET request to IoT server using 'Volley'.
+     */
+    private void sendGetRequest()
+    {
+        // Instantiate the RequestQueue with Volley
+        // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
+        String url = getURL(ipAddress);
+
+        // Request a string response from the provided URL
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) { responseHandling(response); }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { errorHandling(Common.ERROR_RESPONSE); }
+                });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
+    /**
+     * @brief Handles application errors. Logs an error and passes error code to GUI.
+     * @param errorCode local error codes, see: COMMON
+     */
+    private void errorHandling(int errorCode) {
+        switch(errorCode) {
+            case Common.ERROR_TIME_STAMP:
+                //textViewError.setText("ERR #1");
+                Log.d("errorHandling", "Request time stamp error.");
+                break;
+            case Common.ERROR_NAN_DATA:
+                //textViewError.setText("ERR #2");
+                Log.d("errorHandling", "Invalid JSON data.");
+                break;
+            case Common.ERROR_RESPONSE:
+                //textViewError.setText("ERR #3");
+                Log.d("errorHandling", "GET request VolleyError.");
+                break;
+            default:
+                //textViewError.setText("ERR ??");
+                Log.d("errorHandling", "Unknown error.");
+                break;
+        }
+    }
+
+    /**
+     * @brief GET response handling - chart data series updated with IoT server data.
+     */
+    private void responseHandling(String response) {
+        //if (requestTimer != null) {
+            // get time stamp with SystemClock
+            //long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
+            //requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
+
+            // get raw data from JSON response
+            joyStickModel = responseHandling.getRawDataFromResponseToJoyStick(response);
+
+            // update chart
+            if (isNaN(joyStickModel.getCounterX()) || isNaN(joyStickModel.getCounterY()) || isNaN(joyStickModel.getCounterMiddle())) {
+                errorHandling(Common.ERROR_NAN_DATA);
+
+            } else {
+
+                // update plot series
+                //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
+                //boolean scrollGraph = (timeStamp > dataGraphMaxX);
+
+
+                dataSeriesPoint.appendData(new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY()), false, 1);
+                text = "("+String.valueOf(joyStickModel.getCounterX()) +", "+String.valueOf(joyStickModel.getCounterY())+")";
+                Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
+                dataSeriesPoint.setTitle("Joy-stick");
+                dataSeriesPoint.setColor(Color.MAGENTA);
+                dataSeriesPoint.setShape(PointsGraphSeries.Shape.RECTANGLE);
+
+                textViewCounterMiddle.setText(String.valueOf(joyStickModel.getCounterMiddle()));
+
+                // refresh chart
+                dataGraphJoy.onDataChanged(true, true);
+
+                dataGraphJoy.getLegendRenderer().setVisible(true);
+                dataGraphJoy.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphJoy.getLegendRenderer().setTextSize(30);
+
+                dataGraphJoy.getGridLabelRenderer().setTextSize(20);
+                dataGraphJoy.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Counter_Y [-]");
+                dataGraphJoy.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Counter_X [-]");
+                dataGraphJoy.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphJoy.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphJoy.getGridLabelRenderer().setPadding(35);
+            }
+
+            // remember previous time stamp
+            //requestTimerPreviousTime = requestTimerCurrentTime;
+       // }
+    }
+
 
     /**
      * @param n Number of spaces.
@@ -95,15 +327,15 @@ public class GraphActivityJoyStick extends AppCompatActivity {
 
         dataGraphJoy.addSeries(dataSeriesPoint);
 
-        dataSeriesPoint.appendData(new DataPoint(xyValueArray.get(0).getX(), xyValueArray.get(0).getY()), true, 1);
+        //dataSeriesPoint.appendData(new DataPoint(xyValueArray.get(0).getCounterX(), xyValueArray.get(0).getCounterY()), true, 1);
 
-        Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         dataSeriesPoint.setTitle("Joy-stick");
         dataSeriesPoint.setColor(Color.MAGENTA);
         dataSeriesPoint.setShape(PointsGraphSeries.Shape.RECTANGLE);
 
         dataGraphJoy.getViewport().setScalable(false);
-        dataGraphJoy.getViewport().setScrollable(true);
+        dataGraphJoy.getViewport().setScrollable(false);
 
         dataGraphJoy.getViewport().setXAxisBoundsManual(true);
         dataGraphJoy.getViewport().setYAxisBoundsManual(true);
@@ -118,7 +350,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         dataGraphJoy.getLegendRenderer().setVisible(true);
         dataGraphJoy.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         dataGraphJoy.getLegendRenderer().setTextSize(30);
-
         dataGraphJoy.getGridLabelRenderer().setTextSize(20);
         dataGraphJoy.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Counter_Y [-]");
         dataGraphJoy.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Counter_X [-]");
@@ -126,5 +357,4 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         dataGraphJoy.getGridLabelRenderer().setNumVerticalLabels(7);
         dataGraphJoy.getGridLabelRenderer().setPadding(35);
     }
-
 }

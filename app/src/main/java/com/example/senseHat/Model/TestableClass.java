@@ -15,6 +15,7 @@ import com.example.senseHat.View.DynamicTableActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TestableClass {
 
@@ -94,7 +95,6 @@ public class TestableClass {
             e.printStackTrace();
         }
 
-
         // iterate through JSON Array
         for (int i = 0; i < jArray.length(); i++)
         {
@@ -164,5 +164,30 @@ public class TestableClass {
         }
     }
 
+
+    /**
+     * @brief Reading raw joy-stick data from JSON response.
+     * @param response IoT server JSON response as string
+     * @retval new JoyStickModel data
+     */
+    public JoyStickModel getRawDataFromResponseToJoyStick(String response) {
+        // Create generic JSON object form string
+        JSONObject jsonObject = null;
+        JoyStickModel joyStickModel = null;
+        try {
+            jsonObject = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            /* get joy-stick model from JSON data */
+            joyStickModel = new JoyStickModel(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return joyStickModel;
+    }
 
 }

@@ -20,7 +20,7 @@ public class Common {
 
     // configuration info: names and default values
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
-    public final static String DEFAULT_IP_ADDRESS = "192.168.0.104";
+    public final static String DEFAULT_IP_ADDRESS = "192.168.0.101";
 
     public final static String CONFIG_SOCKET = "socketAddress";
     public final static int DEFAULT_SOCKET = 8000;
