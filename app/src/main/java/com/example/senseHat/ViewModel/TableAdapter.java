@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/TableAdapter.java
+ * @author  Milosz Plutowski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: Adapter to building elements of dynamic list
+ ******************************************************************************
+ */
+
 package com.example.senseHat.ViewModel;
 
 import android.content.Context;
@@ -14,10 +24,6 @@ import com.example.senseHat.R;
 
 import java.util.List;
 
-/*
-* Adapter to building elements of dynamic list
-*
-* */
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> {
 

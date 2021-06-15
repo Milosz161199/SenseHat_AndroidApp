@@ -1,10 +1,10 @@
 /**
  ******************************************************************************
- * @file    Data Grabber Example/TestableClass.java
- * @author  Adrian Wojcik
+ * @file    Sense Hat/TestableClass.java
+ * @author  Milosz Plutowski
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   Data grabber example: testable class for JSON parsing
+ * @date    15-06-2021
+ * @brief   Sense Hat: testable class for JSON parsing
  ******************************************************************************
  */
 

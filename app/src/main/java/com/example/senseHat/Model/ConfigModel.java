@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/ConfigModel.java
+ * @author  Milosz Plutwoski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: Config data from json file
+ ******************************************************************************
+ */
+
 package com.example.senseHat.Model;
 
 import org.json.JSONException;

@@ -31,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.senseHat.Model.Common;
 import com.example.senseHat.R;
 
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class LedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leds);
-
+        url = makeUrl();
 
         sendBtn = (Button) findViewById(R.id.sendBtn);
 
@@ -150,6 +151,14 @@ public class LedActivity extends AppCompatActivity {
             }
         }
         /* END 'Volley' request queue initialization */
+    }
+
+    /**
+     * @brief Url creating for led matrix request
+     * @return String url
+     */
+    private String makeUrl(){
+        return "http://"+ HomePageActivity.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
     }
 
 

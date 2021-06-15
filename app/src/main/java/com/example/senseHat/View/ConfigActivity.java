@@ -1,11 +1,11 @@
 /**
- ******************************************************************************
- * @file    Data Grabber Example/ConfigActivity.java
- * @author  Adrian Wojcik
+ ******************************************************************************************************************
+ * @file    Sense Hat/ConfigActivity.java
+ * @author  Milosz Plutowski
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   Data grabber example: configuration activity with IP and sample time
- ******************************************************************************
+ * @date    15-06-2021
+ * @brief   Sense Hat: configuration activity with: IP, socket, sample time, max number of samples and api version
+ ******************************************************************************************************************
  */
 
 package com.example.senseHat.View;

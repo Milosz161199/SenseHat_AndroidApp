@@ -1,15 +1,14 @@
-
 /**
  ******************************************************************************
- * @file    Data Grabber Example/MainActivity.java
- * @author  Adrian Wojcik
+ * @file    Sense Hat/GraphActivityAngle.java
+ * @author  Milosz Plutowski
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   Data grabber example: main activity with data chart
+ * @date    15-06-2021
+ * @brief   Sense Hat: Angles measurements activity with data charts
  ******************************************************************************
  */
 
-        package com.example.senseHat.View;
+package com.example.senseHat.View;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

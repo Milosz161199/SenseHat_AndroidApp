@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/MeasurementsViewModel.java
+ * @author  Milosz Plutowski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: View model for measurements
+ ******************************************************************************
+ */
+
 package com.example.senseHat.ViewModel;
 
 // MODELS

@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/HomePageActivity.java
+ * @author  Milosz Plutowski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: main page activity with data and main menu
+ ******************************************************************************
+ */
+
 package com.example.senseHat.View;
 
 import android.content.Intent;

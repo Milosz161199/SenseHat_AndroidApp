@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/XYValue.java
+ * @author  Milosz Plutowski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: Joy-stick data reader (for counter x-y)
+ ******************************************************************************
+ */
+
 package com.example.senseHat.Model;
 
 public class XYValue {

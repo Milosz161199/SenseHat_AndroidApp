@@ -1,18 +1,18 @@
-
 /**
  ******************************************************************************
- * @file    Data Grabber Example/MainActivity.java
- * @author  Adrian Wojcik
+ * @file    Sense Hat/GraphActivityEnv.java
+ * @author  Milosz Plutowski
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   Data grabber example: main activity with data chart
+ * @date    15-06-2021
+ * @brief   Sense Hat: Environmental measurements activity with data charts
  ******************************************************************************
  */
 
-        package com.example.senseHat.View;
+package com.example.senseHat.View;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
+        import android.annotation.SuppressLint;
         import android.app.AlertDialog;
         import android.content.DialogInterface;
         import android.content.Intent;
@@ -47,6 +47,7 @@
 
         import static java.lang.Double.isNaN;
 
+@SuppressLint("UseSwitchCompatOrMaterialCode")
 public class GraphActivityEnv extends AppCompatActivity {
 
     /* BEGIN config data */

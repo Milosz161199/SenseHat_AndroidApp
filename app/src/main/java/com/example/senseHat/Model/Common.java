@@ -1,10 +1,10 @@
 /**
  ******************************************************************************
- * @file    Data Grabber Example/Common.java
- * @author  Adrian Wojcik
+ * @file    Sense Hat/Common.java
+ * @author  Milosz Plutwoski
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   Data grabber example: common app information
+ * @date    15-06-2021
+ * @brief   Sense Hat: common app information
  ******************************************************************************
  */
 
@@ -42,9 +42,12 @@ public class Common {
     // IoT server data
     public static String FILE_NAME = "measurements.php?id=";
 
-    public static String PHP_COMMAND_TAKING_DATA_TO_TABLE = "";
-    public static String PHP_COMMAND_TAKING_DATA_TO_GRAPH = "";
-    public static String PHP_COMMAND_TAKING_DATA_TO_CONFIG = "";
+    public static String PHP_COMMAND_TAKE_DATA_TO_TABLE = "";
+    public static String PHP_COMMAND_TAKE_DATA_TO_GRAPH = "";
+    public static String PHP_COMMAND_TAKE_DATA_TO_CONFIG = "/PROJECT/config_data_test_file.json";
+    public static String PHP_COMMAND_TAKE_DATA_JOY_STICK = "/PROJECT/joy_stick_test_file.json";
+    public static String PHP_COMMAND_TAKE_DATA_LED_MATRIX = "/PROJECT/led_display_test_file.json";
+    public static String PHP_COMMAND_SEND_DATA_LED_MATRIX = "/PROJECT/led_display.php";
 
 
     public static List<MeasurementModel> measurementModelsList;

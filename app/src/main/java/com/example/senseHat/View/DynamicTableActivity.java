@@ -1,3 +1,13 @@
+/**
+ ******************************************************************************
+ * @file    Sense Hat/DynamicTableActivity.java
+ * @author  Milosz Plutowski
+ * @version V1.0
+ * @date    15-06-2021
+ * @brief   Sense Hat: Table of measurements activity
+ ******************************************************************************
+ */
+
 package com.example.senseHat.View;
 
 import android.content.Intent;
