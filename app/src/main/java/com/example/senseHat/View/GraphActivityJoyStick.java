@@ -32,6 +32,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.JoyStickModel;
+import com.example.senseHat.Model.SocketAsyncTask;
 import com.example.senseHat.Model.TestableClass;
 import com.example.senseHat.Model.XYValue;
 import com.example.senseHat.R;
@@ -275,8 +276,9 @@ public class GraphActivityJoyStick extends AppCompatActivity {
                 //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 //boolean scrollGraph = (timeStamp > dataGraphMaxX);
 
-
-                dataSeriesPoint.appendData(new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY()), false, 1);
+                //InitGraphView();
+                dataSeriesPoint.resetData( new DataPoint[]{new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY())} );
+                //dataSeriesPoint.appendData(new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY()), false, 1);
                 text = "("+String.valueOf(joyStickModel.getCounterX()) +", "+String.valueOf(joyStickModel.getCounterY())+")";
                 Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
                 dataSeriesPoint.setTitle("Joy-stick");

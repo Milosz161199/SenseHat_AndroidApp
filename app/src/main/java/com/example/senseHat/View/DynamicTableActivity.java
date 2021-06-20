@@ -34,6 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.MeasurementModel;
+import com.example.senseHat.Model.SocketAsyncTask;
 import com.example.senseHat.R;
 import com.example.senseHat.Model.TestableClass;
 import com.example.senseHat.ViewModel.MeasurementViewModel;
@@ -56,11 +57,12 @@ public class DynamicTableActivity extends AppCompatActivity {
     private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
     /* END config data */
 
+
     private RecyclerView recyclerViewDynamicTable;
     private RecyclerView.Adapter tableAdapter;
     private RecyclerView.LayoutManager tableManager;
 
-    private Button btnStartTable;
+    private Button btnRefreshTable;
     private Button btnStopTable;
 
     private CheckBox checkBoxEnvMes;
@@ -70,13 +72,13 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     private Switch swChangeUnit;
 
-    private String onlyEnvMes = "measurements.php?id=[0,1,2]";
-    private String onlyAngles = "measurements.php?id=[3,4,5]";
-    private String onlyJoy = "measurements.php?id=[6]";
-    private String EnvMesAndAngles = "measurements.php?id=[0,1,2,3,4,5]";
-    private String EnvMesAndJoy = "measurements.php?id=[3,4,5,6]";
-    private String JoyAndAngles = "measurements.php?id=[3,4,5,6]";
-    private String AllMes = "measurements.php?id=[0,1,2,3,4,5,6]";
+    private final String onlyEnvMes = "measurements.php?id=[0,1,2]";
+    private final String onlyAngles = "measurements.php?id=[3,4,5]";
+    private final String onlyJoy = "measurements.php?id=[6]";
+    private final String EnvMesAndAngles = "measurements.php?id=[0,1,2,3,4,5]";
+    private final String EnvMesAndJoy = "measurements.php?id=[3,4,5,6]";
+    private final String JoyAndAngles = "measurements.php?id=[3,4,5,6]";
+    private final String AllMes = "measurements.php?id=[0,1,2,3,4,5,6]";
 
 
     /* BEGIN request timer */
@@ -114,8 +116,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(DynamicTableActivity.this);
     }
 
-    public void initView(){
-        btnStartTable = (Button) findViewById(R.id.btnStartTable);
+    public void initView()
+    {
+        btnRefreshTable = (Button) findViewById(R.id.btnRefreshTable);
         //btnStopTable = (Button) findViewById(R.id.btnStopTable);
 
         checkBoxEnvMes = (CheckBox) findViewById(R.id.checkBoxEnvMes);
@@ -130,7 +133,8 @@ public class DynamicTableActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView()
+    {
         dynamicTableRecyclerViewManager = new LinearLayoutManager(this);
         dynamicTableRecyclerView.setLayoutManager(dynamicTableRecyclerViewManager);
 
@@ -159,7 +163,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         mList.add(m);
         m = new MeasurementModel("Humidity", 10.2 , "%", "QFQFQFQ");
         mList.add(m);
-        m = new MeasurementModel("Humidity", 10.2 , "[-]]", "QFQFQFQ");
+        m = new MeasurementModel("Humidity", 10.2 , "[-]", "QFQFQFQ");
         mList.add(m);
         m = new MeasurementModel("Pitch", 100.2 , "deg", "QFQFQFQ");
         mList.add(m);
@@ -196,6 +200,12 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshDataToTable(){
+        SocketAsyncTask.CMD = "get_env";
+        SocketAsyncTask cmd_get_env = new SocketAsyncTask();
+        cmd_get_env.execute();
+    }
+
 
     /**
      * @brief Main activity button onClick procedure - common for all upper menu buttons
@@ -203,8 +213,9 @@ public class DynamicTableActivity extends AppCompatActivity {
      */
     public void btns_onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnStartTable: {
-                startRequestTimer();
+            case R.id.btnRefreshTable: {
+                //startRequestTimer();
+                refreshDataToTable();
                 break;
             }
             //case R.id.btnStopTable: {
@@ -372,10 +383,6 @@ public class DynamicTableActivity extends AppCompatActivity {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
             requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
-
-            // get raw data from JSON response to Table View
-            //initTable();
-            //clearTable();
 
             responseHandling.getRawDataFromResponseToTable(response);
 

@@ -101,7 +101,7 @@
 
 
             <Button
-                android:id="@+id/btnStartTable"
+                android:id="@+id/btnRefreshTable"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:onClick="btns_onClick"

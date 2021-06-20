@@ -20,10 +20,10 @@ public class Common {
 
     // configuration info: names and default values
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
-    public final static String DEFAULT_IP_ADDRESS = "192.168.0.101";
+    public final static String DEFAULT_IP_ADDRESS = "192.168.0.103";
 
     public final static String CONFIG_SOCKET = "socketAddress";
-    public final static int DEFAULT_SOCKET = 8000;
+    public final static int DEFAULT_SOCKET = 21567;
 
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
     public final static int DEFAULT_SAMPLE_TIME = 500;
@@ -49,6 +49,32 @@ public class Common {
     public static String PHP_COMMAND_TAKE_DATA_LED_MATRIX = "/PROJECT/led_display_test_file.json";
     public static String PHP_COMMAND_SEND_DATA_LED_MATRIX = "/PROJECT/led_display.php";
 
+
+    /* BEGIN COMMAND TO SERVER */
+    private final String CMD_TEMPERATURE_C = "get_temp_c";
+    private final String CMD_TEMPERATURE_F = "get_temp_f";
+    private final String CMD_PRESSURE_HPA = "get_press_hpa";
+    private final String CMD_PRESSURE_MM_HG = "get_press_mm_hg";
+    private final String CMD_HUMIDITY_P = "get_hum_p";
+    private final String CMD_HUMIDITY_ = "get_hum_";
+    private final String CMD_ROLL_DEG = "get_roll_deg";
+    private final String CMD_ROLL_RAD = "get_roll_rad";
+    private final String CMD_PITCH_DEG = "get_pitch_deg";
+    private final String CMD_PITCH_RAD = "get_pitch_rad";
+    private final String CMD_YAW_DEG = "get_yaw_deg";
+    private final String CMD_YAW_RAD = "get_yaw_rad";
+
+
+    private final String CMD_RPY_DEG = "get_rpy_deg";
+    private final String CMD_RPY_RAD = "get_rpy_rad";
+    private final String CMD_ENV_1 = "get_env_1";
+    private final String CMD_ENV_2 = "get_env_2";
+    private final String CMD_COMPASS = "get_compass";
+    private final String CMD_JOY_STICK = "get_joy_stick";
+    private final String CMD_ALL_MEASUREMENTS = "get_all";
+
+
+    /* END COMMAND TO SERVER  */
 
     public static List<MeasurementModel> measurementModelsList;
 
