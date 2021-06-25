@@ -106,6 +106,12 @@
                 android:layout_height="wrap_content"
                 android:onClick="btns_onClick"
                 android:text="REFRESH" />
+            <Button
+                android:id="@+id/btnClearTable"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="btns_onClick"
+                android:text="CLEAR" />
 
         </LinearLayout>
 

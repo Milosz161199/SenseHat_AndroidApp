@@ -84,10 +84,11 @@ public class TestableClass {
      * @param response IoT server JSON response as string
      * @retval new chart data
      */
-    public void getRawDataFromResponseToTable(String response) {
+    public MeasurementModel getRawDataFromResponseToTable(String response) {
         // Create generic JSON object form string
 
         JSONArray jArray = null;
+        MeasurementModel measurementModel = new MeasurementModel("-", 0, "-", "-");
 
         try {
             jArray = new JSONArray(response);
@@ -100,7 +101,7 @@ public class TestableClass {
         {
             try {
                 /* get measurement model from JSON data */
-                MeasurementModel measurement = new MeasurementModel(jArray.getJSONObject(i));
+                measurementModel = new MeasurementModel(jArray.getJSONObject(i));
 
                 /*
                 if(i == 0 )
@@ -159,9 +160,11 @@ public class TestableClass {
                 }
                 */
             } catch (JSONException e) {
+
                 e.printStackTrace();
             }
         }
+        return measurementModel;
     }
 
 
@@ -189,5 +192,31 @@ public class TestableClass {
 
         return joyStickModel;
     }
+
+    /**
+     * @brief Reading raw joy-stick data from JSON response.
+     * @param response IoT server JSON response as string
+     * @retval new JoyStickModel data
+     */
+    public MeasurementModel getRawDataFromResponseToDynamicTable(String response) {
+        // Create generic JSON object form string
+        JSONObject jsonObject = null;
+        MeasurementModel measurementModel = null;
+        try {
+            jsonObject = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            /* get joy-stick model from JSON data */
+            measurementModel = new MeasurementModel(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return measurementModel;
+    }
+
 
 }

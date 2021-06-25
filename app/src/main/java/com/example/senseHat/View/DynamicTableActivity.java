@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -80,6 +81,9 @@ public class DynamicTableActivity extends AppCompatActivity {
     private final String JoyAndAngles = "measurements.php?id=[3,4,5,6]";
     private final String AllMes = "measurements.php?id=[0,1,2,3,4,5,6]";
 
+    private final String testedFile = "/PROJECT/OneByOne/TEST_file.json";
+    protected String Command = "0";
+
 
     /* BEGIN request timer */
     private RequestQueue queue;
@@ -115,6 +119,8 @@ public class DynamicTableActivity extends AppCompatActivity {
         // Initialize Volley request queue
         queue = Volley.newRequestQueue(DynamicTableActivity.this);
     }
+
+
 
     public void initView()
     {
@@ -200,10 +206,74 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
+    int counter = 0;
+    //private SocketAsyncTask cmd_get = new SocketAsyncTask();
     private void refreshDataToTable(){
-        SocketAsyncTask.CMD = "get_env";
-        SocketAsyncTask cmd_get_env = new SocketAsyncTask();
-        cmd_get_env.execute();
+
+        if(checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
+        {
+            if(SocketAsyncTask.tmpSocket && counter == 0) {
+                SocketAsyncTask.CMD = "get_hum_p";
+                SocketAsyncTask cmd_get_hum_p = new SocketAsyncTask();
+                cmd_get_hum_p.execute();
+
+                sendGetRequest(Common.REQ_HUM_P);
+                counter++;
+            }
+
+            if(SocketAsyncTask.tmpSocket && counter == 1) {
+                SocketAsyncTask.CMD = "get_temp_C_1";
+                SocketAsyncTask cmd_get_temp_C_1 = new SocketAsyncTask();
+                cmd_get_temp_C_1.execute();
+
+                sendGetRequest(Common.REQ_TEMP_C_1);
+                counter++;
+            }
+
+            if(SocketAsyncTask.tmpSocket && counter == 2) {
+                SocketAsyncTask.CMD = "get_pres_hpa";
+                SocketAsyncTask cmd_get_pres_hpa = new SocketAsyncTask();
+                cmd_get_pres_hpa.execute();
+
+                sendGetRequest(Common.REQ_PRES_HPA);
+                counter = 0;
+            }
+
+
+
+        }
+        if(!checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
+        {
+            //url = getURL(ipAddress, onlyAngles);
+        }
+        if(!checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
+        {
+            //url = getURL(ipAddress, onlyJoy);
+        }
+        if(checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
+        {
+            //url = getURL(ipAddress, EnvMesAndAngles);
+        }
+        if(checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
+        {
+            //url = getURL(ipAddress, EnvMesAndJoy);
+        }
+        if(!checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
+        {
+            //url = getURL(ipAddress, JoyAndAngles);
+        }
+        if(checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
+        {
+           // url = getURL(ipAddress, AllMes);
+        }
+
+        //SocketAsyncTask.CMD = "get_hum_p";
+        //SocketAsyncTask cmd_get_env = new SocketAsyncTask();
+        //cmd_get_env.execute();
+
+        //sendGetRequest();
+
+        initRecyclerView();
     }
 
 
@@ -218,19 +288,26 @@ public class DynamicTableActivity extends AppCompatActivity {
                 refreshDataToTable();
                 break;
             }
-            //case R.id.btnStopTable: {
-            //    stopRequestTimerTask();
-            //    break;
-            //}
+            case R.id.btnClearTable: {
+                //stopRequestTimerTask();
+                clearTable();
+                break;
+            }
             default: {
                 // do nothing
             }
         }
     }
 
+    private void clearTable(){
+        mList.clear();
+        initRecyclerView();
+    }
+
+
     /**
      * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
-     */
+
     private void startRequestTimer() {
         if(requestTimer == null) {
             // set a new Timer
@@ -244,11 +321,12 @@ public class DynamicTableActivity extends AppCompatActivity {
             //textViewError.setText("");
         }
     }
+     */
 
     /**
      * @brief Stops request timer (if currently exist)
      * and sets 'requestTimerFirstRequestAfterStop' flag.
-     */
+
     private void stopRequestTimerTask() {
         // stop the timer, if it's not already null
         if (requestTimer != null) {
@@ -257,10 +335,11 @@ public class DynamicTableActivity extends AppCompatActivity {
             requestTimerFirstRequestAfterStop = true;
         }
     }
+     */
 
     /**
      * @brief Initialize request timer period task with 'Handler' post method as 'sendGetRequest'.
-     */
+
     private void initializeRequestTimerTask() {
         requestTimerTask = new TimerTask() {
             public void run() {
@@ -270,15 +349,19 @@ public class DynamicTableActivity extends AppCompatActivity {
             }
         };
     }
+     */
 
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
      */
-    private void sendGetRequest()
+    private void sendGetRequest(String u)
     {
         // Instantiate the RequestQueue with Volley
         // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
         String url = getURL(ipAddress, "measurements.php?id=[-1]");
+        url = getURL(ipAddress, u);
+
+        /*
         if(checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
         {
             url = getURL(ipAddress, onlyEnvMes);
@@ -307,7 +390,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         {
             url = getURL(ipAddress, AllMes);
         }
-
+        */
         // Request a string response from the provided URL
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -320,18 +403,19 @@ public class DynamicTableActivity extends AppCompatActivity {
                 });
 
         // Set longer time for request
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                7000,
-                0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+        //        7000,
+        //        0,
+        //        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
+
     /**
      * @brief Validation of client-side time stamp based on 'SystemClock'.
-     */
+
     private long getValidTimeStampIncrease(long currentTime)
     {
         // Right after start remember current time and return 0
@@ -360,6 +444,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         // Return time difference between current and previous request
         return (currentTime - requestTimerPreviousTime);
     }
+     */
 
 
     /**
@@ -379,19 +464,22 @@ public class DynamicTableActivity extends AppCompatActivity {
      */
     private void responseHandling(String response)
     {
-        if(requestTimer != null) {
+        //if(requestTimer != null) {
             // get time stamp with SystemClock
-            long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
-            requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
+            //long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
+            //requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
-            responseHandling.getRawDataFromResponseToTable(response);
+            MeasurementModel m = new MeasurementModel("-", 0, "-", "-");
+            m = responseHandling.getRawDataFromResponseToDynamicTable(response);
+            mList.add(m);
+            initRecyclerView();
 
             // update plot series
-            double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
+            //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
 
             // remember previous time stamp
-            requestTimerPreviousTime = requestTimerCurrentTime;
-        }
+            //requestTimerPreviousTime = requestTimerCurrentTime;
+        //}
     }
 
 }

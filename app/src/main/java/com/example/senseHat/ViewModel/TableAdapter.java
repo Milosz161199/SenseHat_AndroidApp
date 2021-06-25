@@ -23,7 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.senseHat.Model.MeasurementModel;
 import com.example.senseHat.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> {
@@ -57,6 +62,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         holder.unitTextView.setText(measurementModel.mUnit);
         holder.sensorTextView.setText(measurementModel.mSensor);
 
+        Date currentTime = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+        String formattedDate = df.format(currentTime);
+
+        holder.dateTextView.setText(formattedDate);
+
     }
 
     @Override
@@ -77,6 +89,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         protected TextView valueTextView;
         protected TextView unitTextView;
         protected TextView sensorTextView;
+        protected TextView dateTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,6 +98,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
             this.valueTextView = (TextView) itemView.findViewById(R.id.singleElementValueTextView);
             this.unitTextView = (TextView) itemView.findViewById(R.id.singleElementUnitTextView);
             this.sensorTextView = (TextView) itemView.findViewById(R.id.singleElementSensorTextView);
+            this.dateTextView = (TextView) itemView.findViewById(R.id.singleElementDateTextView);
         }
     }
 }
