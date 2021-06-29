@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/HomePageActivity.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/HomePageActivity.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: main page activity with data and main menu
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: main page activity with data and main menu
+ * *****************************************************************************
  */
 
 package com.example.senseHat.View;
@@ -56,8 +57,6 @@ public class HomePageActivity extends AppCompatActivity {
         menuBarButtons();
         RefreshMenuData();
 
-
-
     }
 
     /**
@@ -75,8 +74,7 @@ public class HomePageActivity extends AppCompatActivity {
         startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
     }
 
-    private void RefreshMenuData()
-    {
+    private void RefreshMenuData() {
         textViewAddressIP.setText(ipAddress);
         textViewSocket.setText(String.valueOf(socketAddress));
         textViewSampleTime.setText(String.valueOf(sampleTime));
@@ -84,7 +82,7 @@ public class HomePageActivity extends AppCompatActivity {
         textViewApiVersion.setText(String.valueOf(apiVersion));
     }
 
-    private void initView(){
+    private void initView() {
         textViewAddressIP = (TextView) findViewById(R.id.textViewIpAddressHome);
         textViewSocket = (TextView) findViewById(R.id.textViewSocketHome);
         textViewSampleTime = (TextView) findViewById(R.id.textViewSampleTimeHome);
@@ -92,7 +90,7 @@ public class HomePageActivity extends AppCompatActivity {
         textViewApiVersion = (TextView) findViewById(R.id.textViewApiVersionHome);
     }
 
-    private void initMenuBar(){
+    private void initMenuBar() {
         btnGoToTable = (Button) findViewById(R.id.btnGoToTable);
         btnGoToConfig = (Button) findViewById(R.id.btnGoToConfig);
         btnGoToGraphAngle = (Button) findViewById(R.id.btnGoToGraphAngle);

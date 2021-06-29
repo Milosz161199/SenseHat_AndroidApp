@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/Common.java
- * @author  Milosz Plutwoski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/Common.java
+ * @author Milosz Plutwoski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: common app information
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: common app information
+ * *****************************************************************************
  */
 
 package com.example.senseHat.Model;
@@ -123,13 +124,13 @@ public class Common {
     public static String REQ_YAW_DEG = "/PROJECT/OneByOne/yaw_deg.json";
     public static String REQ_GYROSCOPE_ROLL = "/PROJECT/OneByOne/gyroscope_roll.json";
     public static String REQ_GYROSCOPE_PITCH = "/PROJECT/OneByOne/gyroscope_pitch.json";
-    public static String REQ_GYROSCOPE_WAY = "/PROJECT/OneByOne/gyroscope_yaw.json";
+    public static String REQ_GYROSCOPE_YAW = "/PROJECT/OneByOne/gyroscope_yaw.json";
     public static String REQ_GYROSCOPE_X = "/PROJECT/OneByOne/gyroscope_x.json";
     public static String REQ_GYROSCOPE_Y = "/PROJECT/OneByOne/gyroscope_y.json";
     public static String REQ_GYROSCOPE_Z = "/PROJECT/OneByOne/gyroscope_z.json";
     public static String REQ_ACCELEROMETER_ROLL = "/PROJECT/OneByOne/accelerometer_roll.json";
     public static String REQ_ACCELEROMETER_PITCH = "/PROJECT/OneByOne/accelerometer_pitch.json";
-    public static String REQ_ACCELEROMETER_WAY = "/PROJECT/OneByOne/accelerometer_yaw.json";
+    public static String REQ_ACCELEROMETER_YAW = "/PROJECT/OneByOne/accelerometer_yaw.json";
     public static String REQ_ACCELEROMETER_X = "/PROJECT/OneByOne/accelerometer_x.json";
     public static String REQ_ACCELEROMETER_Y = "/PROJECT/OneByOne/accelerometer_y.json";
     public static String REQ_ACCELEROMETER_Z = "/PROJECT/OneByOne/accelerometer_z.json";

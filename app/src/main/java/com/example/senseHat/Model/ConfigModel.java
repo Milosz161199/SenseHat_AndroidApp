@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/ConfigModel.java
- * @author  Milosz Plutwoski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/ConfigModel.java
+ * @author Milosz Plutwoski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: Config data from json file
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: Config data from json file
+ * *****************************************************************************
  */
 
 package com.example.senseHat.Model;
@@ -19,8 +20,7 @@ public class ConfigModel {
     public double mMaxNumOfSamples;
     public double mApiVersion;
 
-    public ConfigModel(String IpAddress, double SampleTimeMs, double MaxNumOfSamples, double ApiVersion)
-    {
+    public ConfigModel(String IpAddress, double SampleTimeMs, double MaxNumOfSamples, double ApiVersion) {
         mIpAddress = IpAddress;
         mSampleTimeMs = SampleTimeMs;
         mMaxNumOfSamples = MaxNumOfSamples;
@@ -30,11 +30,10 @@ public class ConfigModel {
     public ConfigModel(JSONObject data) throws JSONException {
         try {
             mIpAddress = data.getString("ipAddress");
-            mSampleTimeMs= data.getDouble("sampleTimeMs");
+            mSampleTimeMs = data.getDouble("sampleTimeMs");
             mMaxNumOfSamples = data.getDouble("maxNumOfSamples");
             mApiVersion = data.getDouble("apiVersion");
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException("Json Object to Measurement Data parse error");
         }

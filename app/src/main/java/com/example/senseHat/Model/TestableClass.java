@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/TestableClass.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/TestableClass.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: testable class for JSON parsing
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: testable class for JSON parsing
+ * *****************************************************************************
  */
 
 package com.example.senseHat.Model;
@@ -38,34 +39,27 @@ public class TestableClass {
         }
 
         // iterate through JSON Array
-        for (int i = 0; i < jArray.length(); i++)
-        {
+        for (int i = 0; i < jArray.length(); i++) {
             try {
                 /* get measurement model from JSON data */
                 MeasurementModel measurement = new MeasurementModel(jArray.getJSONObject(i));
 
-                if(measurement.mName.matches("temperature"))
-                {
+                if (measurement.mName.matches("temperature")) {
                     x[0] = measurement.mValue;
                 }
-                if(measurement.mName.matches("humidity"))
-                {
+                if (measurement.mName.matches("humidity")) {
                     x[1] = measurement.mValue;
                 }
-                if(measurement.mName.matches("pressure"))
-                {
+                if (measurement.mName.matches("pressure")) {
                     x[2] = measurement.mValue;
                 }
-                if(measurement.mName.matches("roll"))
-                {
+                if (measurement.mName.matches("roll")) {
                     x[3] = measurement.mValue;
                 }
-                if(measurement.mName.matches("pitch"))
-                {
+                if (measurement.mName.matches("pitch")) {
                     x[4] = measurement.mValue;
                 }
-                if(measurement.mName.matches("yaw"))
-                {
+                if (measurement.mName.matches("yaw")) {
                     x[5] = measurement.mValue;
                 }
 
@@ -97,8 +91,7 @@ public class TestableClass {
         }
 
         // iterate through JSON Array
-        for (int i = 0; i < jArray.length(); i++)
-        {
+        for (int i = 0; i < jArray.length(); i++) {
             try {
                 /* get measurement model from JSON data */
                 measurementModel = new MeasurementModel(jArray.getJSONObject(i));

@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    LED Display Control Example/MainActivity.java
- * @author  Adrian Wojcik
+ * *****************************************************************************
+ *
+ * @file LED Display Control Example/MainActivity.java
+ * @author Adrian Wojcik
  * @version V1.0
- * @date    09-Apr-2020
- * @brief   LED display controller: main activity with display GUI
- ******************************************************************************
+ * @date 09-Apr-2020
+ * @brief LED display controller: main activity with display GUI
+ * *****************************************************************************
  */
 
 package com.example.senseHat.View;
@@ -67,7 +68,7 @@ public class LedActivity extends AppCompatActivity {
     /* BEGIN request */
     String url = "http://192.168.0.104/led_display.php";  ///< Default IoT server script URL
     private RequestQueue queue; ///< HTTP requests queue
-    Map<String, String>  paramsClear = new HashMap<String, String>(); ///< HTTP POST data: clear display command
+    Map<String, String> paramsClear = new HashMap<String, String>(); ///< HTTP POST data: clear display command
     /* END request */
 
     @Override
@@ -92,42 +93,51 @@ public class LedActivity extends AppCompatActivity {
         /* END Color data initialization */
 
         /* BEGIN widgets initialization */
-        redSeekBar = (SeekBar)findViewById(R.id.seekBarR);
+        redSeekBar = (SeekBar) findViewById(R.id.seekBarR);
         redSeekBar.setMax(255);
         redSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
+
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
             }
+
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
+
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('R', progressChangedValue);
                 colorView.setBackgroundColor(ledActiveColor);
             }
         });
 
-        greenSeekBar = (SeekBar)findViewById(R.id.seekBarG);
+        greenSeekBar = (SeekBar) findViewById(R.id.seekBarG);
         greenSeekBar.setMax(255);
         greenSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
+
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
             }
+
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
+
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('G', progressChangedValue);
                 colorView.setBackgroundColor(ledActiveColor);
             }
         });
 
-        blueSeekBar = (SeekBar)findViewById(R.id.seekBarB);
+        blueSeekBar = (SeekBar) findViewById(R.id.seekBarB);
         blueSeekBar.setMax(255);
         blueSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
+
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
             }
+
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
+
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('B', progressChangedValue);
                 colorView.setBackgroundColor(ledActiveColor);
@@ -143,10 +153,10 @@ public class LedActivity extends AppCompatActivity {
         /* BEGIN 'Volley' request queue initialization */
         queue = Volley.newRequestQueue(this);
 
-        for(int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 // "LEDij" : "[i,j,r,g,b]"
-                String data ="["+Integer.toString(i)+","+Integer.toString(j)+",0,0,0]";
+                String data = "[" + Integer.toString(i) + "," + Integer.toString(j) + ",0,0,0]";
                 paramsClear.put(ledIndexToTag(i, j), data);
             }
         }
@@ -157,8 +167,8 @@ public class LedActivity extends AppCompatActivity {
      * @brief Url creating for led matrix request
      * @return String url
      */
-    private String makeUrl(){
-        return "http://"+ HomePageActivity.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
+    private String makeUrl() {
+        return "http://" + HomePageActivity.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
     }
 
 
@@ -170,8 +180,8 @@ public class LedActivity extends AppCompatActivity {
      * @param _b Blue component: 0-255 (0x00-0xFF)
      * @return Color in ARGB format
      */
-    public int argbToInt(int _a, int _r, int _g, int _b){
-        return  (_a & 0xff) << 24 | (_r & 0xff) << 16 | (_g & 0xff) << 8 | (_b & 0xff);
+    public int argbToInt(int _a, int _r, int _g, int _b) {
+        return (_a & 0xff) << 24 | (_r & 0xff) << 16 | (_g & 0xff) << 8 | (_b & 0xff);
     }
 
     /**
@@ -184,9 +194,9 @@ public class LedActivity extends AppCompatActivity {
         int _g = (argb >> 8) & 0xff;
         int _b = argb & 0xff;
         Vector<Integer> rgb = new Vector<>(3);
-        rgb.add(0,_r);
-        rgb.add(1,_g);
-        rgb.add(2,_b);
+        rgb.add(0, _r);
+        rgb.add(1, _g);
+        rgb.add(2, _b);
         return rgb;
     }
 
@@ -225,7 +235,7 @@ public class LedActivity extends AppCompatActivity {
         String _r = Integer.toString(ledDisplayModel[x][y][0]);
         String _g = Integer.toString(ledDisplayModel[x][y][1]);
         String _b = Integer.toString(ledDisplayModel[x][y][2]);
-        return "["+_x+","+_y+","+_r+","+_g+","+_b+"]";
+        return "[" + _x + "," + _y + "," + _r + "," + _g + "," + _b + "]";
     }
 
     /**
@@ -235,14 +245,14 @@ public class LedActivity extends AppCompatActivity {
      * @return False if color is Null; True otherwise
      */
     boolean ledColorNotNull(int x, int y) {
-        return !((ledDisplayModel[x][y][0]==null)||(ledDisplayModel[x][y][1]==null)||(ledDisplayModel[x][y][2]==null));
+        return !((ledDisplayModel[x][y][0] == null) || (ledDisplayModel[x][y][1] == null) || (ledDisplayModel[x][y][2] == null));
     }
 
     /**
      * @brief LED display data model clear - fill with all components with Null
      */
     public void clearDisplayModel() {
-        for(int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ledDisplayModel[i][j][0] = null;
                 ledDisplayModel[i][j][1] = null;
@@ -258,14 +268,21 @@ public class LedActivity extends AppCompatActivity {
      * @return Color in ARGB format
      */
     int seekBarUpdate(char color, int value) {
-        switch(color) {
-            case 'R': ledActiveColorR = value; break;
-            case 'G': ledActiveColorG = value; break;
-            case 'B': ledActiveColorB = value; break;
-            default: /* Do nothing */ break;
+        switch (color) {
+            case 'R':
+                ledActiveColorR = value;
+                break;
+            case 'G':
+                ledActiveColorG = value;
+                break;
+            case 'B':
+                ledActiveColorB = value;
+                break;
+            default: /* Do nothing */
+                break;
         }
-        ledActiveColorA = (ledActiveColorR+ledActiveColorG+ledActiveColorB)/3;
-        return argbToInt(ledActiveColorA,  ledActiveColorR, ledActiveColorG, ledActiveColorB);
+        ledActiveColorA = (ledActiveColorR + ledActiveColorG + ledActiveColorB) / 3;
+        return argbToInt(ledActiveColorA, ledActiveColorR, ledActiveColorG, ledActiveColorB);
     }
 
     /**
@@ -277,10 +294,10 @@ public class LedActivity extends AppCompatActivity {
         // Set active color as background
         v.setBackgroundColor(ledActiveColor);
         // Find element x-y position
-        String tag = (String)v.getTag();
+        String tag = (String) v.getTag();
         Vector<Integer> index = ledTagToIndex(tag);
-        int x = (int)index.get(0);
-        int y = (int)index.get(1);
+        int x = (int) index.get(0);
+        int y = (int) index.get(1);
         // Update LED display data model
         ledDisplayModel[x][y][0] = ledActiveColorR;
         ledDisplayModel[x][y][1] = ledActiveColorG;
@@ -293,9 +310,9 @@ public class LedActivity extends AppCompatActivity {
      */
     public void clearAllLed(View v) {
         // Clear LED display GUI
-        TableLayout tb = (TableLayout)findViewById(R.id.ledTable);
+        TableLayout tb = (TableLayout) findViewById(R.id.ledTable);
         View ledInd;
-        for(int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ledInd = tb.findViewWithTag(ledIndexToTag(i, j));
                 ledInd.setBackgroundColor(ledOffColor);
@@ -313,13 +330,13 @@ public class LedActivity extends AppCompatActivity {
      * @brief Generate HTTP POST request parameters for LED display control via IoT server script
      * @return HTTP POST request parameters as hash map (String keys, String values)
      */
-    public Map<String, String>  getDisplayControlParams() {
+    public Map<String, String> getDisplayControlParams() {
         String led;
         String position_color_data;
-        Map<String, String>  params = new HashMap<String, String>();
-        for(int i = 0; i < 8; i++) {
+        Map<String, String> params = new HashMap<String, String>();
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(ledColorNotNull(i,j)) {
+                if (ledColorNotNull(i, j)) {
                     led = ledIndexToTag(i, j);
                     position_color_data = ledIndexToJsonData(i, j);
                     params.put(led, position_color_data);
@@ -334,26 +351,23 @@ public class LedActivity extends AppCompatActivity {
      * @brief Send button onClick event handling procedure: send control request via Volley queue
      * @param v Send button element
      */
-    public void sendControlRequest(View v)
-    {
+    public void sendControlRequest(View v) {
 
-        sendBtn.setBackgroundColor(Color.rgb(3,218,197));
+        sendBtn.setBackgroundColor(Color.rgb(3, 218, 197));
         url = urlText.getText().toString();
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>()
-                {
+                new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(!response.equals("ACK"))
+                        if (!response.equals("ACK"))
                             Log.d("Response", "\n" + response);
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String msg = error.getMessage();
-                        if(msg != null)
+                        if (msg != null)
                             Log.d("Error.Response", msg);
                         else {
                             // TODO: error type specific code
@@ -375,24 +389,21 @@ public class LedActivity extends AppCompatActivity {
     /**
      * @brief Send clear request via Volley queue
      */
-    void sendClearRequest()
-    {
+    void sendClearRequest() {
         url = urlText.getText().toString();
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>()
-                {
+                new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("Response", response);
                         // TODO: check if ACK is valid
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String msg = error.getMessage();
-                        if(msg != null)
+                        if (msg != null)
                             Log.d("Error.Response", msg);
                         else {
                             // TODO: error type specific code

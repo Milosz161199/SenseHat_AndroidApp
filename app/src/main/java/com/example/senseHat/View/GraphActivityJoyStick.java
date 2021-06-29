@@ -10,12 +10,9 @@
 
 package com.example.senseHat.View;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,17 +29,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.JoyStickModel;
-import com.example.senseHat.Model.SocketAsyncTask;
 import com.example.senseHat.Model.TestableClass;
-import com.example.senseHat.Model.XYValue;
 import com.example.senseHat.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -83,8 +76,8 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     private final int dataGraphMaxY = 100;
     private final int dataGraphMinY = -100;
 
-    private ArrayList<JoyStickModel> xyValueArray;
-    //public XYValue xy;
+    //private ArrayList<JoyStickModel> xyValueArray;
+
 
     public String text;
 
@@ -98,13 +91,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
 
         initView();
 
-        xyValueArray = new ArrayList<>();
-
-        //xy = new XYValue(45,50);
-        //xyValueArray.add(joyStickModel);
-        //text = "("+String.valueOf(xyValueArray.get(0).getCounterX()) +", "+String.valueOf(xyValueArray.get(0).getCounterY())+")";
-
-
+        //xyValueArray = new ArrayList<>();
 
         InitGraphView();
 
@@ -114,7 +101,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
                 sendGetRequest();
             }
         });
-
 
     }
 

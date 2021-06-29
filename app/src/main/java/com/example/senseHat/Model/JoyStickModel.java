@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/JoyStickModel.java
- * @author  Milosz Plutwoski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/JoyStickModel.java
+ * @author Milosz Plutwoski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: Joy-stick model
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: Joy-stick model
+ * *****************************************************************************
  */
 
 package com.example.senseHat.Model;
@@ -47,7 +48,7 @@ public class JoyStickModel extends AppCompatActivity {
     }
 
 
-    public JoyStickModel(){
+    public JoyStickModel() {
     }
 
     public JoyStickModel(JSONObject data) throws JSONException {
@@ -55,8 +56,7 @@ public class JoyStickModel extends AppCompatActivity {
             this.mCounterX = data.getInt("counter_x");
             this.mCounterY = data.getInt("counter_y");
             this.mCounterMiddle = data.getInt("counter_middle");
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException("Json Object to Measurement Data parse error");
         }

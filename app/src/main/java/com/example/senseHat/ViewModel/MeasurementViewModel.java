@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/MeasurementsViewModel.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/MeasurementsViewModel.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: View model for measurements
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: View model for measurements
+ * *****************************************************************************
  */
 
 package com.example.senseHat.ViewModel;
@@ -35,5 +36,7 @@ public class MeasurementViewModel {
         return model.mUnit;
     }
 
-    public String getSensor() { return model.mSensor; }
+    public String getSensor() {
+        return model.mSensor;
+    }
 }

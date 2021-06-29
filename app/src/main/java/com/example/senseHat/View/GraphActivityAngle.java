@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/GraphActivityAngle.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/GraphActivityAngle.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: Angles measurements activity with data charts
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: Angles measurements activity with data charts
+ * *****************************************************************************
  */
 
 package com.example.senseHat.View;
@@ -149,13 +150,10 @@ public class GraphActivityAngle extends AppCompatActivity {
         swRoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Roll...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[3] = true;
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "-Roll...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[3] = false;
                 }
@@ -165,13 +163,10 @@ public class GraphActivityAngle extends AppCompatActivity {
         swPitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Pitch...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[4] = true;
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "-Pitch...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[4] = false;
                 }
@@ -181,13 +176,10 @@ public class GraphActivityAngle extends AppCompatActivity {
         swYaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Yaw...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[5] = true;
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "-Yaw...", Toast.LENGTH_SHORT).show();
                     tabOfMeasurements[5] = false;
                 }
@@ -296,82 +288,63 @@ public class GraphActivityAngle extends AppCompatActivity {
      * **/
     boolean[] tabOfMeasurements = new boolean[6];
 
-    protected String madeRequest(boolean[] tab)
-    {
+    protected String madeRequest(boolean[] tab) {
         String req = "[";
         boolean firstValue = true;
 
-        if(tab[0])
-        {
-            if(firstValue){
+        if (tab[0]) {
+            if (firstValue) {
                 req = req + "0,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",0";
             }
         }
-        if(tab[1])
-        {
-            if(firstValue){
+        if (tab[1]) {
+            if (firstValue) {
                 req = req + "1,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",1";
             }
         }
-        if(tab[2] )
-        {
-            if(firstValue){
+        if (tab[2]) {
+            if (firstValue) {
                 req = req + "2,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",2";
             }
         }
-        if(tab[3])
-        {
-            if(firstValue){
+        if (tab[3]) {
+            if (firstValue) {
                 req = req + "3,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",3";
             }
         }
-        if(tab[4] )
-        {
-            if(firstValue){
+        if (tab[4]) {
+            if (firstValue) {
                 req = req + "4,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",4";
             }
         }
-        if(tab[5])
-        {
-            if(firstValue){
+        if (tab[5]) {
+            if (firstValue) {
                 req = req + "5,";
                 firstValue = false;
-            }
-            else
-            {
+            } else {
                 req = req + ",5";
             }
         }
 
         req = req + "]";
-        req = req.replace(",,",",");
-        req = req.replace(",]","]");
-        req = req.replace("[,","[");
+        req = req.replace(",,", ",");
+        req = req.replace(",]", "]");
+        req = req.replace("[,", "[");
         return req;
     }
 
@@ -459,7 +432,7 @@ public class GraphActivityAngle extends AppCompatActivity {
      * @param errorCode local error codes, see: COMMON
      */
     private void errorHandling(int errorCode) {
-        switch(errorCode) {
+        switch (errorCode) {
             case Common.ERROR_TIME_STAMP:
                 textViewError.setText("ERR #1");
                 Log.d("errorHandling", "Request time stamp error.");
@@ -495,7 +468,7 @@ public class GraphActivityAngle extends AppCompatActivity {
      * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
      */
     private void startRequestTimer() {
-        if(requestTimer == null) {
+        if (requestTimer == null) {
             // set a new Timer
             requestTimer = new Timer();
 
@@ -528,7 +501,9 @@ public class GraphActivityAngle extends AppCompatActivity {
         requestTimerTask = new TimerTask() {
             public void run() {
                 handler.post(new Runnable() {
-                    public void run() { sendGetRequest(); }
+                    public void run() {
+                        sendGetRequest();
+                    }
                 });
             }
         };
@@ -537,8 +512,7 @@ public class GraphActivityAngle extends AppCompatActivity {
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
      */
-    private void sendGetRequest()
-    {
+    private void sendGetRequest() {
         // Instantiate the RequestQueue with Volley
         // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
         String url = getURL(ipAddress);
@@ -547,11 +521,15 @@ public class GraphActivityAngle extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) { responseHandling(response); }
+                    public void onResponse(String response) {
+                        responseHandling(response);
+                    }
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) { errorHandling(Common.ERROR_RESPONSE); }
+                    public void onErrorResponse(VolleyError error) {
+                        errorHandling(Common.ERROR_RESPONSE);
+                    }
                 });
 
         // Add the request to the RequestQueue.
@@ -561,11 +539,9 @@ public class GraphActivityAngle extends AppCompatActivity {
     /**
      * @brief Validation of client-side time stamp based on 'SystemClock'.
      */
-    private long getValidTimeStampIncrease(long currentTime)
-    {
+    private long getValidTimeStampIncrease(long currentTime) {
         // Right after start remember current time and return 0
-        if(requestTimerFirstRequest)
-        {
+        if (requestTimerFirstRequest) {
             requestTimerPreviousTime = currentTime;
             requestTimerFirstRequest = false;
             return 0;
@@ -573,9 +549,8 @@ public class GraphActivityAngle extends AppCompatActivity {
 
         // After each stop return value not greater than sample time
         // to avoid "holes" in the plot
-        if(requestTimerFirstRequestAfterStop)
-        {
-            if((currentTime - requestTimerPreviousTime) > sampleTime)
+        if (requestTimerFirstRequestAfterStop) {
+            if ((currentTime - requestTimerPreviousTime) > sampleTime)
                 requestTimerPreviousTime = currentTime - sampleTime;
 
             requestTimerFirstRequestAfterStop = false;
@@ -583,7 +558,7 @@ public class GraphActivityAngle extends AppCompatActivity {
 
         // If time difference is equal zero after start
         // return sample time
-        if((currentTime - requestTimerPreviousTime) == 0)
+        if ((currentTime - requestTimerPreviousTime) == 0)
             return sampleTime;
 
         // Return time difference between current and previous request
@@ -605,9 +580,8 @@ public class GraphActivityAngle extends AppCompatActivity {
     /**
      * @brief GET response handling - chart data series updated with IoT server data.
      */
-    private void responseHandling(String response)
-    {
-        if(requestTimer != null) {
+    private void responseHandling(String response) {
+        if (requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
             requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
@@ -616,7 +590,7 @@ public class GraphActivityAngle extends AppCompatActivity {
             tabOfMeasurementValues = responseHandling.getRawDataFromResponse(response);
 
             // update chart
-            if (isNaN(tabOfMeasurementValues[0]) ) {
+            if (isNaN(tabOfMeasurementValues[0])) {
                 errorHandling(Common.ERROR_NAN_DATA);
 
             } else {
@@ -624,19 +598,19 @@ public class GraphActivityAngle extends AppCompatActivity {
                 // update plot series
                 double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
-                if(tabOfMeasurements[3]){
+                if (tabOfMeasurements[3]) {
                     dataSeriesRoll.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[3]), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesRoll.setTitle("Roll [deg]");
                     dataSeriesRoll.setColor(Color.YELLOW);
                 }
 
-                if(tabOfMeasurements[4]){
+                if (tabOfMeasurements[4]) {
                     dataSeriesPitch.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[4]), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesPitch.setTitle("Pitch [deg]");
                     dataSeriesPitch.setColor(Color.GRAY);
                 }
 
-                if(tabOfMeasurements[5]){
+                if (tabOfMeasurements[5]) {
                     dataSeriesYaw.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[5]), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesYaw.setTitle("Yaw [deg]");
                     dataSeriesYaw.setColor(Color.MAGENTA);

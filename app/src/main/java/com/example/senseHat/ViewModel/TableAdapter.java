@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/TableAdapter.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/TableAdapter.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: Adapter to building elements of dynamic list
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: Adapter to building elements of dynamic list
+ * *****************************************************************************
  */
 
 package com.example.senseHat.ViewModel;
@@ -37,7 +38,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     private List<MeasurementModel> measurementList;
     private MeasurementModel measurementModel;
 
-    public TableAdapter(Context context, List<MeasurementModel> measurementList ) {
+    public TableAdapter(Context context, List<MeasurementModel> measurementList) {
 
         this.measurementList = measurementList;
         this.context = context;
@@ -73,12 +74,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if (measurementList == null)
-        {
+        if (measurementList == null) {
             return 0;
-        }
-        else
-        {
+        } else {
             return measurementList.size();
         }
     }
