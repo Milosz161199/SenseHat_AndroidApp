@@ -1,11 +1,12 @@
 /**
- ******************************************************************************
- * @file    Sense Hat/GraphActivityJoyStick.java
- * @author  Milosz Plutowski
+ * *****************************************************************************
+ *
+ * @file Sense Hat/GraphActivityJoyStick.java
+ * @author Milosz Plutowski
  * @version V1.0
- * @date    15-06-2021
- * @brief   Sense Hat: Joy-stick activity with data chart
- ******************************************************************************
+ * @date 15-06-2021
+ * @brief Sense Hat: Joy-stick activity with data chart
+ * *****************************************************************************
  */
 
 package com.example.senseHat.View;
@@ -91,8 +92,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
 
         initView();
 
-        //xyValueArray = new ArrayList<>();
-
         InitGraphView();
 
         btnRefreshCounters.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +108,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
      * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
      */
     private void startRequestTimer() {
-        if(requestTimer == null) {
+        if (requestTimer == null) {
             // set a new Timer
             requestTimer = new Timer();
 
@@ -142,7 +141,9 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         requestTimerTask = new TimerTask() {
             public void run() {
                 handler.post(new Runnable() {
-                    public void run() { sendGetRequest(); }
+                    public void run() {
+                        sendGetRequest();
+                    }
                 });
             }
         };
@@ -152,11 +153,9 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     /**
      * @brief Validation of client-side time stamp based on 'SystemClock'.
      */
-    private long getValidTimeStampIncrease(long currentTime)
-    {
+    private long getValidTimeStampIncrease(long currentTime) {
         // Right after start remember current time and return 0
-        if(requestTimerFirstRequest)
-        {
+        if (requestTimerFirstRequest) {
             requestTimerPreviousTime = currentTime;
             requestTimerFirstRequest = false;
             return 0;
@@ -164,9 +163,8 @@ public class GraphActivityJoyStick extends AppCompatActivity {
 
         // After each stop return value not greater than sample time
         // to avoid "holes" in the plot
-        if(requestTimerFirstRequestAfterStop)
-        {
-            if((currentTime - requestTimerPreviousTime) > sampleTime)
+        if (requestTimerFirstRequestAfterStop) {
+            if ((currentTime - requestTimerPreviousTime) > sampleTime)
                 requestTimerPreviousTime = currentTime - sampleTime;
 
             requestTimerFirstRequestAfterStop = false;
@@ -174,7 +172,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
 
         // If time difference is equal zero after start
         // return sample time
-        if((currentTime - requestTimerPreviousTime) == 0)
+        if ((currentTime - requestTimerPreviousTime) == 0)
             return sampleTime;
 
         // Return time difference between current and previous request
@@ -187,14 +185,13 @@ public class GraphActivityJoyStick extends AppCompatActivity {
      * @retval GET request URL
      */
     private String getURL(String ip) {
-        return ("http://" + ip + Common.PHP_COMMAND_TAKE_DATA_JOY_STICK );
+        return ("http://" + ip + Common.PHP_COMMAND_TAKE_DATA_JOY_STICK);
     }
 
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
      */
-    private void sendGetRequest()
-    {
+    private void sendGetRequest() {
         // Instantiate the RequestQueue with Volley
         // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
         String url = getURL(ipAddress);
@@ -203,11 +200,15 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) { responseHandling(response); }
+                    public void onResponse(String response) {
+                        responseHandling(response);
+                    }
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) { errorHandling(Common.ERROR_RESPONSE); }
+                    public void onErrorResponse(VolleyError error) {
+                        errorHandling(Common.ERROR_RESPONSE);
+                    }
                 });
 
         // Add the request to the RequestQueue.
@@ -220,7 +221,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
      * @param errorCode local error codes, see: COMMON
      */
     private void errorHandling(int errorCode) {
-        switch(errorCode) {
+        switch (errorCode) {
             case Common.ERROR_TIME_STAMP:
                 //textViewError.setText("ERR #1");
                 Log.d("errorHandling", "Request time stamp error.");
@@ -245,52 +246,52 @@ public class GraphActivityJoyStick extends AppCompatActivity {
      */
     private void responseHandling(String response) {
         //if (requestTimer != null) {
-            // get time stamp with SystemClock
-            //long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
-            //requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
+        // get time stamp with SystemClock
+        //long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
+        //requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
-            // get raw data from JSON response
-            joyStickModel = responseHandling.getRawDataFromResponseToJoyStick(response);
+        // get raw data from JSON response
+        joyStickModel = responseHandling.getRawDataFromResponseToJoyStick(response);
 
-            // update chart
-            if (isNaN(joyStickModel.getCounterX()) || isNaN(joyStickModel.getCounterY()) || isNaN(joyStickModel.getCounterMiddle())) {
-                errorHandling(Common.ERROR_NAN_DATA);
+        // update chart
+        if (isNaN(joyStickModel.getCounterX()) || isNaN(joyStickModel.getCounterY()) || isNaN(joyStickModel.getCounterMiddle())) {
+            errorHandling(Common.ERROR_NAN_DATA);
 
-            } else {
+        } else {
 
-                // update plot series
-                //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
-                //boolean scrollGraph = (timeStamp > dataGraphMaxX);
+            // update plot series
+            //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
+            //boolean scrollGraph = (timeStamp > dataGraphMaxX);
 
-                //InitGraphView();
-                dataSeriesPoint.resetData( new DataPoint[]{new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY())} );
-                //dataSeriesPoint.appendData(new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY()), false, 1);
-                text = "("+String.valueOf(joyStickModel.getCounterX()) +", "+String.valueOf(joyStickModel.getCounterY())+")";
-                Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
-                dataSeriesPoint.setTitle("Joy-stick");
-                dataSeriesPoint.setColor(Color.MAGENTA);
-                dataSeriesPoint.setShape(PointsGraphSeries.Shape.RECTANGLE);
+            //InitGraphView();
+            dataSeriesPoint.resetData(new DataPoint[]{new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY())});
+            //dataSeriesPoint.appendData(new DataPoint(joyStickModel.getCounterX(), joyStickModel.getCounterY()), false, 1);
+            text = "(" + String.valueOf(joyStickModel.getCounterX()) + ", " + String.valueOf(joyStickModel.getCounterY()) + ")";
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+            dataSeriesPoint.setTitle("Joy-stick");
+            dataSeriesPoint.setColor(Color.MAGENTA);
+            dataSeriesPoint.setShape(PointsGraphSeries.Shape.RECTANGLE);
 
-                textViewCounterMiddle.setText(String.valueOf(joyStickModel.getCounterMiddle()));
+            textViewCounterMiddle.setText(String.valueOf(joyStickModel.getCounterMiddle()));
 
-                // refresh chart
-                dataGraphJoy.onDataChanged(true, true);
+            // refresh chart
+            dataGraphJoy.onDataChanged(true, true);
 
-                dataGraphJoy.getLegendRenderer().setVisible(true);
-                dataGraphJoy.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraphJoy.getLegendRenderer().setTextSize(30);
+            dataGraphJoy.getLegendRenderer().setVisible(true);
+            dataGraphJoy.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+            dataGraphJoy.getLegendRenderer().setTextSize(30);
 
-                dataGraphJoy.getGridLabelRenderer().setTextSize(20);
-                dataGraphJoy.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Counter_Y [-]");
-                dataGraphJoy.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Counter_X [-]");
-                dataGraphJoy.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraphJoy.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraphJoy.getGridLabelRenderer().setPadding(35);
-            }
+            dataGraphJoy.getGridLabelRenderer().setTextSize(20);
+            dataGraphJoy.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Counter_Y [-]");
+            dataGraphJoy.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Counter_X [-]");
+            dataGraphJoy.getGridLabelRenderer().setNumHorizontalLabels(9);
+            dataGraphJoy.getGridLabelRenderer().setNumVerticalLabels(7);
+            dataGraphJoy.getGridLabelRenderer().setPadding(35);
+        }
 
-            // remember previous time stamp
-            //requestTimerPreviousTime = requestTimerCurrentTime;
-       // }
+        // remember previous time stamp
+        //requestTimerPreviousTime = requestTimerCurrentTime;
+        // }
     }
 
 
@@ -303,7 +304,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     }
 
 
-    public void initView(){
+    public void initView() {
         dataGraphJoy = (GraphView) findViewById(R.id.dataGraphJoy);
         btnRefreshCounters = (Button) findViewById(R.id.btnRefreshCounters);
         textViewCounterMiddle = (TextView) findViewById(R.id.textViewCounterMiddle);

@@ -355,13 +355,21 @@ public class DynamicTableActivity extends AppCompatActivity {
     public void btns_onClick(View v) {
         switch (v.getId()) {
             case R.id.btnRefreshTable: {
-                //startRequestTimer();
+
                 refreshDataToTable();
                 break;
             }
             case R.id.btnClearTable: {
-                //stopRequestTimerTask();
+
                 clearTable();
+                break;
+            }
+            case R.id.btnStartTable: {
+                //startRequestTimer();
+                break;
+            }
+            case R.id.btnStopTable: {
+                //stopRequestTimerTask();
                 break;
             }
             default: {
@@ -378,49 +386,51 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     /**
      * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
-
-    private void startRequestTimer() {
-    if(requestTimer == null) {
-    // set a new Timer
-    requestTimer = new Timer();
-
-    // initialize the TimerTask's job
-    initializeRequestTimerTask();
-    requestTimer.schedule(requestTimerTask, 0, sampleTime);
-
-    // clear error message
-    //textViewError.setText("");
-    }
-    }
      */
+    private void startRequestTimer() {
+        if (requestTimer == null) {
+            // set a new Timer
+            requestTimer = new Timer();
+
+            // initialize the TimerTask's job
+            initializeRequestTimerTask();
+            requestTimer.schedule(requestTimerTask, 0, sampleTime);
+
+            // clear error message
+            //textViewError.setText("");
+        }
+    }
+
 
     /**
      * @brief Stops request timer (if currently exist)
      * and sets 'requestTimerFirstRequestAfterStop' flag.
-
-    private void stopRequestTimerTask() {
-    // stop the timer, if it's not already null
-    if (requestTimer != null) {
-    requestTimer.cancel();
-    requestTimer = null;
-    requestTimerFirstRequestAfterStop = true;
-    }
-    }
      */
+    private void stopRequestTimerTask() {
+        // stop the timer, if it's not already null
+        if (requestTimer != null) {
+            requestTimer.cancel();
+            requestTimer = null;
+            requestTimerFirstRequestAfterStop = true;
+        }
+    }
+
 
     /**
      * @brief Initialize request timer period task with 'Handler' post method as 'sendGetRequest'.
-
-    private void initializeRequestTimerTask() {
-    requestTimerTask = new TimerTask() {
-    public void run() {
-    handler.post(new Runnable() {
-    public void run() { sendGetRequest(); }
-    });
-    }
-    };
-    }
      */
+    private void initializeRequestTimerTask() {
+        requestTimerTask = new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        //sendGetRequest();
+                    }
+                });
+            }
+        };
+    }
+
 
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
@@ -431,36 +441,6 @@ public class DynamicTableActivity extends AppCompatActivity {
         String url = getURL(ipAddress, "measurements.php?id=[-1]");
         url = getURL(ipAddress, u);
 
-        /*
-        if(checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, onlyEnvMes);
-        }
-        if(!checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, onlyAngles);
-        }
-        if(!checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, onlyJoy);
-        }
-        if(checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && !checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, EnvMesAndAngles);
-        }
-        if(checkBoxEnvMes.isChecked() && !checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, EnvMesAndJoy);
-        }
-        if(!checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, JoyAndAngles);
-        }
-        if(checkBoxEnvMes.isChecked() && checkBoxAngleOrientation.isChecked() && checkBoxJoyStick.isChecked())
-        {
-            url = getURL(ipAddress, AllMes);
-        }
-        */
         // Request a string response from the provided URL
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -488,36 +468,32 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     /**
      * @brief Validation of client-side time stamp based on 'SystemClock'.
-
-    private long getValidTimeStampIncrease(long currentTime)
-    {
-    // Right after start remember current time and return 0
-    if(requestTimerFirstRequest)
-    {
-    requestTimerPreviousTime = currentTime;
-    requestTimerFirstRequest = false;
-    return 0;
-    }
-
-    // After each stop return value not greater than sample time
-    // to avoid "holes" in the plot
-    if(requestTimerFirstRequestAfterStop)
-    {
-    if((currentTime - requestTimerPreviousTime) > sampleTime)
-    requestTimerPreviousTime = currentTime - sampleTime;
-
-    requestTimerFirstRequestAfterStop = false;
-    }
-
-    // If time difference is equal zero after start
-    // return sample time
-    if((currentTime - requestTimerPreviousTime) == 0)
-    return sampleTime;
-
-    // Return time difference between current and previous request
-    return (currentTime - requestTimerPreviousTime);
-    }
      */
+    private long getValidTimeStampIncrease(long currentTime) {
+        // Right after start remember current time and return 0
+        if (requestTimerFirstRequest) {
+            requestTimerPreviousTime = currentTime;
+            requestTimerFirstRequest = false;
+            return 0;
+        }
+
+        // After each stop return value not greater than sample time
+        // to avoid "holes" in the plot
+        if (requestTimerFirstRequestAfterStop) {
+            if ((currentTime - requestTimerPreviousTime) > sampleTime)
+                requestTimerPreviousTime = currentTime - sampleTime;
+
+            requestTimerFirstRequestAfterStop = false;
+        }
+
+        // If time difference is equal zero after start
+        // return sample time
+        if ((currentTime - requestTimerPreviousTime) == 0)
+            return sampleTime;
+
+        // Return time difference between current and previous request
+        return (currentTime - requestTimerPreviousTime);
+    }
 
 
     /**

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@mipmap/raspberry_background">
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".View.DynamicTableActivity">
 
 
@@ -36,7 +35,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dynamicTableRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:layout_weight="2"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -61,31 +60,61 @@
                 android:id="@+id/checkBoxEnvMes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Environmental measurements" />
+                android:text="Environmental measurements"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/checkBoxAngleOrientation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Angle Orientation (RPY)" />
+                android:text="Angle Orientation (RPY)"
+                android:textSize="12sp"/>
 
             <CheckBox
                 android:id="@+id/checkBoxJoyStick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Joy-stick" />
+                android:text="Joy-stick"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/checkBoxCompass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Compass" />
+                android:text="Compass"
+                android:textSize="12sp"/>
 
             <CheckBox
                 android:id="@+id/checkBoxAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All measurements" />
+                android:text="All measurements"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnStartTable"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="btns_onClick"
+                android:text="START" />
+            <Button
+                android:id="@+id/btnStopTable"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="btns_onClick"
+                android:text="STOP" />
 
         </LinearLayout>
 
@@ -94,11 +123,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:gravity="center"
             android:layout_weight="2"
             android:orientation="horizontal">
-
 
             <Button
                 android:id="@+id/btnRefreshTable"

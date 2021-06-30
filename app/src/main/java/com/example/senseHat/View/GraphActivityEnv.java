@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
+import com.example.senseHat.Model.MeasurementModel;
 import com.example.senseHat.R;
 import com.example.senseHat.Model.TestableClass;
 import com.jjoe64.graphview.GraphView;
@@ -66,7 +67,10 @@ public class GraphActivityEnv extends AppCompatActivity {
     private ImageButton btnGoToConfig;
 
 
-    //private LineGraphSeries[] dataSeries;
+    private boolean tempBoolean = false;
+    private boolean humBoolean = false;
+    private boolean presBoolean = false;
+
 
     private TextView textViewIP;
     private TextView textViewSampleTime;
@@ -160,10 +164,10 @@ public class GraphActivityEnv extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Temperature...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[0] = true;
+                    tempBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Temperature...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[0] = false;
+                    tempBoolean = false;
                 }
             }
         });
@@ -173,10 +177,10 @@ public class GraphActivityEnv extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Humidity...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[1] = true;
+                    humBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Humidity...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[1] = false;
+                    humBoolean = false;
                 }
             }
         });
@@ -186,10 +190,10 @@ public class GraphActivityEnv extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Pressure...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[2] = true;
+                    presBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Pressure...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[2] = false;
+                    presBoolean = false;
                 }
             }
         });
@@ -284,75 +288,50 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphPres.getGridLabelRenderer().setPadding(35);
     }
 
-    /**
-     * Index :
-     * 0 -> Temperature
-     * 1 -> Humidity
-     * 2 -> Pressure
-     * 3 -> Roll
-     * 4 -> Pitch
-     * 5 -> Yaw
-     * **/
-    boolean[] tabOfMeasurements = new boolean[6];
 
-    protected String madeRequest(boolean[] tab) {
-        String req = "[";
-        boolean firstValue = true;
+    private void madeRequestTempHum() {
+        sendGetRequest(Common.REQ_TEMP_C_1);
+        sendGetRequest(Common.REQ_HUM_P);
+    }
 
-        if (tab[0]) {
-            if (firstValue) {
-                req = req + "0,";
-                firstValue = false;
-            } else {
-                req = req + ",0";
-            }
-        }
-        if (tab[1]) {
-            if (firstValue) {
-                req = req + "1,";
-                firstValue = false;
-            } else {
-                req = req + ",1";
-            }
-        }
-        if (tab[2]) {
-            if (firstValue) {
-                req = req + "2,";
-                firstValue = false;
-            } else {
-                req = req + ",2";
-            }
-        }
-        if (tab[3]) {
-            if (firstValue) {
-                req = req + "3,";
-                firstValue = false;
-            } else {
-                req = req + ",3";
-            }
-        }
-        if (tab[4]) {
-            if (firstValue) {
-                req = req + "4,";
-                firstValue = false;
-            } else {
-                req = req + ",4";
-            }
-        }
-        if (tab[5]) {
-            if (firstValue) {
-                req = req + "5,";
-                firstValue = false;
-            } else {
-                req = req + ",5";
-            }
-        }
+    private void madeRequestHumPres() {
+        sendGetRequest(Common.REQ_HUM_P);
+        sendGetRequest(Common.REQ_PRES_HPA);
+    }
 
-        req = req + "]";
-        req = req.replace(",,", ",");
-        req = req.replace(",]", "]");
-        req = req.replace("[,", "[");
-        return req;
+    private void madeRequestTempPres() {
+        sendGetRequest(Common.REQ_TEMP_C_1);
+        sendGetRequest(Common.REQ_PRES_HPA);
+    }
+
+    private void madeRequestTempHumPres() {
+        sendGetRequest(Common.REQ_TEMP_C_1);
+        sendGetRequest(Common.REQ_PRES_HPA);
+        sendGetRequest(Common.REQ_HUM_P);
+    }
+
+    private void madeRequest() {
+        if (tempBoolean && !humBoolean && !presBoolean) {
+            sendGetRequest(Common.REQ_TEMP_C_1);
+        }
+        if (!tempBoolean && humBoolean && !presBoolean) {
+            sendGetRequest(Common.REQ_HUM_P);
+        }
+        if (!tempBoolean && !humBoolean && presBoolean) {
+            sendGetRequest(Common.REQ_PRES_HPA);
+        }
+        if (tempBoolean && humBoolean && !presBoolean) {
+            madeRequestTempHum();
+        }
+        if (!tempBoolean && humBoolean && presBoolean) {
+            madeRequestHumPres();
+        }
+        if (tempBoolean && !humBoolean && presBoolean) {
+            madeRequestTempPres();
+        }
+        if (tempBoolean && humBoolean && presBoolean) {
+            madeRequestTempHumPres();
+        }
     }
 
 
@@ -373,8 +352,8 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
     /**
-     * @brief Main activity button onClick procedure - common for all upper menu buttons
      * @param v the View (Button) that was clicked
+     * @brief Main activity button onClick procedure - common for all upper menu buttons
      */
     public void btns_onClick(View v) {
         switch (v.getId()) {
@@ -400,8 +379,8 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
     /**
-     * @brief Create display text for IoT server IP address
      * @param ip IP address (string)
+     * @brief Create display text for IoT server IP address
      * @retval Display text for textViewIP widget
      */
     private String getIpAddressDisplayText(String ip) {
@@ -409,8 +388,8 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
     /**
-     * @brief Create display text for requests sample time
      * @param st Sample time in ms (string)
+     * @brief Create display text for requests sample time
      * @retval Display text for textViewSampleTime widget
      */
     private String getSampleTimeDisplayText(String st) {
@@ -418,12 +397,13 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
     /**
+     * @param ip  IP address (string)
+     * @param req added part of request (string)
      * @brief Create JSON file URL from IoT server IP.
-     * @param ip IP address (string)
      * @retval GET request URL
      */
-    private String getURL(String ip) {
-        return ("http://" + ip + "/" + Common.FILE_NAME + madeRequest(tabOfMeasurements));
+    private String getURL(String ip, String req) {
+        return ("http://" + ip + "/" + req);
     }
 
     /**
@@ -435,8 +415,8 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
     /**
-     * @brief Handles application errors. Logs an error and passes error code to GUI.
      * @param errorCode local error codes, see: COMMON
+     * @brief Handles application errors. Logs an error and passes error code to GUI.
      */
     private void errorHandling(int errorCode) {
         switch (errorCode) {
@@ -461,7 +441,7 @@ public class GraphActivityEnv extends AppCompatActivity {
 
     /**
      * @brief Called when the user taps the 'Config' button.
-     * */
+     */
     private void openConfig() {
         Intent openConfigIntent = new Intent(this, ConfigActivity.class);
         Bundle configBundle = new Bundle();
@@ -509,7 +489,7 @@ public class GraphActivityEnv extends AppCompatActivity {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        sendGetRequest();
+                        madeRequest();
                     }
                 });
             }
@@ -519,10 +499,10 @@ public class GraphActivityEnv extends AppCompatActivity {
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
      */
-    private void sendGetRequest() {
+    private void sendGetRequest(String u) {
         // Instantiate the RequestQueue with Volley
         // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
-        String url = getURL(ipAddress);
+        String url = getURL(ipAddress, u);
 
         // Request a string response from the provided URL
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -572,18 +552,6 @@ public class GraphActivityEnv extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
-
-    /**
-     * Index :
-     * 0 -> Temperature
-     * 1 -> Humidity
-     * 2 -> Pressure
-     * 3 -> Roll
-     * 4 -> Pitch
-     * 5 -> Yaw
-     * **/
-    double[] tabOfMeasurementValues = new double[6];
-
     /**
      * @brief GET response handling - chart data series updated with IoT server data.
      */
@@ -594,10 +562,11 @@ public class GraphActivityEnv extends AppCompatActivity {
             requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
             // get raw data from JSON response
-            tabOfMeasurementValues = responseHandling.getRawDataFromResponse(response);
+            MeasurementModel m = new MeasurementModel("-", 0, "-", "-");
+            m = responseHandling.getRawDataFromResponseToDynamicTable(response);
 
             // update chart
-            if (isNaN(tabOfMeasurementValues[0])) {
+            if (isNaN(m.mValue)) {
                 errorHandling(Common.ERROR_NAN_DATA);
 
             } else {
@@ -605,36 +574,63 @@ public class GraphActivityEnv extends AppCompatActivity {
                 // update plot series
                 double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
-                if (tabOfMeasurements[0]) {
-                    dataSeriesTemperature.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[0]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("temperature")) {
+                    dataSeriesTemperature.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesTemperature.setTitle("Temperature [C]");
                     dataSeriesTemperature.setColor(Color.BLUE);
                 }
-                if (tabOfMeasurements[1]) {
-                    dataSeriesHumidity.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[1]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("humidity")) {
+                    dataSeriesHumidity.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesHumidity.setTitle("Humidity [%]");
                     dataSeriesHumidity.setColor(Color.GREEN);
                 }
-                if (tabOfMeasurements[2]) {
-                    dataSeriesPressure.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[2]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("pressure")) {
+                    dataSeriesPressure.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesPressure.setTitle("Pressure [hPa]");
                     dataSeriesPressure.setColor(Color.RED);
                 }
 
-
                 // refresh chart
-                dataGraph.onDataChanged(true, true);
+                dataGraphTemp.onDataChanged(true, true);
 
-                dataGraph.getLegendRenderer().setVisible(true);
-                dataGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraph.getLegendRenderer().setTextSize(30);
+                dataGraphTemp.getLegendRenderer().setVisible(true);
+                dataGraphTemp.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphTemp.getLegendRenderer().setTextSize(30);
 
-                dataGraph.getGridLabelRenderer().setTextSize(20);
-                dataGraph.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Value [-]");
-                dataGraph.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-                dataGraph.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraph.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraph.getGridLabelRenderer().setPadding(35);
+                dataGraphTemp.getGridLabelRenderer().setTextSize(20);
+                dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [°C]");
+                dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphTemp.getGridLabelRenderer().setPadding(35);
+
+                dataGraphHum.onDataChanged(true, true);
+
+                dataGraphHum.getLegendRenderer().setVisible(true);
+                dataGraphHum.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphHum.getLegendRenderer().setTextSize(30);
+
+                dataGraphHum.getGridLabelRenderer().setTextSize(20);
+                dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [-]");
+                dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphHum.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphHum.getGridLabelRenderer().setPadding(35);
+
+                dataGraphPres.onDataChanged(true, true);
+
+                dataGraphPres.getLegendRenderer().setVisible(true);
+                dataGraphPres.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphPres.getLegendRenderer().setTextSize(30);
+
+                dataGraphPres.getGridLabelRenderer().setTextSize(20);
+                dataGraphPres.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pressure [hPa]");
+                dataGraphPres.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphPres.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphPres.getGridLabelRenderer().setPadding(35);
+
+
             }
 
             // remember previous time stamp

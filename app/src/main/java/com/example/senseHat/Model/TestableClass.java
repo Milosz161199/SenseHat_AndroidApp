@@ -194,7 +194,7 @@ public class TestableClass {
     public MeasurementModel getRawDataFromResponseToDynamicTable(String response) {
         // Create generic JSON object form string
         JSONObject jsonObject = null;
-        MeasurementModel measurementModel = null;
+        MeasurementModel measurementModel = new MeasurementModel("-", 0, "-", "-");
         try {
             jsonObject = new JSONObject(response);
         } catch (JSONException e) {

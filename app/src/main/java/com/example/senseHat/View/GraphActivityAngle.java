@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
+import com.example.senseHat.Model.MeasurementModel;
 import com.example.senseHat.R;
 import com.example.senseHat.Model.TestableClass;
 import com.jjoe64.graphview.GraphView;
@@ -41,12 +42,13 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static java.lang.Double.isNaN;
 
-public class GraphActivityAngle extends AppCompatActivity {
+public class GraphActivityAngle<mList> extends AppCompatActivity {
 
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
@@ -60,6 +62,9 @@ public class GraphActivityAngle extends AppCompatActivity {
     private Switch swPitch;
     private Switch swYaw;
 
+    private boolean angleRollBoolean = false;
+    private boolean anglePitchBoolean = false;
+    private boolean angleYawBoolean = false;
 
     //private LineGraphSeries[] dataSeries;
 
@@ -152,10 +157,10 @@ public class GraphActivityAngle extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Roll...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[3] = true;
+                    angleRollBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Roll...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[3] = false;
+                    angleRollBoolean = false;
                 }
             }
         });
@@ -165,10 +170,10 @@ public class GraphActivityAngle extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Pitch...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[4] = true;
+                    anglePitchBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Pitch...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[4] = false;
+                    anglePitchBoolean = false;
                 }
             }
         });
@@ -178,10 +183,10 @@ public class GraphActivityAngle extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     Toast.makeText(getApplicationContext(), "+Yaw...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[5] = true;
+                    angleYawBoolean = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "-Yaw...", Toast.LENGTH_SHORT).show();
-                    tabOfMeasurements[5] = false;
+                    angleYawBoolean = false;
                 }
             }
         });
@@ -273,8 +278,6 @@ public class GraphActivityAngle extends AppCompatActivity {
         dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
         dataGraphYaw.getGridLabelRenderer().setNumVerticalLabels(7);
         dataGraphYaw.getGridLabelRenderer().setPadding(35);
-
-
     }
 
     /**
@@ -285,67 +288,52 @@ public class GraphActivityAngle extends AppCompatActivity {
      * 3 -> Roll
      * 4 -> Pitch
      * 5 -> Yaw
-     * **/
+     **/
     boolean[] tabOfMeasurements = new boolean[6];
 
-    protected String madeRequest(boolean[] tab) {
-        String req = "[";
-        boolean firstValue = true;
+    private void madeRequestRollPitch() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
+    }
 
-        if (tab[0]) {
-            if (firstValue) {
-                req = req + "0,";
-                firstValue = false;
-            } else {
-                req = req + ",0";
-            }
-        }
-        if (tab[1]) {
-            if (firstValue) {
-                req = req + "1,";
-                firstValue = false;
-            } else {
-                req = req + ",1";
-            }
-        }
-        if (tab[2]) {
-            if (firstValue) {
-                req = req + "2,";
-                firstValue = false;
-            } else {
-                req = req + ",2";
-            }
-        }
-        if (tab[3]) {
-            if (firstValue) {
-                req = req + "3,";
-                firstValue = false;
-            } else {
-                req = req + ",3";
-            }
-        }
-        if (tab[4]) {
-            if (firstValue) {
-                req = req + "4,";
-                firstValue = false;
-            } else {
-                req = req + ",4";
-            }
-        }
-        if (tab[5]) {
-            if (firstValue) {
-                req = req + "5,";
-                firstValue = false;
-            } else {
-                req = req + ",5";
-            }
-        }
+    private void madeRequestRollYaw() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_YAW_DEG);
+    }
 
-        req = req + "]";
-        req = req.replace(",,", ",");
-        req = req.replace(",]", "]");
-        req = req.replace("[,", "[");
-        return req;
+    private void madeRequestYawPitch() {
+        sendGetRequest(Common.REQ_YAW_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
+    }
+
+    private void madeRequestRollYawPitch() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
+        sendGetRequest(Common.REQ_YAW_DEG);
+    }
+
+    private void madeRequest() {
+        if (angleRollBoolean && !anglePitchBoolean && !angleYawBoolean) {
+            sendGetRequest(Common.REQ_ROLL_DEG);
+        }
+        if (!angleRollBoolean && anglePitchBoolean && !angleYawBoolean) {
+            sendGetRequest(Common.REQ_PITCH_DEG);
+        }
+        if (!angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
+            sendGetRequest(Common.REQ_YAW_DEG);
+        }
+        if (angleRollBoolean && anglePitchBoolean && !angleYawBoolean) {
+            madeRequestRollPitch();
+        }
+        if (!angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
+            madeRequestRollYaw();
+        }
+        if (angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
+            madeRequestYawPitch();
+        }
+        if (angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
+            madeRequestRollYawPitch();
+        }
     }
 
 
@@ -366,8 +354,8 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     /**
-     * @brief Main activity button onClick procedure - common for all upper menu buttons
      * @param v the View (Button) that was clicked
+     * @brief Main activity button onClick procedure - common for all upper menu buttons
      */
     public void btns_onClick(View v) {
         switch (v.getId()) {
@@ -393,8 +381,8 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     /**
-     * @brief Create display text for IoT server IP address
      * @param ip IP address (string)
+     * @brief Create display text for IoT server IP address
      * @retval Display text for textViewIP widget
      */
     private String getIpAddressDisplayText(String ip) {
@@ -402,8 +390,8 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     /**
-     * @brief Create display text for requests sample time
      * @param st Sample time in ms (string)
+     * @brief Create display text for requests sample time
      * @retval Display text for textViewSampleTime widget
      */
     private String getSampleTimeDisplayText(String st) {
@@ -411,12 +399,13 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     /**
+     * @param ip  IP address (string)
+     * @param req added part of request (string)
      * @brief Create JSON file URL from IoT server IP.
-     * @param ip IP address (string)
      * @retval GET request URL
      */
-    private String getURL(String ip) {
-        return ("http://" + ip + "/" + Common.FILE_NAME + madeRequest(tabOfMeasurements));
+    private String getURL(String ip, String req) {
+        return ("http://" + ip + "/" + req);
     }
 
     /**
@@ -428,8 +417,8 @@ public class GraphActivityAngle extends AppCompatActivity {
     }
 
     /**
-     * @brief Handles application errors. Logs an error and passes error code to GUI.
      * @param errorCode local error codes, see: COMMON
+     * @brief Handles application errors. Logs an error and passes error code to GUI.
      */
     private void errorHandling(int errorCode) {
         switch (errorCode) {
@@ -454,7 +443,7 @@ public class GraphActivityAngle extends AppCompatActivity {
 
     /**
      * @brief Called when the user taps the 'Config' button.
-     * */
+     */
     private void openConfig() {
         Intent openConfigIntent = new Intent(this, ConfigActivity.class);
         Bundle configBundle = new Bundle();
@@ -502,7 +491,7 @@ public class GraphActivityAngle extends AppCompatActivity {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        sendGetRequest();
+                        madeRequest();
                     }
                 });
             }
@@ -512,10 +501,10 @@ public class GraphActivityAngle extends AppCompatActivity {
     /**
      * @brief Sending GET request to IoT server using 'Volley'.
      */
-    private void sendGetRequest() {
+    private void sendGetRequest(String u) {
         // Instantiate the RequestQueue with Volley
         // https://javadoc.io/doc/com.android.volley/volley/1.1.0-rc2/index.html
-        String url = getURL(ipAddress);
+        String url = getURL(ipAddress, u);
 
         // Request a string response from the provided URL
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -567,51 +556,42 @@ public class GraphActivityAngle extends AppCompatActivity {
 
 
     /**
-     * Index :
-     * 0 -> Temperature
-     * 1 -> Humidity
-     * 2 -> Pressure
-     * 3 -> Roll
-     * 4 -> Pitch
-     * 5 -> Yaw
-     * **/
-    double[] tabOfMeasurementValues = new double[6];
-
-    /**
      * @brief GET response handling - chart data series updated with IoT server data.
      */
     private void responseHandling(String response) {
+
+
         if (requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
             requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
             // get raw data from JSON response
-            tabOfMeasurementValues = responseHandling.getRawDataFromResponse(response);
+            MeasurementModel m = new MeasurementModel("-", 0, "-", "-");
+            m = responseHandling.getRawDataFromResponseToDynamicTable(response);
 
             // update chart
-            if (isNaN(tabOfMeasurementValues[0])) {
+            if (isNaN(m.mValue)) {
                 errorHandling(Common.ERROR_NAN_DATA);
 
             } else {
-
                 // update plot series
                 double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
-                if (tabOfMeasurements[3]) {
-                    dataSeriesRoll.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[3]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("roll")) {
+                    dataSeriesRoll.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesRoll.setTitle("Roll [deg]");
                     dataSeriesRoll.setColor(Color.YELLOW);
                 }
 
-                if (tabOfMeasurements[4]) {
-                    dataSeriesPitch.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[4]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("pitch")) {
+                    dataSeriesPitch.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesPitch.setTitle("Pitch [deg]");
                     dataSeriesPitch.setColor(Color.GRAY);
                 }
 
-                if (tabOfMeasurements[5]) {
-                    dataSeriesYaw.appendData(new DataPoint(timeStamp, tabOfMeasurementValues[5]), scrollGraph, dataGraphMaxDataPointsNumber);
+                if (m.mName.equals("yaw")) {
+                    dataSeriesYaw.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesYaw.setTitle("Yaw [deg]");
                     dataSeriesYaw.setColor(Color.MAGENTA);
 
@@ -619,18 +599,45 @@ public class GraphActivityAngle extends AppCompatActivity {
 
 
                 // refresh chart
-                dataGraph.onDataChanged(true, true);
+                // refresh chart
+                dataGraphRoll.onDataChanged(true, true);
 
-                dataGraph.getLegendRenderer().setVisible(true);
-                dataGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraph.getLegendRenderer().setTextSize(30);
+                dataGraphRoll.getLegendRenderer().setVisible(true);
+                dataGraphRoll.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphRoll.getLegendRenderer().setTextSize(30);
 
-                dataGraph.getGridLabelRenderer().setTextSize(20);
-                dataGraph.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Value [deg]");
-                dataGraph.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-                dataGraph.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraph.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraph.getGridLabelRenderer().setPadding(35);
+                dataGraphRoll.getGridLabelRenderer().setTextSize(20);
+                dataGraphRoll.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Roll [deg]");
+                dataGraphRoll.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphRoll.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphRoll.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphRoll.getGridLabelRenderer().setPadding(35);
+
+                dataGraphPitch.onDataChanged(true, true);
+
+                dataGraphPitch.getLegendRenderer().setVisible(true);
+                dataGraphPitch.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphPitch.getLegendRenderer().setTextSize(30);
+
+                dataGraphPitch.getGridLabelRenderer().setTextSize(20);
+                dataGraphPitch.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pitch [deg]");
+                dataGraphPitch.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphPitch.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphPitch.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphPitch.getGridLabelRenderer().setPadding(35);
+
+                dataGraphYaw.onDataChanged(true, true);
+
+                dataGraphYaw.getLegendRenderer().setVisible(true);
+                dataGraphYaw.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphYaw.getLegendRenderer().setTextSize(30);
+
+                dataGraphYaw.getGridLabelRenderer().setTextSize(20);
+                dataGraphYaw.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Yaw [deg]");
+                dataGraphYaw.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphYaw.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphYaw.getGridLabelRenderer().setPadding(35);
             }
 
             // remember previous time stamp
