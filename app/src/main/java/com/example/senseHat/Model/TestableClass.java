@@ -195,19 +195,20 @@ public class TestableClass {
         // Create generic JSON object form string
         JSONObject jsonObject = null;
         MeasurementModel measurementModel = new MeasurementModel("-", 0, "-", "-");
-        try {
-            jsonObject = new JSONObject(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(!response.isEmpty()) {
+            try {
+                jsonObject = new JSONObject(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            /* get joy-stick model from JSON data */
-            measurementModel = new MeasurementModel(jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            try {
+                /* get joy-stick model from JSON data */
+                measurementModel = new MeasurementModel(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
         return measurementModel;
     }
 
