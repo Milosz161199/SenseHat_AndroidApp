@@ -29,7 +29,6 @@ public class ConfigActivity extends AppCompatActivity {
 
     /* BEGIN config TextViews */
     private EditText ipEditText;
-    private EditText socketEditText;
     private EditText sampleTimeEditText;
     private EditText maxNumberOfSamplesTimeEditText;
     private EditText apiVersionEditText;
@@ -58,10 +57,6 @@ public class ConfigActivity extends AppCompatActivity {
             String ip = configBundle.getString(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_IP_ADDRESS);
             ipEditText.setText(ip);
 
-            socketEditText = (EditText) findViewById(R.id.socketEditTextConfig);
-            int soc = configBundle.getInt(Common.CONFIG_SOCKET, Common.DEFAULT_SOCKET);
-            socketEditText.setText(Integer.toString(soc));
-
             sampleTimeEditText = (EditText) findViewById(R.id.sampleTimeEditTextConfig);
             int st = configBundle.getInt(Common.CONFIG_SAMPLE_TIME, Common.DEFAULT_SAMPLE_TIME);
             sampleTimeEditText.setText(Integer.toString(st));
@@ -85,7 +80,6 @@ public class ConfigActivity extends AppCompatActivity {
                 btnSetNewConfig.setBackgroundColor(Color.rgb(0, 255, 0));
                 Intent intent = new Intent();
                 intent.putExtra(Common.CONFIG_IP_ADDRESS, ipEditText.getText().toString());
-                intent.putExtra(Common.CONFIG_SOCKET, socketEditText.getText().toString());
                 intent.putExtra(Common.CONFIG_SAMPLE_TIME, sampleTimeEditText.getText().toString());
                 intent.putExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, maxNumberOfSamplesTimeEditText.getText().toString());
                 intent.putExtra(Common.CONFIG_API_VERSION, apiVersionEditText.getText().toString());
@@ -100,7 +94,6 @@ public class ConfigActivity extends AppCompatActivity {
                 btnSetDefaultConfig.setBackgroundColor(Color.rgb(0, 255, 0));
                 Intent intent = new Intent();
                 intent.putExtra(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_IP_ADDRESS);
-                intent.putExtra(Common.CONFIG_SOCKET, String.valueOf(Common.DEFAULT_SOCKET));
                 intent.putExtra(Common.CONFIG_SAMPLE_TIME, String.valueOf(Common.DEFAULT_SAMPLE_TIME));
                 intent.putExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, String.valueOf(Common.DEFAULT_MAX_NUMBER_OF_SAMPLES));
                 intent.putExtra(Common.CONFIG_API_VERSION, String.valueOf(Common.DEFAULT_API_VERSION));
@@ -114,7 +107,6 @@ public class ConfigActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent();
         intent.putExtra(Common.CONFIG_IP_ADDRESS, ipEditText.getText().toString());
-        intent.putExtra(Common.CONFIG_SOCKET, socketEditText.getText().toString());
         intent.putExtra(Common.CONFIG_SAMPLE_TIME, sampleTimeEditText.getText().toString());
         intent.putExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, maxNumberOfSamplesTimeEditText.getText().toString());
         intent.putExtra(Common.CONFIG_API_VERSION, apiVersionEditText.getText().toString());

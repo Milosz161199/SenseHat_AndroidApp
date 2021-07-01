@@ -27,7 +27,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     /* BEGIN config data */
     public static String ipAddress = Common.DEFAULT_IP_ADDRESS;
-    public static int socketAddress = Common.DEFAULT_SOCKET;
     public static int sampleTime = Common.DEFAULT_SAMPLE_TIME;
     public static int maxNumberOfSamples = Common.DEFAULT_MAX_NUMBER_OF_SAMPLES;
     public static double apiVersion = Common.DEFAULT_API_VERSION;
@@ -41,7 +40,6 @@ public class HomePageActivity extends AppCompatActivity {
     private Button btnGoToLed;
 
     private TextView textViewAddressIP;
-    private TextView textViewSocket;
     private TextView textViewSampleTime;
     private TextView textViewMaxNumberOfSamples;
     private TextView textViewApiVersion;
@@ -66,7 +64,6 @@ public class HomePageActivity extends AppCompatActivity {
         Intent openConfigIntent = new Intent(this, ConfigActivity.class);
         Bundle configBundle = new Bundle();
         configBundle.putString(Common.CONFIG_IP_ADDRESS, ipAddress);
-        configBundle.putInt(Common.CONFIG_SOCKET, socketAddress);
         configBundle.putInt(Common.CONFIG_SAMPLE_TIME, sampleTime);
         configBundle.putInt(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, maxNumberOfSamples);
         configBundle.putDouble(Common.CONFIG_API_VERSION, apiVersion);
@@ -76,7 +73,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void RefreshMenuData() {
         textViewAddressIP.setText(ipAddress);
-        textViewSocket.setText(String.valueOf(socketAddress));
         textViewSampleTime.setText(String.valueOf(sampleTime));
         textViewMaxNumberOfSamples.setText(String.valueOf(maxNumberOfSamples));
         textViewApiVersion.setText(String.valueOf(apiVersion));
@@ -84,7 +80,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void initView() {
         textViewAddressIP = (TextView) findViewById(R.id.textViewIpAddressHome);
-        textViewSocket = (TextView) findViewById(R.id.textViewSocketHome);
         textViewSampleTime = (TextView) findViewById(R.id.textViewSampleTimeHome);
         textViewMaxNumberOfSamples = (TextView) findViewById(R.id.textViewMaxNumOfSamplesHome);
         textViewApiVersion = (TextView) findViewById(R.id.textViewApiVersionHome);
@@ -153,11 +148,6 @@ public class HomePageActivity extends AppCompatActivity {
             // server IP address
             ipAddress = dataIntent.getStringExtra(Common.CONFIG_IP_ADDRESS);
             textViewAddressIP.setText(ipAddress);
-
-            // server Socket
-            String socketText = dataIntent.getStringExtra(Common.CONFIG_SOCKET);
-            textViewSocket.setText(socketText);
-            socketAddress = Integer.parseInt(socketText);
 
             // Sample time (ms)
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);

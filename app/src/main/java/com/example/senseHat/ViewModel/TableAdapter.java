@@ -56,19 +56,19 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull TableAdapter.ViewHolder holder, int position) {
         measurementModel = measurementList.get(position);
-        numberOfMeasurement = String.valueOf(position) + ".";
+        numberOfMeasurement = String.valueOf(position+1) + ".";
         holder.numberTextView.setText(numberOfMeasurement);
         holder.nameTextView.setText(measurementModel.mName);
         holder.valueTextView.setText(String.valueOf(measurementModel.mValue));
         holder.unitTextView.setText(measurementModel.mUnit);
         holder.sensorTextView.setText(measurementModel.mSensor);
 
-        Date currentTime = Calendar.getInstance().getTime();
+        //Date currentTime = Calendar.getInstance().getTime();
 
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
-        String formattedDate = df.format(currentTime);
+        //SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+        //String formattedDate = df.format(currentTime);
 
-        holder.dateTextView.setText(formattedDate);
+        holder.dateTextView.setText(measurementModel.mDate);
 
     }
 

@@ -14,14 +14,10 @@ package com.example.senseHat.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,22 +33,21 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.MeasurementModel;
-import com.example.senseHat.Model.SocketAsyncTask;
 import com.example.senseHat.R;
 import com.example.senseHat.Model.TestableClass;
 import com.example.senseHat.ViewModel.MeasurementViewModel;
 import com.example.senseHat.ViewModel.TableAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DynamicTableActivity extends AppCompatActivity {
-
-    private ArrayList<MeasurementModel> mList;
-
-    private List<MeasurementViewModel> measurements;
 
 
     /* BEGIN config data */
@@ -61,6 +55,7 @@ public class DynamicTableActivity extends AppCompatActivity {
     private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
     /* END config data */
 
+    private ArrayList<MeasurementModel> mList;
 
     private RecyclerView recyclerViewDynamicTable;
     private RecyclerView.Adapter tableAdapter;
@@ -78,17 +73,6 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     private Switch swChangeUnit;
 
-    private final String onlyEnvMes = "measurements.php?id=[0,1,2]";
-    private final String onlyAngles = "measurements.php?id=[3,4,5]";
-    private final String onlyJoy = "measurements.php?id=[6]";
-    private final String EnvMesAndAngles = "measurements.php?id=[0,1,2,3,4,5]";
-    private final String EnvMesAndJoy = "measurements.php?id=[3,4,5,6]";
-    private final String JoyAndAngles = "measurements.php?id=[3,4,5,6]";
-    private final String AllMes = "measurements.php?id=[0,1,2,3,4,5,6]";
-
-    private final String testedFile = "/PROJECT/OneByOne/TEST_file.json";
-    protected String Command = "0";
-
 
     /* BEGIN request timer */
     private RequestQueue queue;
@@ -103,6 +87,11 @@ public class DynamicTableActivity extends AppCompatActivity {
 
     /* Testable module */
     private TestableClass responseHandling = new TestableClass();
+
+
+    protected Date currentTime;
+    protected SimpleDateFormat df;
+    protected String formattedDate;
 
     private RecyclerView dynamicTableRecyclerView;
     private RecyclerView.Adapter dynamicTableRecyclerViewAdapter;
@@ -156,8 +145,8 @@ public class DynamicTableActivity extends AppCompatActivity {
     private void initTableList() {
         mList = new ArrayList<MeasurementModel>() {
         };
-        MeasurementModel m = new MeasurementModel("NULL", 0.0, "[-]", "NONE");
-        mList.add(m);
+        //MeasurementModel m = new MeasurementModel("NULL", 0.0, "[-]", "NONE");
+        //mList.add(m);
     }
 
     @Override
@@ -195,7 +184,9 @@ public class DynamicTableActivity extends AppCompatActivity {
             if (checkBoxALL.isChecked()) {
                 RequestForAllMeasurements();
             } else {
-
+                sendGetRequest(Common.REQ_COUNTER_X);
+                sendGetRequest(Common.REQ_COUNTER_Y);
+                sendGetRequest(Common.REQ_COUNTER_MIDDLE);
             }
         }
 
@@ -242,7 +233,9 @@ public class DynamicTableActivity extends AppCompatActivity {
             if (checkBoxALL.isChecked()) {
                 RequestForAllMeasurementsOtherUnit();
             } else {
-
+                sendGetRequest(Common.REQ_COUNTER_X);
+                sendGetRequest(Common.REQ_COUNTER_Y);
+                sendGetRequest(Common.REQ_COUNTER_MIDDLE);
             }
         }
 
@@ -518,6 +511,12 @@ public class DynamicTableActivity extends AppCompatActivity {
 
         MeasurementModel m = new MeasurementModel("-", 0, "-", "-");
         m = responseHandling.getRawDataFromResponseToDynamicTable(response);
+        // SET TIME OF MEASUREMENT
+        currentTime = Calendar.getInstance().getTime();
+        df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+        formattedDate = df.format(currentTime);
+        m.mDate = formattedDate;
+
         mList.add(m);
         initRecyclerView();
 
