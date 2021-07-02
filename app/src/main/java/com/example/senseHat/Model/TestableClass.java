@@ -212,5 +212,31 @@ public class TestableClass {
         return measurementModel;
     }
 
+    /**
+     * @brief Reading raw joy-stick data from JSON response.
+     * @param response IoT server JSON response as string
+     * @retval new Config data
+     */
+    public ConfigModel getRawDataFromResponseToConfig(String response) {
+        // Create generic JSON object form string
+        JSONObject jsonObject = null;
+        ConfigModel configModel = null;
+        if(!response.isEmpty()) {
+            try {
+                jsonObject = new JSONObject(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                /* get joy-stick model from JSON data */
+                configModel = new ConfigModel(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return configModel;
+    }
+
 
 }

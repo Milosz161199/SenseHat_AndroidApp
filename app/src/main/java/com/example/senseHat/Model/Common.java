@@ -21,7 +21,7 @@ public class Common {
 
     // configuration info: names and default values
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
-    public final static String DEFAULT_IP_ADDRESS = "192.168.0.104";
+    public final static String DEFAULT_IP_ADDRESS = "192.168.0.103";
 
 
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
@@ -38,20 +38,16 @@ public class Common {
     public final static int ERROR_NAN_DATA = -2;
     public final static int ERROR_RESPONSE = -3;
 
-    // IoT server data
-    public static String FILE_NAME = "measurements.php?id=";
 
-    public static String PHP_COMMAND_TAKE_DATA_TO_TABLE = "";
-    public static String PHP_COMMAND_TAKE_DATA_TO_GRAPH = "";
-    public static String PHP_COMMAND_TAKE_DATA_TO_CONFIG = "/PROJECT/config_data_test_file.json";
+    /* BEGIN REQUEST COMMAND TO SERVER */
+
+    // IoT server data
+    public static String PHP_COMMAND_TAKE_DATA_TO_CONFIG = "/PROJECT/config_test_file.json";
+    public static String PHP_COMMAND_SEND_DATA_TO_CONFIG = "/PROJECT/config_test_file.json";
     public static String PHP_COMMAND_TAKE_DATA_JOY_STICK = "/PROJECT/joy_stick_test_file.json";
     public static String PHP_COMMAND_TAKE_DATA_LED_MATRIX = "/PROJECT/led_display_test_file.json";
     public static String PHP_COMMAND_SEND_DATA_LED_MATRIX = "/PROJECT/led_display.php";
 
-
-    /* END COMMAND TO SERVER  */
-
-    /* BEGIN REQUEST COMMAND TO SERVER */
     public static String REQ_TEST_FILE = "/PROJECT/OneByOne/TEST_file.json";
     public static String REQ_COMPASS_X = "/PROJECT/OneByOne/compass_x.json";
     public static String REQ_COMPASS_Y = "/PROJECT/OneByOne/compass_y.json";
@@ -91,6 +87,5 @@ public class Common {
     /* END REQUEST COMMAND TO SERVER */
 
     public static List<MeasurementModel> measurementModelsList;
-
 
 }

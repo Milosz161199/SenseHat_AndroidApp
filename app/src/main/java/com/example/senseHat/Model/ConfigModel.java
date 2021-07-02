@@ -16,11 +16,11 @@ import org.json.JSONObject;
 
 public class ConfigModel {
     public String mIpAddress;
-    public double mSampleTimeMs;
-    public double mMaxNumOfSamples;
+    public int mSampleTimeMs;
+    public int mMaxNumOfSamples;
     public double mApiVersion;
 
-    public ConfigModel(String IpAddress, double SampleTimeMs, double MaxNumOfSamples, double ApiVersion) {
+    public ConfigModel(String IpAddress, int SampleTimeMs, int MaxNumOfSamples, double ApiVersion) {
         mIpAddress = IpAddress;
         mSampleTimeMs = SampleTimeMs;
         mMaxNumOfSamples = MaxNumOfSamples;
@@ -30,12 +30,12 @@ public class ConfigModel {
     public ConfigModel(JSONObject data) throws JSONException {
         try {
             mIpAddress = data.getString("ipAddress");
-            mSampleTimeMs = data.getDouble("sampleTimeMs");
-            mMaxNumOfSamples = data.getDouble("maxNumOfSamples");
+            mSampleTimeMs = data.getInt("sampleTime");
+            mMaxNumOfSamples = data.getInt("maxNumOfSamples");
             mApiVersion = data.getDouble("apiVersion");
         } catch (JSONException e) {
             e.printStackTrace();
-            throw new JSONException("Json Object to Measurement Data parse error");
+            throw new JSONException("Json Object to Config Data parse error");
         }
     }
 }

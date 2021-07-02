@@ -114,13 +114,13 @@
                     android:id="@+id/btnSetConfig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SET CHANGES" />
+                    android:text="UPDATE CONFIG" />
 
                 <Button
                     android:id="@+id/btnSetDefaultConfig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SET DEFAULT" />
+                    android:text="CHANGE CONFIG" />
             </LinearLayout>
 
             <LinearLayout
