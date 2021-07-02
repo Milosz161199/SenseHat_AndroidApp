@@ -86,6 +86,5 @@ public class Common {
     public static String REQ_ACCELEROMETER_Z = "/PROJECT/OneByOne/accelerometer_z.json";
     /* END REQUEST COMMAND TO SERVER */
 
-    public static List<MeasurementModel> measurementModelsList;
-
+    //public static List<MeasurementModel> measurementModelsList;
 }

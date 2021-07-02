@@ -17,12 +17,23 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.senseHat.Model.Common;
+import com.example.senseHat.Model.ConfigModel;
 import com.example.senseHat.R;
+
+import java.util.Map;
 
 public class ConfigActivity extends AppCompatActivity {
 
@@ -39,12 +50,17 @@ public class ConfigActivity extends AppCompatActivity {
     private Button btnSetDefaultConfig;
 
 
+    private RequestQueue queue; ///< HTTP requests queue
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
 
+
+        /* BEGIN 'Volley' request queue initialization */
+        queue = Volley.newRequestQueue(this);
 
         // get the Intent that started this Activity
         Intent intent = getIntent();
@@ -113,5 +129,6 @@ public class ConfigActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
+
 
 }

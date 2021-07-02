@@ -34,12 +34,6 @@ public class MeasurementModel {
         mValue = value;
         mUnit = unit;
         mSensor = sensor;
-
-        // SET TIME OF MEASUREMENT
-        //Date currentTime = Calendar.getInstance().getTime();
-        //SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
-        //String formattedDate = df.format(currentTime);
-        //mDate = formattedDate;
     }
 
     public MeasurementModel(JSONObject data) throws JSONException {
@@ -49,19 +43,13 @@ public class MeasurementModel {
             mUnit = data.getString("unit");
             mSensor = data.getString("sensor");
 
-            // SET TIME OF MEASUREMENT
-            //Date currentTime = Calendar.getInstance().getTime();
-            //SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
-            //String formattedDate = df.format(currentTime);
-            //mDate = formattedDate;
-
         } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException("Json Object to Measurement Data parse error");
         }
     }
 
-    public MeasurementViewModel toVM() {
-        return new MeasurementViewModel(this);
-    }
+    //public MeasurementViewModel toVM() {
+    //    return new MeasurementViewModel(this);
+    //}
 }

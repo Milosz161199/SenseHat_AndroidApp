@@ -159,6 +159,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         queue = Volley.newRequestQueue(GraphActivityEnv.this);
 
 
+        /* BEGIN SWITCH METHOD */
         swTemperature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -197,7 +198,7 @@ public class GraphActivityEnv extends AppCompatActivity {
                 }
             }
         });
-
+        /* END SWITCH METHOD */
     }
 
 

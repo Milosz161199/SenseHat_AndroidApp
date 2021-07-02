@@ -14,6 +14,7 @@ package com.example.senseHat.View;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -103,6 +104,9 @@ public class HomePageActivity extends AppCompatActivity {
         startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
     }
 
+    /**
+     * @brief Refresh params.
+     */
     private void RefreshMenuData() {
         textViewAddressIP.setText(ipAddress);
         textViewSampleTime.setText(String.valueOf(sampleTime));
@@ -110,6 +114,9 @@ public class HomePageActivity extends AppCompatActivity {
         textViewApiVersion.setText(String.valueOf(apiVersion));
     }
 
+    /**
+     * @brief Init basics view.
+     */
     private void initView() {
         textViewAddressIP = (TextView) findViewById(R.id.textViewIpAddressHome);
         textViewSampleTime = (TextView) findViewById(R.id.textViewSampleTimeHome);
@@ -117,6 +124,9 @@ public class HomePageActivity extends AppCompatActivity {
         textViewApiVersion = (TextView) findViewById(R.id.textViewApiVersionHome);
     }
 
+    /**
+     * @brief Init basics view - menu bar buttons.
+     */
     private void initMenuBar() {
         btnGoToTable = (Button) findViewById(R.id.btnGoToTable);
         btnGoToConfig = (Button) findViewById(R.id.btnGoToConfig);
@@ -126,12 +136,14 @@ public class HomePageActivity extends AppCompatActivity {
         btnGoToLed = (Button) findViewById(R.id.btnGoToLed);
     }
 
+    /**
+     * @brief Called when the user taps the one of buttons in menu bar.
+     */
     private void menuBarButtons() {
         btnGoToConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openConfig();
-                //RefreshMenuData();
             }
         });
 
@@ -199,6 +211,31 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     /**
+     * @param errorCode local error codes, see: COMMON
+     * @brief Handles application errors. Logs an error and passes error code to GUI.
+     */
+    private void errorHandling(int errorCode) {
+        switch (errorCode) {
+            case Common.ERROR_TIME_STAMP:
+                //textViewError.setText("ERR #1");
+                Log.d("errorHandling", "Request time stamp error.");
+                break;
+            case Common.ERROR_NAN_DATA:
+                //textViewError.setText("ERR #2");
+                Log.d("errorHandling", "Invalid JSON data.");
+                break;
+            case Common.ERROR_RESPONSE:
+                //textViewError.setText("ERR #3");
+                Log.d("errorHandling", "GET request VolleyError.");
+                break;
+            default:
+                //textViewError.setText("ERR ??");
+                Log.d("errorHandling", "Unknown error.");
+                break;
+        }
+    }
+
+    /**
      * @brief GET response handling - chart data series updated with IoT server data.
      */
     private void responseHandling(String response) {
@@ -208,7 +245,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         // update chart
         if (isNaN(configModel.mSampleTimeMs)) {
-            //errorHandling(Common.ERROR_NAN_DATA);
+            errorHandling(Common.ERROR_NAN_DATA);
 
         } else {
             //ipAddress = configModel.mIpAddress;

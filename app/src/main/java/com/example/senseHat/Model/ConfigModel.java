@@ -38,4 +38,23 @@ public class ConfigModel {
             throw new JSONException("Json Object to Config Data parse error");
         }
     }
+
+    public String SaveCurrentConfigToFile( ConfigModel c ) throws JSONException {
+        String jsonText = null;
+
+        String ip = c.mIpAddress;
+        String sampleTime = String.valueOf(c.mSampleTimeMs);
+        String maxNumOfSamples = String.valueOf(c.mMaxNumOfSamples);
+        String api = String.valueOf(c.mApiVersion);
+
+        JSONObject jo = new JSONObject();
+        jo.put("ipAddress", ip);
+        jo.put("sampleTime", sampleTime);
+        jo.put("maxNumOfSamples", maxNumOfSamples);
+        jo.put("apiVersion", api);
+
+        jsonText = jo.toString();
+
+        return jsonText;
+    }
 }
