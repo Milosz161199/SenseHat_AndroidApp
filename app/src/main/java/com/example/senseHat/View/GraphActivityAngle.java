@@ -53,6 +53,7 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
     private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
+    private int dataGraphMaxDataPointsNumber = Common.DEFAULT_MAX_NUMBER_OF_SAMPLES;
     /* END config data */
 
 
@@ -62,11 +63,11 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
     private Switch swPitch;
     private Switch swYaw;
 
-    private boolean angleRollBoolean = false;
-    private boolean anglePitchBoolean = false;
-    private boolean angleYawBoolean = false;
-
-    //private LineGraphSeries[] dataSeries;
+    /* BEGIN booleans */
+    private boolean angleRollBoolean = true;
+    private boolean anglePitchBoolean = true;
+    private boolean angleYawBoolean = true;
+    /* END booleans */
 
     private TextView textViewIP;
     private TextView textViewSampleTime;
@@ -78,7 +79,7 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
     private LineGraphSeries<DataPoint> dataSeriesRoll;
     private LineGraphSeries<DataPoint> dataSeriesPitch;
     private LineGraphSeries<DataPoint> dataSeriesYaw;
-    private final int dataGraphMaxDataPointsNumber = 1000;
+    //private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 10.0d;
     private final double dataGraphMinX = 0.0d;
     private final double dataGraphMaxY = 360.0d;
@@ -152,6 +153,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
         queue = Volley.newRequestQueue(GraphActivityAngle.this);
 
 
+        /**
+         * @brief switch to true and enable 'roll' data to graph
+         */
         swRoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -165,6 +169,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
             }
         });
 
+        /**
+         * @brief switch to true and enable 'pitch' data to graph
+         */
         swPitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -178,6 +185,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
             }
         });
 
+        /**
+         * @brief switch to true and enable 'yaw' data to graph
+         */
         swYaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -193,7 +203,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
 
     }
 
-
+    /**
+     * @brief Init GraphViews.
+     */
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
         dataGraphRoll = (GraphView) findViewById(R.id.dataGraphRoll);
@@ -209,31 +221,31 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
         dataGraphYaw.addSeries(dataSeriesYaw);
 
         dataGraphRoll.getViewport().setXAxisBoundsManual(true);
-        dataGraphRoll.getViewport().setYAxisBoundsManual(true);
+        //dataGraphRoll.getViewport().setYAxisBoundsManual(true);
         dataGraphRoll.getViewport().setMinX(dataGraphMinX);
         dataGraphRoll.getViewport().setMaxX(dataGraphMaxX);
-        dataGraphRoll.getViewport().setMinY(dataGraphMinY);
-        dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
+        //dataGraphRoll.getViewport().setMinY(dataGraphMinY);
+        //dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphRoll.getViewport().setScalable(true);
         dataGraphRoll.getViewport().setScrollable(true);
 
         dataGraphPitch.getViewport().setXAxisBoundsManual(true);
-        dataGraphPitch.getViewport().setYAxisBoundsManual(true);
+        //dataGraphPitch.getViewport().setYAxisBoundsManual(true);
         dataGraphPitch.getViewport().setMinX(dataGraphMinX);
         dataGraphPitch.getViewport().setMaxX(dataGraphMaxX);
-        dataGraphPitch.getViewport().setMinY(dataGraphMinY);
-        dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
+        //dataGraphPitch.getViewport().setMinY(dataGraphMinY);
+        //dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphPitch.getViewport().setScalable(true);
         dataGraphPitch.getViewport().setScrollable(true);
 
         dataGraphYaw.getViewport().setXAxisBoundsManual(true);
-        dataGraphYaw.getViewport().setYAxisBoundsManual(true);
+        //dataGraphYaw.getViewport().setYAxisBoundsManual(true);
         dataGraphYaw.getViewport().setMinX(dataGraphMinX);
         dataGraphYaw.getViewport().setMaxX(dataGraphMaxX);
-        dataGraphYaw.getViewport().setMinY(dataGraphMinY);
-        dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
+        //dataGraphYaw.getViewport().setMinY(dataGraphMinY);
+        //dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphYaw.getViewport().setScalable(true);
         dataGraphYaw.getViewport().setScrollable(true);
@@ -281,37 +293,41 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
     }
 
     /**
-     * Index :
-     * 0 -> Temperature
-     * 1 -> Humidity
-     * 2 -> Pressure
-     * 3 -> Roll
-     * 4 -> Pitch
-     * 5 -> Yaw
-     **/
-    boolean[] tabOfMeasurements = new boolean[6];
-
+     * @brief request for roll and pitch data
+     */
     private void madeRequestRollPitch() {
         sendGetRequest(Common.REQ_ROLL_DEG);
         sendGetRequest(Common.REQ_PITCH_DEG);
     }
 
+    /**
+     * @brief request for roll and yaw data
+     */
     private void madeRequestRollYaw() {
         sendGetRequest(Common.REQ_ROLL_DEG);
         sendGetRequest(Common.REQ_YAW_DEG);
     }
 
+    /**
+     * @brief request for yaw and pitch data
+     */
     private void madeRequestYawPitch() {
         sendGetRequest(Common.REQ_YAW_DEG);
         sendGetRequest(Common.REQ_PITCH_DEG);
     }
 
+    /**
+     * @brief request for roll, pitch and yaw data
+     */
     private void madeRequestRollYawPitch() {
         sendGetRequest(Common.REQ_ROLL_DEG);
         sendGetRequest(Common.REQ_PITCH_DEG);
         sendGetRequest(Common.REQ_YAW_DEG);
     }
 
+    /**
+     * @brief creating request for angles data
+     */
     private void madeRequest() {
         if (angleRollBoolean && !anglePitchBoolean && !angleYawBoolean) {
             sendGetRequest(Common.REQ_ROLL_DEG);
@@ -325,10 +341,10 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
         if (angleRollBoolean && anglePitchBoolean && !angleYawBoolean) {
             madeRequestRollPitch();
         }
-        if (!angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
+        if (angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
             madeRequestRollYaw();
         }
-        if (angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
+        if (!angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
             madeRequestYawPitch();
         }
         if (angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
@@ -350,6 +366,11 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
             sampleTime = Integer.parseInt(sampleTimeText);
             textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
+
+            // Max number of samples
+            String samplesText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
+            dataGraphMaxDataPointsNumber = Integer.parseInt(samplesText);
+
         }
     }
 
@@ -449,6 +470,7 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Common.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Common.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, dataGraphMaxDataPointsNumber);
         openConfigIntent.putExtras(configBundle);
         startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
     }
@@ -559,8 +581,6 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
      * @brief GET response handling - chart data series updated with IoT server data.
      */
     private void responseHandling(String response) {
-
-
         if (requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
@@ -580,25 +600,23 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
                 if (m.mName.equals("roll")) {
                     dataSeriesRoll.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesRoll.setTitle("Roll [deg]");
+                    dataSeriesRoll.setTitle("Roll");
                     dataSeriesRoll.setColor(Color.YELLOW);
                 }
 
                 if (m.mName.equals("pitch")) {
                     dataSeriesPitch.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesPitch.setTitle("Pitch [deg]");
+                    dataSeriesPitch.setTitle("Pitch");
                     dataSeriesPitch.setColor(Color.GRAY);
                 }
 
                 if (m.mName.equals("yaw")) {
                     dataSeriesYaw.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesYaw.setTitle("Yaw [deg]");
+                    dataSeriesYaw.setTitle("Yaw");
                     dataSeriesYaw.setColor(Color.MAGENTA);
 
                 }
 
-
-                // refresh chart
                 // refresh chart
                 dataGraphRoll.onDataChanged(true, true);
 
@@ -643,6 +661,5 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
             // remember previous time stamp
             requestTimerPreviousTime = requestTimerCurrentTime;
         }
-
     }
 }

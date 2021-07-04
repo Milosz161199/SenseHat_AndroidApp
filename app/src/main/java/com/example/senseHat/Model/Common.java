@@ -21,7 +21,7 @@ public class Common {
 
     // configuration info: names and default values
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
-    public final static String DEFAULT_IP_ADDRESS = "192.168.0.103";
+    public final static String DEFAULT_IP_ADDRESS = "192.168.100.19";
 
 
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
@@ -31,7 +31,7 @@ public class Common {
     public final static int DEFAULT_MAX_NUMBER_OF_SAMPLES = 100;
 
     public final static String CONFIG_API_VERSION = "apiVersion";
-    public final static double DEFAULT_API_VERSION = 1.0;
+    public final static double DEFAULT_API_VERSION = 6.0;
 
     // error codes
     public final static int ERROR_TIME_STAMP = -1;
@@ -85,6 +85,4 @@ public class Common {
     public static String REQ_ACCELEROMETER_Y = "/PROJECT/OneByOne/accelerometer_y.json";
     public static String REQ_ACCELEROMETER_Z = "/PROJECT/OneByOne/accelerometer_z.json";
     /* END REQUEST COMMAND TO SERVER */
-
-    //public static List<MeasurementModel> measurementModelsList;
 }

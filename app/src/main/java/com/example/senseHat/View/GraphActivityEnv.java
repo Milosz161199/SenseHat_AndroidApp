@@ -55,27 +55,23 @@ public class GraphActivityEnv extends AppCompatActivity {
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
     private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
+    private int dataGraphMaxDataPointsNumber = Common.DEFAULT_MAX_NUMBER_OF_SAMPLES;
     /* END config data */
-
 
     /* BEGIN widgets */
     private Switch swTemperature;
     private Switch swHumidity;
     private Switch swPressure;
 
-
-    private ImageButton btnGoToConfig;
-
-
-    private boolean tempBoolean = false;
-    private boolean humBoolean = false;
-    private boolean presBoolean = false;
-
+    /* BEGIN booleans */
+    private boolean tempBoolean = true;
+    private boolean humBoolean = true;
+    private boolean presBoolean = true;
+    /* END booleans */
 
     private TextView textViewIP;
     private TextView textViewSampleTime;
     private TextView textViewError;
-    private GraphView dataGraph;
     private GraphView dataGraphTemp;
     private GraphView dataGraphHum;
     private GraphView dataGraphPres;
@@ -83,7 +79,6 @@ public class GraphActivityEnv extends AppCompatActivity {
     private LineGraphSeries<DataPoint> dataSeriesHumidity;
     private LineGraphSeries<DataPoint> dataSeriesPressure;
 
-    private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 10.0d;
     private final double dataGraphMinX = 0.0d;
     private final double dataGraphMaxY = 100.0d;
@@ -202,6 +197,9 @@ public class GraphActivityEnv extends AppCompatActivity {
     }
 
 
+    /**
+     * @brief Init GraphViews.
+     */
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
         dataGraphTemp = (GraphView) findViewById(R.id.dataGraphTemp);
@@ -213,21 +211,22 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataSeriesPressure = new LineGraphSeries<>(new DataPoint[]{});
 
 
+        // GRAPH TEMPERATURE
         dataGraphTemp.addSeries(dataSeriesTemperature);
         dataGraphHum.addSeries(dataSeriesHumidity);
         dataGraphPres.addSeries(dataSeriesPressure);
-
 
         dataGraphTemp.getViewport().setXAxisBoundsManual(true);
         dataGraphTemp.getViewport().setYAxisBoundsManual(true);
         dataGraphTemp.getViewport().setMinX(0);
         dataGraphTemp.getViewport().setMaxX(10);
-        dataGraphTemp.getViewport().setMinY(20);
+        dataGraphTemp.getViewport().setMinY(30);
         dataGraphTemp.getViewport().setMaxY(40);
 
         dataGraphTemp.getViewport().setScalable(true);
         dataGraphTemp.getViewport().setScrollable(true);
 
+        // GRAPH HUMIDITY
         dataGraphHum.getViewport().setXAxisBoundsManual(true);
         dataGraphHum.getViewport().setYAxisBoundsManual(true);
         dataGraphHum.getViewport().setMinX(0);
@@ -238,6 +237,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphHum.getViewport().setScalable(true);
         dataGraphHum.getViewport().setScrollable(true);
 
+        // GRAPH PRESSURE
         dataGraphPres.getViewport().setXAxisBoundsManual(true);
         dataGraphPres.getViewport().setYAxisBoundsManual(true);
         dataGraphPres.getViewport().setMinX(0);
@@ -256,7 +256,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphTemp.getLegendRenderer().setTextSize(30);
 
         dataGraphTemp.getGridLabelRenderer().setTextSize(20);
-        dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [°C]");
+        dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [C]");
         dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
         dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
@@ -289,28 +289,42 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphPres.getGridLabelRenderer().setPadding(35);
     }
 
-
+    /**
+     * @brief Request for temperature and humidity.
+     */
     private void madeRequestTempHum() {
         sendGetRequest(Common.REQ_TEMP_C_1);
         sendGetRequest(Common.REQ_HUM_P);
     }
 
+    /**
+     * @brief Request for pressure and humidity.
+     */
     private void madeRequestHumPres() {
         sendGetRequest(Common.REQ_HUM_P);
         sendGetRequest(Common.REQ_PRES_HPA);
     }
 
+    /**
+     * @brief Request for temperature and pressure.
+     */
     private void madeRequestTempPres() {
         sendGetRequest(Common.REQ_TEMP_C_1);
         sendGetRequest(Common.REQ_PRES_HPA);
     }
 
+    /**
+     * @brief Request for temperature, humidity and pressure.
+     */
     private void madeRequestTempHumPres() {
         sendGetRequest(Common.REQ_TEMP_C_1);
         sendGetRequest(Common.REQ_PRES_HPA);
         sendGetRequest(Common.REQ_HUM_P);
     }
 
+    /**
+     * @brief Creating full request for measurements.
+     */
     private void madeRequest() {
         if (tempBoolean && !humBoolean && !presBoolean) {
             sendGetRequest(Common.REQ_TEMP_C_1);
@@ -349,6 +363,10 @@ public class GraphActivityEnv extends AppCompatActivity {
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
             sampleTime = Integer.parseInt(sampleTimeText);
             textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
+
+            // Sample time (ms)
+            String sampleSText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
+            dataGraphMaxDataPointsNumber = Integer.parseInt(sampleSText);
         }
     }
 
@@ -448,6 +466,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Common.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Common.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, dataGraphMaxDataPointsNumber);
         openConfigIntent.putExtras(configBundle);
         startActivityForResult(openConfigIntent, Common.REQUEST_CODE_CONFIG);
     }
@@ -577,17 +596,17 @@ public class GraphActivityEnv extends AppCompatActivity {
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
                 if (m.mName.equals("temperature")) {
                     dataSeriesTemperature.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesTemperature.setTitle("Temperature [C]");
+                    dataSeriesTemperature.setTitle("Temperature");
                     dataSeriesTemperature.setColor(Color.BLUE);
                 }
                 if (m.mName.equals("humidity")) {
                     dataSeriesHumidity.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesHumidity.setTitle("Humidity [%]");
+                    dataSeriesHumidity.setTitle("Humidity");
                     dataSeriesHumidity.setColor(Color.GREEN);
                 }
                 if (m.mName.equals("pressure")) {
                     dataSeriesPressure.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesPressure.setTitle("Pressure [hPa]");
+                    dataSeriesPressure.setTitle("Pressure");
                     dataSeriesPressure.setColor(Color.RED);
                 }
 
@@ -599,7 +618,7 @@ public class GraphActivityEnv extends AppCompatActivity {
                 dataGraphTemp.getLegendRenderer().setTextSize(30);
 
                 dataGraphTemp.getGridLabelRenderer().setTextSize(20);
-                dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [°C]");
+                dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [C]");
                 dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
                 dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
                 dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
@@ -612,7 +631,7 @@ public class GraphActivityEnv extends AppCompatActivity {
                 dataGraphHum.getLegendRenderer().setTextSize(30);
 
                 dataGraphHum.getGridLabelRenderer().setTextSize(20);
-                dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [-]");
+                dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [%]");
                 dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
                 dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
                 dataGraphHum.getGridLabelRenderer().setNumVerticalLabels(7);
@@ -630,13 +649,9 @@ public class GraphActivityEnv extends AppCompatActivity {
                 dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
                 dataGraphPres.getGridLabelRenderer().setNumVerticalLabels(7);
                 dataGraphPres.getGridLabelRenderer().setPadding(35);
-
-
             }
-
             // remember previous time stamp
             requestTimerPreviousTime = requestTimerCurrentTime;
         }
-
     }
 }

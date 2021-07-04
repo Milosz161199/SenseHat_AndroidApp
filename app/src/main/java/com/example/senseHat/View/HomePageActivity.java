@@ -48,17 +48,21 @@ public class HomePageActivity extends AppCompatActivity {
     public static double apiVersion = Common.DEFAULT_API_VERSION;
     /* END config data */
 
+    /* BEGIN Buttons */
     private Button btnGoToTable;
     private Button btnGoToConfig;
     private Button btnGoToGraphAngle;
     private Button btnGoToGraphEnv;
     private Button btnGoToGraphJoyStick;
     private Button btnGoToLed;
+    /* END Buttons */
 
+    /* BEGIN TextViews */
     private TextView textViewAddressIP;
     private TextView textViewSampleTime;
     private TextView textViewMaxNumberOfSamples;
     private TextView textViewApiVersion;
+    /* END TextViews */
 
     private boolean getConfigParams = true;
     private RequestQueue queue;
@@ -82,10 +86,8 @@ public class HomePageActivity extends AppCompatActivity {
         menuBarButtons();
         RefreshMenuData();
 
-
         if (getConfigParams) {
             sendGetRequest();
-
             getConfigParams = false;
         }
     }
@@ -181,7 +183,6 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(new Intent(HomePageActivity.this, GraphActivityJoyStick.class));
             }
         });
-
     }
 
     @Override
@@ -239,7 +240,6 @@ public class HomePageActivity extends AppCompatActivity {
      * @brief GET response handling - chart data series updated with IoT server data.
      */
     private void responseHandling(String response) {
-
         // get raw data from JSON response
         configModel = responseHandling.getRawDataFromResponseToConfig(response);
 
@@ -291,5 +291,4 @@ public class HomePageActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
 }

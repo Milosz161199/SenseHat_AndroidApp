@@ -35,11 +35,59 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dynamicTableRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="260dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sample Time (>= 1000ms): "
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextNumberDecimalSampleTime"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:text="5000"
+                    android:textColor="#000000" />
+
+                <Button
+                    android:id="@+id/btnSetSample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="btns_onClick"
+                    android:text="SET" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Create long list (1000 samples)" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,38 +104,46 @@
                     android:layout_height="wrap_content"
                     android:text="Change unit od measurement" />
 
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pick measurements witch yow want to follow:"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
                 <CheckBox
                     android:id="@+id/checkBoxEnvMes"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="Environmental measurements"
                     android:textSize="12sp" />
 
                 <CheckBox
                     android:id="@+id/checkBoxAngleOrientation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="Angle Orientation (RPY)"
                     android:textSize="12sp" />
 
                 <CheckBox
                     android:id="@+id/checkBoxJoyStick"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="Joy-stick"
                     android:textSize="12sp" />
 
                 <CheckBox
                     android:id="@+id/checkBoxCompass"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="Compass"
                     android:textSize="12sp" />
 
                 <CheckBox
                     android:id="@+id/checkBoxAll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:text="All measurements"
                     android:textSize="12sp" />
 
@@ -95,7 +151,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="1dp"
                 android:layout_weight="2"
@@ -117,18 +173,6 @@
                     android:onClick="btns_onClick"
                     android:text="STOP" />
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:orientation="horizontal">
-
                 <Button
                     android:id="@+id/btnRefreshTable"
                     android:layout_width="100dp"
@@ -142,7 +186,6 @@
                     android:layout_height="wrap_content"
                     android:onClick="btns_onClick"
                     android:text="CLEAR" />
-
             </LinearLayout>
 
         </LinearLayout>

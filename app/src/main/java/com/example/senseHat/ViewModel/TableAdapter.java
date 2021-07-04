@@ -63,13 +63,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         holder.unitTextView.setText(measurementModel.mUnit);
         holder.sensorTextView.setText(measurementModel.mSensor);
 
-        //Date currentTime = Calendar.getInstance().getTime();
-
-        //SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
-        //String formattedDate = df.format(currentTime);
-
         holder.dateTextView.setText(measurementModel.mDate);
-
     }
 
     @Override

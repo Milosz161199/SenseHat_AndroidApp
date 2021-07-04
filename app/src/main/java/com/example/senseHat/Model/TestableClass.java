@@ -82,7 +82,8 @@ public class TestableClass {
         // Create generic JSON object form string
 
         JSONArray jArray = null;
-        MeasurementModel measurementModel = new MeasurementModel("-", 0, "-", "-");
+        MeasurementModel measurementModel = new MeasurementModel("Error", 0, "-", "-");
+        //MeasurementModel measurementModel = null;
 
         try {
             jArray = new JSONArray(response);
@@ -194,7 +195,8 @@ public class TestableClass {
     public MeasurementModel getRawDataFromResponseToDynamicTable(String response) {
         // Create generic JSON object form string
         JSONObject jsonObject = null;
-        MeasurementModel measurementModel = new MeasurementModel("-", 0, "-", "-");
+        //MeasurementModel measurementModel = null;
+        MeasurementModel measurementModel = new MeasurementModel("Error", 0, "-", "-");
         if(!response.isEmpty()) {
             try {
                 jsonObject = new JSONObject(response);

@@ -22,7 +22,6 @@ public class JoyStickModel extends AppCompatActivity {
     private int mCounterY;
     private int mCounterMiddle;
 
-
     public int getCounterX() {
         return mCounterX;
     }
@@ -47,7 +46,6 @@ public class JoyStickModel extends AppCompatActivity {
         this.mCounterMiddle = z;
     }
 
-
     public JoyStickModel() {
     }
 
@@ -61,5 +59,4 @@ public class JoyStickModel extends AppCompatActivity {
             throw new JSONException("Json Object to Measurement Data parse error");
         }
     }
-
 }

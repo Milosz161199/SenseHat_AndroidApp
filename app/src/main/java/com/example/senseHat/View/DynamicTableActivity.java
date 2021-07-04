@@ -11,12 +11,15 @@
 
 package com.example.senseHat.View;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -35,24 +38,21 @@ import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.MeasurementModel;
 import com.example.senseHat.R;
 import com.example.senseHat.Model.TestableClass;
-import com.example.senseHat.ViewModel.MeasurementViewModel;
 import com.example.senseHat.ViewModel.TableAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DynamicTableActivity extends AppCompatActivity {
 
-
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
-    private int sampleTime = Common.DEFAULT_SAMPLE_TIME;
+    private int sampleTime = 5000;
     /* END config data */
 
     private ArrayList<MeasurementModel> mList;
@@ -61,18 +61,32 @@ public class DynamicTableActivity extends AppCompatActivity {
     private RecyclerView.Adapter tableAdapter;
     private RecyclerView.LayoutManager tableManager;
 
+    /* BEGIN view Buttons */
     private Button btnRefreshTable;
     private Button btnClearTable;
+    private Button btnStartTable;
     private Button btnStopTable;
+    private Button btnSet;
+    /* END view Buttons */
 
+    /* BEGIN view EditText and variable for sample time */
+    private EditText editTextSampleTime;
+    private int sampleTimeOfRefresh;
+    /* END view EditText and variable for sample time */
+
+    /* BEGIN view CheckBoxes */
+    private CheckBox checkBoxList;
     private CheckBox checkBoxEnvMes;
     private CheckBox checkBoxAngleOrientation;
     private CheckBox checkBoxJoyStick;
     private CheckBox checkBoxCompass;
     private CheckBox checkBoxALL;
+    /* END view CheckBoxes */
 
+    /* BEGIN view Switch */
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch swChangeUnit;
-
+    /* END view Switch */
 
     /* BEGIN request timer */
     private RequestQueue queue;
@@ -85,17 +99,20 @@ public class DynamicTableActivity extends AppCompatActivity {
     private final Handler handler = new Handler();
     /* END request timer */
 
-    /* Testable module */
-    private TestableClass responseHandling = new TestableClass();
-
-
+    /* BEGIN DATA INFO */
     protected Date currentTime;
     protected SimpleDateFormat df;
     protected String formattedDate;
+    /* END DATA INFO */
 
+    /* BEGIN RecyclerView variables */
     private RecyclerView dynamicTableRecyclerView;
     private RecyclerView.Adapter dynamicTableRecyclerViewAdapter;
     private RecyclerView.LayoutManager dynamicTableRecyclerViewManager;
+    /* END RecyclerView variables */
+
+    /* Testable module */
+    private TestableClass responseHandling = new TestableClass();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,22 +120,29 @@ public class DynamicTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dynamic_table);
 
         /**************** INIT RECYCLER VIEW - DYNAMIC TABLE *****************/
-        initTableList();
+        mList = new ArrayList<MeasurementModel>() {
+        };
 
         /**************** INIT WIDGETS *****************/
         initView();
-
 
         // Initialize Volley request queue
         queue = Volley.newRequestQueue(DynamicTableActivity.this);
     }
 
-
+    /**
+     * @brief Init View of Page.
+     */
     public void initView() {
+        editTextSampleTime = (EditText) findViewById(R.id.editTextNumberDecimalSampleTime);
+
         btnRefreshTable = (Button) findViewById(R.id.btnRefreshTable);
         btnClearTable = (Button) findViewById(R.id.btnClearTable);
-        //btnStopTable = (Button) findViewById(R.id.btnStopTable);
+        btnStartTable = (Button) findViewById(R.id.btnStartTable);
+        btnStopTable = (Button) findViewById(R.id.btnStopTable);
+        btnSet = (Button) findViewById(R.id.btnSetSample);
 
+        checkBoxList = (CheckBox) findViewById(R.id.checkBoxList);
         checkBoxEnvMes = (CheckBox) findViewById(R.id.checkBoxEnvMes);
         checkBoxAngleOrientation = (CheckBox) findViewById(R.id.checkBoxAngleOrientation);
         checkBoxJoyStick = (CheckBox) findViewById(R.id.checkBoxJoyStick);
@@ -132,6 +156,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+    /**
+     * @brief Init View of RecyclerView.
+     */
     private void initRecyclerView() {
         dynamicTableRecyclerViewManager = new LinearLayoutManager(this);
         dynamicTableRecyclerView.setLayoutManager(dynamicTableRecyclerViewManager);
@@ -142,12 +169,6 @@ public class DynamicTableActivity extends AppCompatActivity {
         dynamicTableRecyclerView.setAdapter(dynamicTableRecyclerViewAdapter);
     }
 
-    private void initTableList() {
-        mList = new ArrayList<MeasurementModel>() {
-        };
-        //MeasurementModel m = new MeasurementModel("NULL", 0.0, "[-]", "NONE");
-        //mList.add(m);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
@@ -157,28 +178,27 @@ public class DynamicTableActivity extends AppCompatActivity {
             // IoT server IP address
             ipAddress = dataIntent.getStringExtra(Common.CONFIG_IP_ADDRESS);
             //textViewIP.setText(getIpAddressDisplayText(ipAddress));
-
-            // Sample time (ms)
-            //String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
-            String sampleTimeText = "10000";
-            sampleTime = Integer.parseInt(sampleTimeText);
-            //textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
         }
     }
 
-
+    /**
+     * @brief Refreshing data to table by unit and max number of samples
+     */
     private void refreshDataToTable() {
-        if (swChangeUnit.isChecked()) {
-            Toast.makeText(getApplicationContext(), "Second type of unit..", Toast.LENGTH_SHORT).show();
-            MeasurementsToTableSecondUnit();
-        } else {
-            Toast.makeText(getApplicationContext(), "First type of unit..", Toast.LENGTH_SHORT).show();
-            MeasurementsToFirstOneUnit();
+        if (mList.size() <= 1000) {
+            if (swChangeUnit.isChecked()) {
+                //Toast.makeText(getApplicationContext(), "Second type of unit..", Toast.LENGTH_SHORT).show();
+                MeasurementsToTableSecondUnit();
+            } else {
+                //Toast.makeText(getApplicationContext(), "First type of unit..", Toast.LENGTH_SHORT).show();
+                MeasurementsToFirstOneUnit();
+            }
         }
-
-        //initRecyclerView();
     }
 
+    /**
+     * @brief Request for picked measurements with first unit.
+     */
     private void MeasurementsToFirstOneUnit() {
         if (checkBoxJoyStick.isChecked()) {
             if (checkBoxALL.isChecked()) {
@@ -228,6 +248,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @brief Request for picked measurements with second unit.
+     */
     private void MeasurementsToTableSecondUnit() {
         if (checkBoxJoyStick.isChecked()) {
             if (checkBoxALL.isChecked()) {
@@ -277,6 +300,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @brief Request for all measurements with first unit.
+     */
     private void RequestForAllMeasurements() {
         sendGetRequest(Common.REQ_TEMP_C_1);
         sendGetRequest(Common.REQ_TEMP_C_2);
@@ -309,6 +335,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         sendGetRequest(Common.REQ_COMPASS_Z);
     }
 
+    /**
+     * @brief Request for all measurements with second unit.
+     */
     private void RequestForAllMeasurementsOtherUnit() {
         sendGetRequest(Common.REQ_TEMP_F_1);
         sendGetRequest(Common.REQ_TEMP_F_2);
@@ -348,21 +377,30 @@ public class DynamicTableActivity extends AppCompatActivity {
     public void btns_onClick(View v) {
         switch (v.getId()) {
             case R.id.btnRefreshTable: {
-
                 refreshDataToTable();
                 break;
             }
             case R.id.btnClearTable: {
-
                 clearTable();
                 break;
             }
             case R.id.btnStartTable: {
-                //startRequestTimer();
+                startRequestTimer();
                 break;
             }
             case R.id.btnStopTable: {
-                //stopRequestTimerTask();
+                stopRequestTimerTask();
+                break;
+            }
+            case R.id.btnSetSample: {
+                // Sample Time of refresh graph by timer
+                stopRequestTimerTask();
+                sampleTimeOfRefresh = Integer.valueOf(editTextSampleTime.getText().toString());
+                if (sampleTimeOfRefresh >= 1000)
+                    sampleTime = sampleTimeOfRefresh;
+                else {
+                    Toast.makeText(getApplicationContext(), "Too low value..", Toast.LENGTH_SHORT).show();
+                }
                 break;
             }
             default: {
@@ -371,6 +409,9 @@ public class DynamicTableActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @brief Clear table 'mList'.
+     */
     private void clearTable() {
         mList.clear();
         initRecyclerView();
@@ -417,7 +458,12 @@ public class DynamicTableActivity extends AppCompatActivity {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        //sendGetRequest();
+                        if (checkBoxList.isChecked() && mList.size() <= 1000) {
+                            refreshDataToTable();
+                        } else {
+                            clearTable();
+                            refreshDataToTable();
+                        }
                     }
                 });
             }
@@ -504,28 +550,35 @@ public class DynamicTableActivity extends AppCompatActivity {
      * @brief GET response handling - chart data series updated with IoT server data.
      */
     private void responseHandling(String response) {
-        //if(requestTimer != null) {
-        // get time stamp with SystemClock
-        //long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
-        //requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
+        if (requestTimer != null) {
+            // get time stamp with SystemClock
+            long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
+            requestTimerTimeStamp += getValidTimeStampIncrease(requestTimerCurrentTime);
 
-        MeasurementModel m = new MeasurementModel("-", 0, "-", "-");
-        m = responseHandling.getRawDataFromResponseToDynamicTable(response);
-        // SET TIME OF MEASUREMENT
-        currentTime = Calendar.getInstance().getTime();
-        df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
-        formattedDate = df.format(currentTime);
-        m.mDate = formattedDate;
+            MeasurementModel m = new MeasurementModel("Error", 0, "-", "-");
+            m = responseHandling.getRawDataFromResponseToDynamicTable(response);
+            // SET TIME OF MEASUREMENT
+            currentTime = Calendar.getInstance().getTime();
+            df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+            formattedDate = df.format(currentTime);
+            m.mDate = formattedDate;
 
-        mList.add(m);
-        initRecyclerView();
+            mList.add(m);
+            initRecyclerView();
 
-        // update plot series
-        //double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
+            // remember previous time stamp
+            requestTimerPreviousTime = requestTimerCurrentTime;
+        } else {
+            MeasurementModel m = new MeasurementModel("Error", 0, "-", "-");
+            m = responseHandling.getRawDataFromResponseToDynamicTable(response);
+            // SET TIME OF MEASUREMENT
+            currentTime = Calendar.getInstance().getTime();
+            df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault());
+            formattedDate = df.format(currentTime);
+            m.mDate = formattedDate;
 
-        // remember previous time stamp
-        //requestTimerPreviousTime = requestTimerCurrentTime;
-        //}
+            mList.add(m);
+            initRecyclerView();
+        }
     }
-
 }

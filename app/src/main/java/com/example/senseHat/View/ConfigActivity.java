@@ -3,8 +3,8 @@
  *
  * @file Sense Hat/ConfigActivity.java
  * @author Milosz Plutowski
- * @version V1.0
- * @date 15-06-2021
+ * @version V1.2
+ * @date 04-07-2021
  * @brief Sense Hat: configuration activity with: IP, socket, sample time, max number of samples and api version
  * *****************************************************************************************************************
  */
@@ -37,7 +37,6 @@ import java.util.Map;
 
 public class ConfigActivity extends AppCompatActivity {
 
-
     /* BEGIN config TextViews */
     private EditText ipEditText;
     private EditText sampleTimeEditText;
@@ -45,10 +44,10 @@ public class ConfigActivity extends AppCompatActivity {
     private EditText apiVersionEditText;
     /* END config TextViews */
 
-
+    /* BEGIN config Buttons */
     private Button btnSetNewConfig;
     private Button btnSetDefaultConfig;
-
+    /* END config Buttons */
 
     private RequestQueue queue; ///< HTTP requests queue
 
@@ -90,6 +89,9 @@ public class ConfigActivity extends AppCompatActivity {
         btnSetNewConfig = (Button) findViewById(R.id.btnSetConfig);
         btnSetDefaultConfig = (Button) findViewById(R.id.btnSetDefaultConfig);
 
+        /**
+         * @brief Sets and give new params from config to other view by Intent
+         */
         btnSetNewConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +106,9 @@ public class ConfigActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * @brief Sets and give old params from config to other view by Intent
+         */
         btnSetDefaultConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +134,5 @@ public class ConfigActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
 
 }

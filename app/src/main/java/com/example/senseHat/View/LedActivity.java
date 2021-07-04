@@ -42,8 +42,6 @@ import java.util.Vector;
 public class LedActivity extends AppCompatActivity {
 
     /* BEGIN widgets */
-
-
     private Button sendBtn;
 
     SeekBar redSeekBar, greenSeekBar, blueSeekBar;
@@ -164,8 +162,8 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Url creating for led matrix request
      * @return String url
+     * @brief Url creating for led matrix request
      */
     private String makeUrl() {
         return "http://" + HomePageActivity.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
@@ -173,21 +171,21 @@ public class LedActivity extends AppCompatActivity {
 
 
     /**
-     * @brief Color conversion method: ARGB components to single ARGB integer value
      * @param _a Alpha component: 0-255 (0x00-0xFF)
      * @param _r Red component: 0-255 (0x00-0xFF)
      * @param _g Green component: 0-255 (0x00-0xFF)
      * @param _b Blue component: 0-255 (0x00-0xFF)
      * @return Color in ARGB format
+     * @brief Color conversion method: ARGB components to single ARGB integer value
      */
     public int argbToInt(int _a, int _r, int _g, int _b) {
         return (_a & 0xff) << 24 | (_r & 0xff) << 16 | (_g & 0xff) << 8 | (_b & 0xff);
     }
 
     /**
-     * @brief Color conversion method: ARGB integer value to three-element Vector with RGB components
      * @param argb Color in ARGB format: 0x00000000-0xFFFFFFFF
      * @return Three-element Vector with RGB components [0=R, 1=G, 2=B]: 3x 0-255 (3x 0x00-0xFF)
+     * @brief Color conversion method: ARGB integer value to three-element Vector with RGB components
      */
     public Vector<Integer> intToRgb(int argb) {
         int _r = (argb >> 16) & 0xff;
@@ -201,9 +199,9 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Conversion method: LED indicator Tag to LED x-y position
      * @param tag LED indicator View element Tag
      * @return Two-element vector with LED x-y position [0=x, 1=y]
+     * @brief Conversion method: LED indicator Tag to LED x-y position
      */
     Vector<Integer> ledTagToIndex(String tag) {
         // Tag: 'LEDxy"
@@ -214,10 +212,10 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Conversion method: LED x-y position to LED indicator Tag
      * @param x LED horizontal position in display
      * @param y LED vertical position in display
      * @return LED indicator View element Tag
+     * @brief Conversion method: LED x-y position to LED indicator Tag
      */
     String ledIndexToTag(int x, int y) {
         return "LED" + Integer.toString(x) + Integer.toString(y);
@@ -225,6 +223,7 @@ public class LedActivity extends AppCompatActivity {
 
     /**
      * Conversion method: LED x-y position to position/color data in JSON format
+     *
      * @param x LED horizontal position in display
      * @param y LED vertical position in display
      * @return Position/color data in JSON format: [x,y,r,g,b] (x,y: 0-7; r,g,b: 0-255)
@@ -239,10 +238,10 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Null color check
      * @param x LED horizontal position in display
      * @param y LED vertical position in display
      * @return False if color is Null; True otherwise
+     * @brief Null color check
      */
     boolean ledColorNotNull(int x, int y) {
         return !((ledDisplayModel[x][y][0] == null) || (ledDisplayModel[x][y][1] == null) || (ledDisplayModel[x][y][2] == null));
@@ -262,10 +261,10 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Common method for RGB seek bars update
      * @param color Component selector: 'R' / 'G' / 'B'
      * @param value Component byte value: 0-255 (0x00-0xFF)
      * @return Color in ARGB format
+     * @brief Common method for RGB seek bars update
      */
     int seekBarUpdate(char color, int value) {
         switch (color) {
@@ -286,8 +285,8 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief LED indicator onClick event handling procedure
      * @param v LED indicator View element
+     * @brief LED indicator onClick event handling procedure
      */
     public void changeLedIndicatorColor(View v) {
         sendBtn.setBackgroundColor(Color.RED);
@@ -305,8 +304,8 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Clear button onClick event handling procedure
      * @param v Clear button element
+     * @brief Clear button onClick event handling procedure
      */
     public void clearAllLed(View v) {
         // Clear LED display GUI
@@ -327,8 +326,8 @@ public class LedActivity extends AppCompatActivity {
     }
 
     /**
-     * @brief Generate HTTP POST request parameters for LED display control via IoT server script
      * @return HTTP POST request parameters as hash map (String keys, String values)
+     * @brief Generate HTTP POST request parameters for LED display control via IoT server script
      */
     public Map<String, String> getDisplayControlParams() {
         String led;
@@ -348,8 +347,8 @@ public class LedActivity extends AppCompatActivity {
 
 
     /**
-     * @brief Send button onClick event handling procedure: send control request via Volley queue
      * @param v Send button element
+     * @brief Send button onClick event handling procedure: send control request via Volley queue
      */
     public void sendControlRequest(View v) {
 

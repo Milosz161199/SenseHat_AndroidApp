@@ -67,11 +67,12 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     /* Joy-stick Model */
     private JoyStickModel joyStickModel = new JoyStickModel();
 
-
+    /* BEGIN Buttons */
     private Button btnRefreshCounters;
     private Button btnStartCounters;
     private Button btnStopCounters;
     private TextView textViewCounterMiddle;
+    /* END Buttons */
 
     /* BEGIN GRAPH PARAMS */
     private GraphView dataGraphJoy;
@@ -99,7 +100,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         // Initialize Graph View
         InitGraphView();
 
-
         /* BEGIN BUTTONS ONCLICK METHOD */
         btnRefreshCounters.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +123,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         });
         /* END BUTTONS ONCLICK METHOD */
     }
-
 
     /**
      * @brief Starts new 'Timer' (if currently not exist) and schedules periodic task.
@@ -169,7 +168,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
             }
         };
     }
-
 
     /**
      * @brief Validation of client-side time stamp based on 'SystemClock'.
@@ -239,7 +237,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
 
     /**
      * @param errorCode local error codes, see: COMMON
@@ -353,7 +350,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         }
     }
 
-
     /**
      * @param n Number of spaces.
      * @retval String with 'n' spaces.
@@ -361,7 +357,6 @@ public class GraphActivityJoyStick extends AppCompatActivity {
     private String Space(int n) {
         return new String(new char[n]).replace('\0', ' ');
     }
-
 
     /**
      * @brief Init widgets.
@@ -378,12 +373,9 @@ public class GraphActivityJoyStick extends AppCompatActivity {
      * @brief Init graph view.
      */
     private void InitGraphView() {
-
         dataSeriesPoint = new PointsGraphSeries<>(new DataPoint[]{});
 
         dataGraphJoy.addSeries(dataSeriesPoint);
-
-        //dataSeriesPoint.appendData(new DataPoint(xyValueArray.get(0).getCounterX(), xyValueArray.get(0).getCounterY()), true, 1);
 
         //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         dataSeriesPoint.setTitle("Joy-stick");

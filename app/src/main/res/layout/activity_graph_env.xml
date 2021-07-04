@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/raspberry_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context="com.example.senseHat.View.GraphActivityEnv">
@@ -161,6 +162,7 @@
                     android:id="@+id/swTemperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="Temperature"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
@@ -168,6 +170,7 @@
                     android:id="@+id/swHumidity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="Humidity"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
@@ -175,6 +178,7 @@
                     android:id="@+id/swPressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="Pressure"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>

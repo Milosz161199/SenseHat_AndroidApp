@@ -11,15 +11,8 @@
 
 package com.example.senseHat.Model;
 
-import com.example.senseHat.ViewModel.MeasurementViewModel;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MeasurementModel {
 
@@ -48,8 +41,4 @@ public class MeasurementModel {
             throw new JSONException("Json Object to Measurement Data parse error");
         }
     }
-
-    //public MeasurementViewModel toVM() {
-    //    return new MeasurementViewModel(this);
-    //}
 }
