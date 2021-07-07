@@ -221,31 +221,31 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
         dataGraphYaw.addSeries(dataSeriesYaw);
 
         dataGraphRoll.getViewport().setXAxisBoundsManual(true);
-        //dataGraphRoll.getViewport().setYAxisBoundsManual(true);
+        dataGraphRoll.getViewport().setYAxisBoundsManual(true);
         dataGraphRoll.getViewport().setMinX(dataGraphMinX);
         dataGraphRoll.getViewport().setMaxX(dataGraphMaxX);
-        //dataGraphRoll.getViewport().setMinY(dataGraphMinY);
-        //dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
+        dataGraphRoll.getViewport().setMinY(dataGraphMinY);
+        dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphRoll.getViewport().setScalable(true);
         dataGraphRoll.getViewport().setScrollable(true);
 
         dataGraphPitch.getViewport().setXAxisBoundsManual(true);
-        //dataGraphPitch.getViewport().setYAxisBoundsManual(true);
+        dataGraphPitch.getViewport().setYAxisBoundsManual(true);
         dataGraphPitch.getViewport().setMinX(dataGraphMinX);
         dataGraphPitch.getViewport().setMaxX(dataGraphMaxX);
-        //dataGraphPitch.getViewport().setMinY(dataGraphMinY);
-        //dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
+        dataGraphPitch.getViewport().setMinY(dataGraphMinY);
+        dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphPitch.getViewport().setScalable(true);
         dataGraphPitch.getViewport().setScrollable(true);
 
         dataGraphYaw.getViewport().setXAxisBoundsManual(true);
-        //dataGraphYaw.getViewport().setYAxisBoundsManual(true);
+        dataGraphYaw.getViewport().setYAxisBoundsManual(true);
         dataGraphYaw.getViewport().setMinX(dataGraphMinX);
         dataGraphYaw.getViewport().setMaxX(dataGraphMaxX);
-        //dataGraphYaw.getViewport().setMinY(dataGraphMinY);
-        //dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
+        dataGraphYaw.getViewport().setMinY(dataGraphMinY);
+        dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
 
         dataGraphYaw.getViewport().setScalable(true);
         dataGraphYaw.getViewport().setScrollable(true);
@@ -256,9 +256,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
 
         dataGraphRoll.getLegendRenderer().setVisible(true);
         dataGraphRoll.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphRoll.getLegendRenderer().setTextSize(30);
+        dataGraphRoll.getLegendRenderer().setTextSize(20);
 
-        dataGraphRoll.getGridLabelRenderer().setTextSize(20);
+        dataGraphRoll.getGridLabelRenderer().setTextSize(14);
         dataGraphRoll.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Roll [deg]");
         dataGraphRoll.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphRoll.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -269,9 +269,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
 
         dataGraphPitch.getLegendRenderer().setVisible(true);
         dataGraphPitch.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphPitch.getLegendRenderer().setTextSize(30);
+        dataGraphPitch.getLegendRenderer().setTextSize(20);
 
-        dataGraphPitch.getGridLabelRenderer().setTextSize(20);
+        dataGraphPitch.getGridLabelRenderer().setTextSize(14);
         dataGraphPitch.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pitch [deg]");
         dataGraphPitch.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphPitch.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -282,9 +282,9 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
 
         dataGraphYaw.getLegendRenderer().setVisible(true);
         dataGraphYaw.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphYaw.getLegendRenderer().setTextSize(30);
+        dataGraphYaw.getLegendRenderer().setTextSize(20);
 
-        dataGraphYaw.getGridLabelRenderer().setTextSize(20);
+        dataGraphYaw.getGridLabelRenderer().setTextSize(14);
         dataGraphYaw.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Yaw [deg]");
         dataGraphYaw.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -361,15 +361,18 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
             // IoT server IP address
             ipAddress = dataIntent.getStringExtra(Common.CONFIG_IP_ADDRESS);
             textViewIP.setText(getIpAddressDisplayText(ipAddress));
+            Common.DEFAULT_IP_ADDRESS = ipAddress;
 
             // Sample time (ms)
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
             sampleTime = Integer.parseInt(sampleTimeText);
             textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
+            Common.DEFAULT_SAMPLE_TIME = sampleTime;
 
             // Max number of samples
             String samplesText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
             dataGraphMaxDataPointsNumber = Integer.parseInt(samplesText);
+            Common.DEFAULT_MAX_NUMBER_OF_SAMPLES = dataGraphMaxDataPointsNumber;
 
         }
     }
@@ -601,19 +604,19 @@ public class GraphActivityAngle<mList> extends AppCompatActivity {
                 if (m.mName.equals("roll")) {
                     dataSeriesRoll.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesRoll.setTitle("Roll");
-                    dataSeriesRoll.setColor(Color.YELLOW);
+                    dataSeriesRoll.setColor(Color.BLUE);
                 }
 
                 if (m.mName.equals("pitch")) {
                     dataSeriesPitch.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesPitch.setTitle("Pitch");
-                    dataSeriesPitch.setColor(Color.GRAY);
+                    dataSeriesPitch.setColor(Color.MAGENTA);
                 }
 
                 if (m.mName.equals("yaw")) {
                     dataSeriesYaw.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
                     dataSeriesYaw.setTitle("Yaw");
-                    dataSeriesYaw.setColor(Color.MAGENTA);
+                    dataSeriesYaw.setColor(Color.GRAY);
 
                 }
 

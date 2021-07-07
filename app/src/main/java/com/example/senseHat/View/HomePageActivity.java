@@ -193,21 +193,25 @@ public class HomePageActivity extends AppCompatActivity {
             // server IP address
             ipAddress = dataIntent.getStringExtra(Common.CONFIG_IP_ADDRESS);
             textViewAddressIP.setText(ipAddress);
+            Common.DEFAULT_IP_ADDRESS = ipAddress;
 
             // Sample time (ms)
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
             textViewSampleTime.setText(sampleTimeText);
             sampleTime = Integer.parseInt(sampleTimeText);
+            Common.DEFAULT_SAMPLE_TIME = sampleTime;
 
             // Max number of samples
             String maxSampleTimeText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
             textViewMaxNumberOfSamples.setText(maxSampleTimeText);
             maxNumberOfSamples = Integer.parseInt(maxSampleTimeText);
+            Common.DEFAULT_MAX_NUMBER_OF_SAMPLES = maxNumberOfSamples;
 
             // Api version
             String apiText = dataIntent.getStringExtra(Common.CONFIG_API_VERSION);
             textViewApiVersion.setText(apiText);
             apiVersion = Double.parseDouble(apiText);
+            Common.DEFAULT_API_VERSION = apiVersion;
         }
     }
 

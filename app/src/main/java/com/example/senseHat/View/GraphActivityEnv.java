@@ -220,7 +220,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphTemp.getViewport().setYAxisBoundsManual(true);
         dataGraphTemp.getViewport().setMinX(0);
         dataGraphTemp.getViewport().setMaxX(10);
-        dataGraphTemp.getViewport().setMinY(30);
+        dataGraphTemp.getViewport().setMinY(20);
         dataGraphTemp.getViewport().setMaxY(40);
 
         dataGraphTemp.getViewport().setScalable(true);
@@ -242,8 +242,8 @@ public class GraphActivityEnv extends AppCompatActivity {
         dataGraphPres.getViewport().setYAxisBoundsManual(true);
         dataGraphPres.getViewport().setMinX(0);
         dataGraphPres.getViewport().setMaxX(10);
-        dataGraphPres.getViewport().setMinY(990);
-        dataGraphPres.getViewport().setMaxY(1100);
+        dataGraphPres.getViewport().setMinY(980);
+        dataGraphPres.getViewport().setMaxY(1030);
 
         dataGraphPres.getViewport().setScalable(true);
         dataGraphPres.getViewport().setScrollable(true);
@@ -253,9 +253,9 @@ public class GraphActivityEnv extends AppCompatActivity {
 
         dataGraphTemp.getLegendRenderer().setVisible(true);
         dataGraphTemp.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphTemp.getLegendRenderer().setTextSize(30);
+        dataGraphTemp.getLegendRenderer().setTextSize(20);
 
-        dataGraphTemp.getGridLabelRenderer().setTextSize(20);
+        dataGraphTemp.getGridLabelRenderer().setTextSize(14);
         dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [C]");
         dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -266,9 +266,9 @@ public class GraphActivityEnv extends AppCompatActivity {
 
         dataGraphHum.getLegendRenderer().setVisible(true);
         dataGraphHum.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphHum.getLegendRenderer().setTextSize(30);
+        dataGraphHum.getLegendRenderer().setTextSize(20);
 
-        dataGraphHum.getGridLabelRenderer().setTextSize(20);
+        dataGraphHum.getGridLabelRenderer().setTextSize(14);
         dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [-]");
         dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -279,9 +279,9 @@ public class GraphActivityEnv extends AppCompatActivity {
 
         dataGraphPres.getLegendRenderer().setVisible(true);
         dataGraphPres.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphPres.getLegendRenderer().setTextSize(30);
+        dataGraphPres.getLegendRenderer().setTextSize(20);
 
-        dataGraphPres.getGridLabelRenderer().setTextSize(20);
+        dataGraphPres.getGridLabelRenderer().setTextSize(14);
         dataGraphPres.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pressure [hPa]");
         dataGraphPres.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
         dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
@@ -358,15 +358,18 @@ public class GraphActivityEnv extends AppCompatActivity {
             // IoT server IP address
             ipAddress = dataIntent.getStringExtra(Common.CONFIG_IP_ADDRESS);
             textViewIP.setText(getIpAddressDisplayText(ipAddress));
+            Common.DEFAULT_IP_ADDRESS = ipAddress;
 
             // Sample time (ms)
             String sampleTimeText = dataIntent.getStringExtra(Common.CONFIG_SAMPLE_TIME);
             sampleTime = Integer.parseInt(sampleTimeText);
             textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
+            Common.DEFAULT_SAMPLE_TIME = sampleTime;
 
             // Sample time (ms)
             String sampleSText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
             dataGraphMaxDataPointsNumber = Integer.parseInt(sampleSText);
+            Common.DEFAULT_MAX_NUMBER_OF_SAMPLES = dataGraphMaxDataPointsNumber;
         }
     }
 

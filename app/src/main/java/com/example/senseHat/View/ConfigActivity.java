@@ -114,10 +114,10 @@ public class ConfigActivity extends AppCompatActivity {
             public void onClick(View v) {
                 btnSetDefaultConfig.setBackgroundColor(Color.rgb(0, 255, 0));
                 Intent intent = new Intent();
-                intent.putExtra(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_IP_ADDRESS);
-                intent.putExtra(Common.CONFIG_SAMPLE_TIME, String.valueOf(Common.DEFAULT_SAMPLE_TIME));
-                intent.putExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, String.valueOf(Common.DEFAULT_MAX_NUMBER_OF_SAMPLES));
-                intent.putExtra(Common.CONFIG_API_VERSION, String.valueOf(Common.DEFAULT_API_VERSION));
+                intent.putExtra(Common.CONFIG_IP_ADDRESS, Common.DEFAULT_CONFIG_IP_ADDRESS);
+                intent.putExtra(Common.CONFIG_SAMPLE_TIME, String.valueOf(Common.DEFAULT_CONFIG_SAMPLE_TIME));
+                intent.putExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES, String.valueOf(Common.DEFAULT_CONFIG_MAX_NUMBER_OF_SAMPLES));
+                intent.putExtra(Common.CONFIG_API_VERSION, String.valueOf(Common.DEFAULT_CONFIG_API_VERSION));
                 setResult(RESULT_OK, intent);
                 finish();
             }
