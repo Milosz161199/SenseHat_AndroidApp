@@ -11,14 +11,12 @@
 
 package com.example.senseHat.View;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 
@@ -39,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class LedActivity extends AppCompatActivity {
+public class LedView extends AppCompatActivity {
 
     /* BEGIN widgets */
     private Button sendBtn;
@@ -166,7 +164,7 @@ public class LedActivity extends AppCompatActivity {
      * @brief Url creating for led matrix request
      */
     private String makeUrl() {
-        return "http://" + HomePageActivity.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
+        return "http://" + HomePageView.ipAddress + Common.PHP_COMMAND_SEND_DATA_LED_MATRIX;
     }
 
 

@@ -47,7 +47,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_table_element, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_table_element_2, null);
         return new ViewHolder(view);
     }
 
@@ -63,7 +63,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         holder.unitTextView.setText(measurementModel.mUnit);
         holder.sensorTextView.setText(measurementModel.mSensor);
 
-        holder.dateTextView.setText(measurementModel.mDate);
+        //holder.dateTextView.setText(measurementModel.mDate);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         protected TextView valueTextView;
         protected TextView unitTextView;
         protected TextView sensorTextView;
-        protected TextView dateTextView;
+        //protected TextView dateTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -90,7 +90,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
             this.valueTextView = (TextView) itemView.findViewById(R.id.singleElementValueTextView);
             this.unitTextView = (TextView) itemView.findViewById(R.id.singleElementUnitTextView);
             this.sensorTextView = (TextView) itemView.findViewById(R.id.singleElementSensorTextView);
-            this.dateTextView = (TextView) itemView.findViewById(R.id.singleElementDateTextView);
+            //this.dateTextView = (TextView) itemView.findViewById(R.id.singleElementDateTextView);
         }
     }
 }

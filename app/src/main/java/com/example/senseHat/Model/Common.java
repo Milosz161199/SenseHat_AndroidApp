@@ -21,8 +21,8 @@ public class Common {
 
     // configuration info: names and default values
     public final static String CONFIG_IP_ADDRESS = "ipAddress";
-    public static String DEFAULT_IP_ADDRESS = "192.168.100.19";
-    public final static String DEFAULT_CONFIG_IP_ADDRESS = "192.168.100.19";
+    public static String DEFAULT_IP_ADDRESS = "192.168.100.22";
+    public final static String DEFAULT_CONFIG_IP_ADDRESS = "192.168.100.22";
 
 
     public final static String CONFIG_SAMPLE_TIME = "sampleTime";
@@ -30,8 +30,8 @@ public class Common {
     public final static int DEFAULT_CONFIG_SAMPLE_TIME = 500;
 
     public final static String CONFIG_MAX_NUMBER_OF_SAMPLES = "maxNumOfSamples";
-    public static int DEFAULT_MAX_NUMBER_OF_SAMPLES = 100;
-    public final static int DEFAULT_CONFIG_MAX_NUMBER_OF_SAMPLES = 100;
+    public static int DEFAULT_MAX_NUMBER_OF_SAMPLES = 1000;
+    public final static int DEFAULT_CONFIG_MAX_NUMBER_OF_SAMPLES = 1000;
 
     public final static String CONFIG_API_VERSION = "apiVersion";
     public static double DEFAULT_API_VERSION = 6.0;

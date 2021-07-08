@@ -48,7 +48,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DynamicTableActivity extends AppCompatActivity {
+public class DynamicTableView extends AppCompatActivity {
 
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
@@ -127,7 +127,7 @@ public class DynamicTableActivity extends AppCompatActivity {
         initView();
 
         // Initialize Volley request queue
-        queue = Volley.newRequestQueue(DynamicTableActivity.this);
+        queue = Volley.newRequestQueue(DynamicTableView.this);
     }
 
     /**

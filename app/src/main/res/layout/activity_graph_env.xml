@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.senseHat.View.GraphActivityEnv">
+        tools:context="com.example.senseHat.View.GraphEnvView">
 
         <LinearLayout
             android:id="@+id/linearLayout"

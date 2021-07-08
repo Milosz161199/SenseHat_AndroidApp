@@ -35,7 +35,7 @@ import com.example.senseHat.R;
 
 import java.util.Map;
 
-public class ConfigActivity extends AppCompatActivity {
+public class ConfigView extends AppCompatActivity {
 
     /* BEGIN config TextViews */
     private EditText ipEditText;

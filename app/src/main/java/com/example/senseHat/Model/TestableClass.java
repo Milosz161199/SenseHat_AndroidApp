@@ -11,10 +11,6 @@
 
 package com.example.senseHat.Model;
 
-import com.example.senseHat.Model.MeasurementModel;
-import com.example.senseHat.View.DynamicTableActivity;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,7 +84,7 @@ public class TestableClass {
             }
 
             try {
-                /* get joy-stick model from JSON data */
+                /* get config model from JSON data */
                 configModel = new ConfigModel(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();

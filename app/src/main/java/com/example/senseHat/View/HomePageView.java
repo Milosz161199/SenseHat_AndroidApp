@@ -12,14 +12,11 @@
 package com.example.senseHat.View;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,13 +30,10 @@ import com.example.senseHat.Model.Common;
 import com.example.senseHat.Model.ConfigModel;
 import com.example.senseHat.Model.TestableClass;
 import com.example.senseHat.R;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import static java.lang.Double.isNaN;
 
-public class HomePageActivity extends AppCompatActivity {
+public class HomePageView extends AppCompatActivity {
 
     /* BEGIN config data */
     public static String ipAddress = Common.DEFAULT_IP_ADDRESS;
@@ -79,7 +73,7 @@ public class HomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         // Initialize Volley request queue
-        queue = Volley.newRequestQueue(HomePageActivity.this);
+        queue = Volley.newRequestQueue(HomePageView.this);
 
         initMenuBar();
         initView();
@@ -96,7 +90,7 @@ public class HomePageActivity extends AppCompatActivity {
      * @brief Called when the user taps the 'Config' button.
      */
     private void openConfig() {
-        Intent openConfigIntent = new Intent(this, ConfigActivity.class);
+        Intent openConfigIntent = new Intent(this, ConfigView.class);
         Bundle configBundle = new Bundle();
         configBundle.putString(Common.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Common.CONFIG_SAMPLE_TIME, sampleTime);
@@ -152,35 +146,35 @@ public class HomePageActivity extends AppCompatActivity {
         btnGoToTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomePageActivity.this, DynamicTableActivity.class));
+                startActivity(new Intent(HomePageView.this, DynamicTableView.class));
             }
         });
 
         btnGoToLed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomePageActivity.this, LedActivity.class));
+                startActivity(new Intent(HomePageView.this, LedView.class));
             }
         });
 
         btnGoToGraphAngle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomePageActivity.this, GraphActivityAngle.class));
+                startActivity(new Intent(HomePageView.this, GraphAngleView.class));
             }
         });
 
         btnGoToGraphEnv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomePageActivity.this, GraphActivityEnv.class));
+                startActivity(new Intent(HomePageView.this, GraphEnvView.class));
             }
         });
 
         btnGoToGraphJoyStick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomePageActivity.this, GraphActivityJoyStick.class));
+                startActivity(new Intent(HomePageView.this, GraphJoyStickView.class));
             }
         });
     }

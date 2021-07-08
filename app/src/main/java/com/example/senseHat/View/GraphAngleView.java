@@ -1,19 +1,16 @@
 /**
  * *****************************************************************************
  *
- * @file Sense Hat/GraphActivityEnv.java
+ * @file Sense Hat/GraphActivityAngle.java
  * @author Milosz Plutowski
  * @version V1.0
  * @date 15-06-2021
- * @brief Sense Hat: Environmental measurements activity with data charts
+ * @brief Sense Hat: Angles measurements activity with data charts
  * *****************************************************************************
  */
 
 package com.example.senseHat.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,10 +21,11 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,8 +47,7 @@ import java.util.TimerTask;
 
 import static java.lang.Double.isNaN;
 
-@SuppressLint("UseSwitchCompatOrMaterialCode")
-public class GraphActivityEnv extends AppCompatActivity {
+public class GraphAngleView<mList> extends AppCompatActivity {
 
     /* BEGIN config data */
     private String ipAddress = Common.DEFAULT_IP_ADDRESS;
@@ -58,30 +55,33 @@ public class GraphActivityEnv extends AppCompatActivity {
     private int dataGraphMaxDataPointsNumber = Common.DEFAULT_MAX_NUMBER_OF_SAMPLES;
     /* END config data */
 
+
     /* BEGIN widgets */
-    private Switch swTemperature;
-    private Switch swHumidity;
-    private Switch swPressure;
+
+    private Switch swRoll;
+    private Switch swPitch;
+    private Switch swYaw;
 
     /* BEGIN booleans */
-    private boolean tempBoolean = true;
-    private boolean humBoolean = true;
-    private boolean presBoolean = true;
+    private boolean angleRollBoolean = true;
+    private boolean anglePitchBoolean = true;
+    private boolean angleYawBoolean = true;
     /* END booleans */
 
     private TextView textViewIP;
     private TextView textViewSampleTime;
     private TextView textViewError;
-    private GraphView dataGraphTemp;
-    private GraphView dataGraphHum;
-    private GraphView dataGraphPres;
-    private LineGraphSeries<DataPoint> dataSeriesTemperature;
-    private LineGraphSeries<DataPoint> dataSeriesHumidity;
-    private LineGraphSeries<DataPoint> dataSeriesPressure;
-
+    private GraphView dataGraph;
+    private GraphView dataGraphRoll;
+    private GraphView dataGraphYaw;
+    private GraphView dataGraphPitch;
+    private LineGraphSeries<DataPoint> dataSeriesRoll;
+    private LineGraphSeries<DataPoint> dataSeriesPitch;
+    private LineGraphSeries<DataPoint> dataSeriesYaw;
+    //private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 10.0d;
     private final double dataGraphMinX = 0.0d;
-    private final double dataGraphMaxY = 100.0d;
+    private final double dataGraphMaxY = 360.0d;
     private final double dataGraphMinY = 0.0d;
     private AlertDialog.Builder configAlterDialog;
     /* END widgets */
@@ -100,21 +100,19 @@ public class GraphActivityEnv extends AppCompatActivity {
     /* Testable module */
     private TestableClass responseHandling = new TestableClass();
 
-    public GraphActivityEnv() {
-
+    public GraphAngleView() {
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_env);
+        setContentView(R.layout.activity_graph_angle);
 
         /* BEGIN initialize widgets */
         /* BEGIN initialize Switches */
-        swTemperature = findViewById(R.id.swTemperature);
-        swHumidity = findViewById(R.id.swHumidity);
-        swPressure = findViewById(R.id.swPressure);
-
+        swRoll = (Switch) findViewById(R.id.swRoll);
+        swPitch = (Switch) findViewById(R.id.swPitch);
+        swYaw = (Switch) findViewById(R.id.swYaw);
 
         /* BEGIN initialize TextViews */
         textViewIP = findViewById(R.id.textViewIP);
@@ -133,7 +131,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         /* END initialize GraphView */
 
         /* BEGIN config alter dialog */
-        configAlterDialog = new AlertDialog.Builder(GraphActivityEnv.this);
+        configAlterDialog = new AlertDialog.Builder(GraphAngleView.this);
         configAlterDialog.setTitle("This will STOP data acquisition. Proceed?");
         configAlterDialog.setIcon(android.R.drawable.ic_dialog_alert);
         configAlterDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -151,201 +149,205 @@ public class GraphActivityEnv extends AppCompatActivity {
         /* END initialize widgets */
 
         // Initialize Volley request queue
-        queue = Volley.newRequestQueue(GraphActivityEnv.this);
+        queue = Volley.newRequestQueue(GraphAngleView.this);
 
 
-        /* BEGIN SWITCH METHOD */
-        swTemperature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /**
+         * @brief switch to true and enable 'roll' data to graph
+         */
+        swRoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(getApplicationContext(), "+Temperature...", Toast.LENGTH_SHORT).show();
-                    tempBoolean = true;
+                    Toast.makeText(getApplicationContext(), "+Roll...", Toast.LENGTH_SHORT).show();
+                    angleRollBoolean = true;
                 } else {
-                    Toast.makeText(getApplicationContext(), "-Temperature...", Toast.LENGTH_SHORT).show();
-                    tempBoolean = false;
+                    Toast.makeText(getApplicationContext(), "-Roll...", Toast.LENGTH_SHORT).show();
+                    angleRollBoolean = false;
                 }
             }
         });
 
-        swHumidity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /**
+         * @brief switch to true and enable 'pitch' data to graph
+         */
+        swPitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(getApplicationContext(), "+Humidity...", Toast.LENGTH_SHORT).show();
-                    humBoolean = true;
+                    Toast.makeText(getApplicationContext(), "+Pitch...", Toast.LENGTH_SHORT).show();
+                    anglePitchBoolean = true;
                 } else {
-                    Toast.makeText(getApplicationContext(), "-Humidity...", Toast.LENGTH_SHORT).show();
-                    humBoolean = false;
+                    Toast.makeText(getApplicationContext(), "-Pitch...", Toast.LENGTH_SHORT).show();
+                    anglePitchBoolean = false;
                 }
             }
         });
 
-        swPressure.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /**
+         * @brief switch to true and enable 'yaw' data to graph
+         */
+        swYaw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(getApplicationContext(), "+Pressure...", Toast.LENGTH_SHORT).show();
-                    presBoolean = true;
+                    Toast.makeText(getApplicationContext(), "+Yaw...", Toast.LENGTH_SHORT).show();
+                    angleYawBoolean = true;
                 } else {
-                    Toast.makeText(getApplicationContext(), "-Pressure...", Toast.LENGTH_SHORT).show();
-                    presBoolean = false;
+                    Toast.makeText(getApplicationContext(), "-Yaw...", Toast.LENGTH_SHORT).show();
+                    angleYawBoolean = false;
                 }
             }
         });
-        /* END SWITCH METHOD */
+
     }
-
 
     /**
      * @brief Init GraphViews.
      */
     private void InitGraphView() {
         // https://github.com/jjoe64/GraphView/wiki
-        dataGraphTemp = (GraphView) findViewById(R.id.dataGraphTemp);
-        dataGraphHum = (GraphView) findViewById(R.id.dataGraphHum);
-        dataGraphPres = (GraphView) findViewById(R.id.dataGraphPres);
+        dataGraphRoll = (GraphView) findViewById(R.id.dataGraphRoll);
+        dataGraphPitch = (GraphView) findViewById(R.id.dataGraphPitch);
+        dataGraphYaw = (GraphView) findViewById(R.id.dataGraphYaw);
 
-        dataSeriesTemperature = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeriesHumidity = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeriesPressure = new LineGraphSeries<>(new DataPoint[]{});
+        dataSeriesRoll = new LineGraphSeries<>(new DataPoint[]{});
+        dataSeriesPitch = new LineGraphSeries<>(new DataPoint[]{});
+        dataSeriesYaw = new LineGraphSeries<>(new DataPoint[]{});
 
+        dataGraphRoll.addSeries(dataSeriesRoll);
+        dataGraphPitch.addSeries(dataSeriesPitch);
+        dataGraphYaw.addSeries(dataSeriesYaw);
 
-        // GRAPH TEMPERATURE
-        dataGraphTemp.addSeries(dataSeriesTemperature);
-        dataGraphHum.addSeries(dataSeriesHumidity);
-        dataGraphPres.addSeries(dataSeriesPressure);
+        dataGraphRoll.getViewport().setXAxisBoundsManual(true);
+        dataGraphRoll.getViewport().setYAxisBoundsManual(true);
+        dataGraphRoll.getViewport().setMinX(dataGraphMinX);
+        dataGraphRoll.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphRoll.getViewport().setMinY(dataGraphMinY);
+        dataGraphRoll.getViewport().setMaxY(dataGraphMaxY);
 
-        dataGraphTemp.getViewport().setXAxisBoundsManual(true);
-        dataGraphTemp.getViewport().setYAxisBoundsManual(true);
-        dataGraphTemp.getViewport().setMinX(0);
-        dataGraphTemp.getViewport().setMaxX(10);
-        dataGraphTemp.getViewport().setMinY(20);
-        dataGraphTemp.getViewport().setMaxY(40);
+        dataGraphRoll.getViewport().setScalable(true);
+        dataGraphRoll.getViewport().setScrollable(true);
 
-        dataGraphTemp.getViewport().setScalable(true);
-        dataGraphTemp.getViewport().setScrollable(true);
+        dataGraphPitch.getViewport().setXAxisBoundsManual(true);
+        dataGraphPitch.getViewport().setYAxisBoundsManual(true);
+        dataGraphPitch.getViewport().setMinX(dataGraphMinX);
+        dataGraphPitch.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphPitch.getViewport().setMinY(dataGraphMinY);
+        dataGraphPitch.getViewport().setMaxY(dataGraphMaxY);
 
-        // GRAPH HUMIDITY
-        dataGraphHum.getViewport().setXAxisBoundsManual(true);
-        dataGraphHum.getViewport().setYAxisBoundsManual(true);
-        dataGraphHum.getViewport().setMinX(0);
-        dataGraphHum.getViewport().setMaxX(10);
-        dataGraphHum.getViewport().setMinY(0);
-        dataGraphHum.getViewport().setMaxY(100);
+        dataGraphPitch.getViewport().setScalable(true);
+        dataGraphPitch.getViewport().setScrollable(true);
 
-        dataGraphHum.getViewport().setScalable(true);
-        dataGraphHum.getViewport().setScrollable(true);
+        dataGraphYaw.getViewport().setXAxisBoundsManual(true);
+        dataGraphYaw.getViewport().setYAxisBoundsManual(true);
+        dataGraphYaw.getViewport().setMinX(dataGraphMinX);
+        dataGraphYaw.getViewport().setMaxX(dataGraphMaxX);
+        dataGraphYaw.getViewport().setMinY(dataGraphMinY);
+        dataGraphYaw.getViewport().setMaxY(dataGraphMaxY);
 
-        // GRAPH PRESSURE
-        dataGraphPres.getViewport().setXAxisBoundsManual(true);
-        dataGraphPres.getViewport().setYAxisBoundsManual(true);
-        dataGraphPres.getViewport().setMinX(0);
-        dataGraphPres.getViewport().setMaxX(10);
-        dataGraphPres.getViewport().setMinY(980);
-        dataGraphPres.getViewport().setMaxY(1030);
+        dataGraphYaw.getViewport().setScalable(true);
+        dataGraphYaw.getViewport().setScrollable(true);
 
-        dataGraphPres.getViewport().setScalable(true);
-        dataGraphPres.getViewport().setScrollable(true);
 
         // refresh chart
-        dataGraphTemp.onDataChanged(true, true);
+        dataGraphRoll.onDataChanged(true, true);
 
-        dataGraphTemp.getLegendRenderer().setVisible(true);
-        dataGraphTemp.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphTemp.getLegendRenderer().setTextSize(20);
+        dataGraphRoll.getLegendRenderer().setVisible(true);
+        dataGraphRoll.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphRoll.getLegendRenderer().setTextSize(20);
 
-        dataGraphTemp.getGridLabelRenderer().setTextSize(14);
-        dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [C]");
-        dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-        dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
-        dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
-        dataGraphTemp.getGridLabelRenderer().setPadding(35);
+        dataGraphRoll.getGridLabelRenderer().setTextSize(14);
+        dataGraphRoll.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Roll [deg]");
+        dataGraphRoll.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphRoll.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphRoll.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphRoll.getGridLabelRenderer().setPadding(35);
 
-        dataGraphHum.onDataChanged(true, true);
+        dataGraphPitch.onDataChanged(true, true);
 
-        dataGraphHum.getLegendRenderer().setVisible(true);
-        dataGraphHum.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphHum.getLegendRenderer().setTextSize(20);
+        dataGraphPitch.getLegendRenderer().setVisible(true);
+        dataGraphPitch.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphPitch.getLegendRenderer().setTextSize(20);
 
-        dataGraphHum.getGridLabelRenderer().setTextSize(14);
-        dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [-]");
-        dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-        dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
-        dataGraphHum.getGridLabelRenderer().setNumVerticalLabels(7);
-        dataGraphHum.getGridLabelRenderer().setPadding(35);
+        dataGraphPitch.getGridLabelRenderer().setTextSize(14);
+        dataGraphPitch.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pitch [deg]");
+        dataGraphPitch.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphPitch.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphPitch.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphPitch.getGridLabelRenderer().setPadding(35);
 
-        dataGraphPres.onDataChanged(true, true);
+        dataGraphYaw.onDataChanged(true, true);
 
-        dataGraphPres.getLegendRenderer().setVisible(true);
-        dataGraphPres.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        dataGraphPres.getLegendRenderer().setTextSize(20);
+        dataGraphYaw.getLegendRenderer().setVisible(true);
+        dataGraphYaw.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        dataGraphYaw.getLegendRenderer().setTextSize(20);
 
-        dataGraphPres.getGridLabelRenderer().setTextSize(14);
-        dataGraphPres.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pressure [hPa]");
-        dataGraphPres.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-        dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
-        dataGraphPres.getGridLabelRenderer().setNumVerticalLabels(7);
-        dataGraphPres.getGridLabelRenderer().setPadding(35);
+        dataGraphYaw.getGridLabelRenderer().setTextSize(14);
+        dataGraphYaw.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Yaw [deg]");
+        dataGraphYaw.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+        dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
+        dataGraphYaw.getGridLabelRenderer().setNumVerticalLabels(7);
+        dataGraphYaw.getGridLabelRenderer().setPadding(35);
     }
 
     /**
-     * @brief Request for temperature and humidity.
+     * @brief request for roll and pitch data
      */
-    private void madeRequestTempHum() {
-        sendGetRequest(Common.REQ_TEMP_C_1);
-        sendGetRequest(Common.REQ_HUM_P);
+    private void madeRequestRollPitch() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
     }
 
     /**
-     * @brief Request for pressure and humidity.
+     * @brief request for roll and yaw data
      */
-    private void madeRequestHumPres() {
-        sendGetRequest(Common.REQ_HUM_P);
-        sendGetRequest(Common.REQ_PRES_HPA);
+    private void madeRequestRollYaw() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_YAW_DEG);
     }
 
     /**
-     * @brief Request for temperature and pressure.
+     * @brief request for yaw and pitch data
      */
-    private void madeRequestTempPres() {
-        sendGetRequest(Common.REQ_TEMP_C_1);
-        sendGetRequest(Common.REQ_PRES_HPA);
+    private void madeRequestYawPitch() {
+        sendGetRequest(Common.REQ_YAW_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
     }
 
     /**
-     * @brief Request for temperature, humidity and pressure.
+     * @brief request for roll, pitch and yaw data
      */
-    private void madeRequestTempHumPres() {
-        sendGetRequest(Common.REQ_TEMP_C_1);
-        sendGetRequest(Common.REQ_PRES_HPA);
-        sendGetRequest(Common.REQ_HUM_P);
+    private void madeRequestRollYawPitch() {
+        sendGetRequest(Common.REQ_ROLL_DEG);
+        sendGetRequest(Common.REQ_PITCH_DEG);
+        sendGetRequest(Common.REQ_YAW_DEG);
     }
 
     /**
-     * @brief Creating full request for measurements.
+     * @brief creating request for angles data
      */
     private void madeRequest() {
-        if (tempBoolean && !humBoolean && !presBoolean) {
-            sendGetRequest(Common.REQ_TEMP_C_1);
+        if (angleRollBoolean && !anglePitchBoolean && !angleYawBoolean) {
+            sendGetRequest(Common.REQ_ROLL_DEG);
         }
-        if (!tempBoolean && humBoolean && !presBoolean) {
-            sendGetRequest(Common.REQ_HUM_P);
+        if (!angleRollBoolean && anglePitchBoolean && !angleYawBoolean) {
+            sendGetRequest(Common.REQ_PITCH_DEG);
         }
-        if (!tempBoolean && !humBoolean && presBoolean) {
-            sendGetRequest(Common.REQ_PRES_HPA);
+        if (!angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
+            sendGetRequest(Common.REQ_YAW_DEG);
         }
-        if (tempBoolean && humBoolean && !presBoolean) {
-            madeRequestTempHum();
+        if (angleRollBoolean && anglePitchBoolean && !angleYawBoolean) {
+            madeRequestRollPitch();
         }
-        if (!tempBoolean && humBoolean && presBoolean) {
-            madeRequestHumPres();
+        if (angleRollBoolean && !anglePitchBoolean && angleYawBoolean) {
+            madeRequestRollYaw();
         }
-        if (tempBoolean && !humBoolean && presBoolean) {
-            madeRequestTempPres();
+        if (!angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
+            madeRequestYawPitch();
         }
-        if (tempBoolean && humBoolean && presBoolean) {
-            madeRequestTempHumPres();
+        if (angleRollBoolean && anglePitchBoolean && angleYawBoolean) {
+            madeRequestRollYawPitch();
         }
     }
 
@@ -366,10 +368,11 @@ public class GraphActivityEnv extends AppCompatActivity {
             textViewSampleTime.setText(getSampleTimeDisplayText(sampleTimeText));
             Common.DEFAULT_SAMPLE_TIME = sampleTime;
 
-            // Sample time (ms)
-            String sampleSText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
-            dataGraphMaxDataPointsNumber = Integer.parseInt(sampleSText);
+            // Max number of samples
+            String samplesText = dataIntent.getStringExtra(Common.CONFIG_MAX_NUMBER_OF_SAMPLES);
+            dataGraphMaxDataPointsNumber = Integer.parseInt(samplesText);
             Common.DEFAULT_MAX_NUMBER_OF_SAMPLES = dataGraphMaxDataPointsNumber;
+
         }
     }
 
@@ -465,7 +468,7 @@ public class GraphActivityEnv extends AppCompatActivity {
      * @brief Called when the user taps the 'Config' button.
      */
     private void openConfig() {
-        Intent openConfigIntent = new Intent(this, ConfigActivity.class);
+        Intent openConfigIntent = new Intent(this, ConfigView.class);
         Bundle configBundle = new Bundle();
         configBundle.putString(Common.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Common.CONFIG_SAMPLE_TIME, sampleTime);
@@ -575,6 +578,7 @@ public class GraphActivityEnv extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
+
     /**
      * @brief GET response handling - chart data series updated with IoT server data.
      */
@@ -593,66 +597,69 @@ public class GraphActivityEnv extends AppCompatActivity {
                 errorHandling(Common.ERROR_NAN_DATA);
 
             } else {
-
                 // update plot series
                 double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
                 boolean scrollGraph = (timeStamp > dataGraphMaxX);
-                if (m.mName.equals("temperature")) {
-                    dataSeriesTemperature.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesTemperature.setTitle("Temperature");
-                    dataSeriesTemperature.setColor(Color.BLUE);
+                if (m.mName.equals("roll")) {
+                    dataSeriesRoll.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesRoll.setTitle("Roll");
+                    dataSeriesRoll.setColor(Color.BLUE);
                 }
-                if (m.mName.equals("humidity")) {
-                    dataSeriesHumidity.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesHumidity.setTitle("Humidity");
-                    dataSeriesHumidity.setColor(Color.GREEN);
+
+                if (m.mName.equals("pitch")) {
+                    dataSeriesPitch.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesPitch.setTitle("Pitch");
+                    dataSeriesPitch.setColor(Color.MAGENTA);
                 }
-                if (m.mName.equals("pressure")) {
-                    dataSeriesPressure.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
-                    dataSeriesPressure.setTitle("Pressure");
-                    dataSeriesPressure.setColor(Color.RED);
+
+                if (m.mName.equals("yaw")) {
+                    dataSeriesYaw.appendData(new DataPoint(timeStamp, m.mValue), scrollGraph, dataGraphMaxDataPointsNumber);
+                    dataSeriesYaw.setTitle("Yaw");
+                    dataSeriesYaw.setColor(Color.GRAY);
+
                 }
 
                 // refresh chart
-                dataGraphTemp.onDataChanged(true, true);
+                dataGraphRoll.onDataChanged(true, true);
 
-                dataGraphTemp.getLegendRenderer().setVisible(true);
-                dataGraphTemp.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraphTemp.getLegendRenderer().setTextSize(30);
+                dataGraphRoll.getLegendRenderer().setVisible(true);
+                dataGraphRoll.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphRoll.getLegendRenderer().setTextSize(30);
 
-                dataGraphTemp.getGridLabelRenderer().setTextSize(20);
-                dataGraphTemp.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Temperature [C]");
-                dataGraphTemp.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-                dataGraphTemp.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraphTemp.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraphTemp.getGridLabelRenderer().setPadding(35);
+                dataGraphRoll.getGridLabelRenderer().setTextSize(20);
+                dataGraphRoll.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Roll [deg]");
+                dataGraphRoll.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphRoll.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphRoll.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphRoll.getGridLabelRenderer().setPadding(35);
 
-                dataGraphHum.onDataChanged(true, true);
+                dataGraphPitch.onDataChanged(true, true);
 
-                dataGraphHum.getLegendRenderer().setVisible(true);
-                dataGraphHum.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraphHum.getLegendRenderer().setTextSize(30);
+                dataGraphPitch.getLegendRenderer().setVisible(true);
+                dataGraphPitch.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphPitch.getLegendRenderer().setTextSize(30);
 
-                dataGraphHum.getGridLabelRenderer().setTextSize(20);
-                dataGraphHum.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Humidity [%]");
-                dataGraphHum.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-                dataGraphHum.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraphHum.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraphHum.getGridLabelRenderer().setPadding(35);
+                dataGraphPitch.getGridLabelRenderer().setTextSize(20);
+                dataGraphPitch.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pitch [deg]");
+                dataGraphPitch.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphPitch.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphPitch.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphPitch.getGridLabelRenderer().setPadding(35);
 
-                dataGraphPres.onDataChanged(true, true);
+                dataGraphYaw.onDataChanged(true, true);
 
-                dataGraphPres.getLegendRenderer().setVisible(true);
-                dataGraphPres.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                dataGraphPres.getLegendRenderer().setTextSize(30);
+                dataGraphYaw.getLegendRenderer().setVisible(true);
+                dataGraphYaw.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                dataGraphYaw.getLegendRenderer().setTextSize(30);
 
-                dataGraphPres.getGridLabelRenderer().setTextSize(20);
-                dataGraphPres.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Pressure [hPa]");
-                dataGraphPres.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
-                dataGraphPres.getGridLabelRenderer().setNumHorizontalLabels(9);
-                dataGraphPres.getGridLabelRenderer().setNumVerticalLabels(7);
-                dataGraphPres.getGridLabelRenderer().setPadding(35);
+                dataGraphYaw.getGridLabelRenderer().setTextSize(20);
+                dataGraphYaw.getGridLabelRenderer().setVerticalAxisTitle(Space(7) + "Yaw [deg]");
+                dataGraphYaw.getGridLabelRenderer().setHorizontalAxisTitle(Space(11) + "Time [s]");
+                dataGraphYaw.getGridLabelRenderer().setNumHorizontalLabels(9);
+                dataGraphYaw.getGridLabelRenderer().setNumVerticalLabels(7);
+                dataGraphYaw.getGridLabelRenderer().setPadding(35);
             }
+
             // remember previous time stamp
             requestTimerPreviousTime = requestTimerCurrentTime;
         }

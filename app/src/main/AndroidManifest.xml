@@ -18,7 +18,7 @@
        android:theme="@style/AppTheme"
        android:usesCleartextTraffic="true">
        <!-- Main activity -->
-       <activity android:name="com.example.senseHat.View.HomePageActivity">
+       <activity android:name="com.example.senseHat.View.HomePageView">
            <intent-filter>
                <action android:name="android.intent.action.MAIN" />
 
@@ -26,12 +26,12 @@
            </intent-filter>
        </activity>
        <!-- Configuration activity -->
-       <activity android:name="com.example.senseHat.View.ConfigActivity" />
-       <activity android:name="com.example.senseHat.View.GraphActivityEnv" />
-       <activity android:name="com.example.senseHat.View.GraphActivityAngle" />
-       <activity android:name="com.example.senseHat.View.GraphActivityJoyStick" />
-       <activity android:name="com.example.senseHat.View.LedActivity" />
-       <activity android:name="com.example.senseHat.View.DynamicTableActivity" />
+       <activity android:name="com.example.senseHat.View.ConfigView" />
+       <activity android:name="com.example.senseHat.View.GraphEnvView" />
+       <activity android:name="com.example.senseHat.View.GraphAngleView" />
+       <activity android:name="com.example.senseHat.View.GraphJoyStickView" />
+       <activity android:name="com.example.senseHat.View.LedView" />
+       <activity android:name="com.example.senseHat.View.DynamicTableView" />
 
    </application>
 

@@ -43,11 +43,11 @@ import java.util.TimerTask;
 
 import static java.lang.Double.isNaN;
 
-public class GraphActivityJoyStick extends AppCompatActivity {
+public class GraphJoyStickView extends AppCompatActivity {
 
     /* BEGIN config data */
-    private String ipAddress = HomePageActivity.ipAddress;
-    private int sampleTime = HomePageActivity.sampleTime;
+    private String ipAddress = HomePageView.ipAddress;
+    private int sampleTime = HomePageView.sampleTime;
     /* END config data */
 
     /* BEGIN request timer */
@@ -92,7 +92,7 @@ public class GraphActivityJoyStick extends AppCompatActivity {
         setContentView(R.layout.activity_graph_joystick);
 
         // Initialize Volley request queue
-        queue = Volley.newRequestQueue(GraphActivityJoyStick.this);
+        queue = Volley.newRequestQueue(GraphJoyStickView.this);
 
         // Initialize View
         initView();
